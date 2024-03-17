@@ -55,19 +55,19 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    //<AuthProvider>
-    <DataProvider>
-      <ModalProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-          <Toast />
-        </ThemeProvider>
-      </ModalProvider>
-    </DataProvider>
-    //</AuthProvider>
+    <AuthProvider>
+      <DataProvider>
+        <ModalProvider>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+            <Toast />
+          </ThemeProvider>
+        </ModalProvider>
+      </DataProvider>
+    </AuthProvider>
   );
 }
