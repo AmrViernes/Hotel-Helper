@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
+import React, { ReactNode } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
@@ -15,10 +15,10 @@ import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useModal } from "./../context/ModelContext";
-import Loader from "../../components/Loader";
 import Orders from "../../components/Orders";
 import ProgramCard from "../../components/ProgramCard";
 import { useData } from "../context/DataContext";
+import Loader from "../../components/Loader";
 
 const home = () => {
   const colorScheme = useColorScheme();
@@ -87,9 +87,6 @@ const home = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
-      {
-        loading ? <Loader/> : (
-
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>
           Room
@@ -125,8 +122,9 @@ const home = () => {
             See All
           </Link>
         </View>
+        {loading && <Loader/>}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {homeData?.REQUEST.map((req: any) => (
+          {!loading && homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID).map((req: any) => (
             <Pressable
               key={req.REQ_ID}
               onPress={() =>
@@ -149,6 +147,7 @@ const home = () => {
                 <Orders
                   orderName={req.DEPT_NAME}
                   imageUrl={ordersImage(req.DEPT_NUMBER)}
+                  loading={loading}
                 />
               </View>
             </Pressable>
@@ -163,8 +162,9 @@ const home = () => {
               See All
             </Link>
           </View>
+          {loading && <Loader/>}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {homeData?.PROGRAM.map((program: any) => (
+            {!loading && homeData?.PROGRAM.sort((a: any, b: any) => b.PROG_ID - a.PROG_ID).map((program: any) => (
               <Pressable
                 key={program.PROG_ID}
                 onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
@@ -184,8 +184,6 @@ const home = () => {
           </ScrollView>
         </View>
       </ScrollView>
-        )
-      }
     </SafeAreaProvider>
   );
 };
