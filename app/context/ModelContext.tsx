@@ -19,6 +19,7 @@ import {
   tintColorWarmBackground,
 } from "../../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type ModalContextProps = {
   handleOpen: (content: ReactNode) => void;
@@ -31,7 +32,7 @@ const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
-  const modalHeight = 500
+  const modalHeight = 700
   const translateY = new Animated.Value(0);
 
   const panResponder = PanResponder.create({
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "white",
     padding: 20,
+    marginBottom: 20,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
