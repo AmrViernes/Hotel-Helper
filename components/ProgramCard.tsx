@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
-import { tintColorPrimary } from "../constants/Colors";
+import { tintColorDisabled, tintColorPrimary } from "../constants/Colors";
 import { ImageBackground } from "expo-image";
 
 type Program = {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height / 5,
     marginHorizontal: 10,
     borderColor: "#eed7c5",
-    backgroundColor: "#f5ebe0",
+    backgroundColor: tintColorDisabled,
     shadowColor: tintColorPrimary,
     textAlign: "center",
     shadowOffset: {

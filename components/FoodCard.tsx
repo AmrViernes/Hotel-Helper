@@ -2,6 +2,7 @@ import { Dimensions, Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import React from "react";
 import {
+  tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height / 8,
     marginHorizontal: 10,
     borderColor: "#eed7c5",
-    backgroundColor: "#f5ebe0",
+    backgroundColor: tintColorDisabled,
     shadowColor: tintColorPrimary,
     textAlign: "center",
     shadowOffset: {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     justifyContent: "space-around",
     alignItems: "flex-start",
-    backgroundColor: "#f5ebe0",
+    backgroundColor: tintColorDisabled,
   },
   text: {
     color: tintColorSecondary,
