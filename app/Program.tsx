@@ -5,8 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import DaysBox from "../components/DaysBox";
 import { Stack } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
-import ProgramBox from "../components/ProgramBox";
-import { tripsData } from "../constants/demoData";
+import ProgramBox from "../components/ProgramCard";
 import { tintColorWarmBackground } from "../constants/Colors";
 import { useData } from "./context/DataContext";
 
@@ -31,9 +30,6 @@ const Program = () => {
         <Stack.Screen
           options={{
             headerTitle: "",
-            headerStyle:{
-              backgroundColor: tintColorWarmBackground 
-            },
             headerShadowVisible: false,
           }}
         />
@@ -44,9 +40,6 @@ const Program = () => {
               <Pressable
                 key={index}
                 onPress={() => setSelectedDate(item)}
-                style={{
-                  backgroundColor: "red",
-                }}
               >
                 <DaysBox
                   color={
