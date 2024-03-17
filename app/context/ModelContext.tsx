@@ -37,7 +37,7 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderRelease: (_, gestureState) => {
-      const newHeight = modalHeight - gestureState.dy;
+
       if (gestureState.dy >= 50) {
         handleClose();
       }
@@ -120,8 +120,6 @@ export const useModal = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    display: 'none',
     justifyContent: "center",
     alignItems: "center",
   },
