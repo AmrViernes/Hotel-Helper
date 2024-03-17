@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import {
+  tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
@@ -13,12 +14,13 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import MaintenanceCard from "../components/ServicesCard";
 import { ServicesT } from "../types/types";
+import { useData } from './context/DataContext'
 
 const Maintenance = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [maintenanceData, setMaintenanceData] = useState<ServicesT[]>();
-  const [maintenanceOrder, setMaintenanceOrder] = useState<ServicesT[]>();
-
+  const [maintenanceOrder, setMaintenanceOrder] = useState<ServicesT>({ITEM_ID: 0});
+const { setLoadingToTrue } = useData()
   useEffect(() => {
     const abort = new AbortController();
 
@@ -47,30 +49,36 @@ const Maintenance = () => {
   }, []);
 
   const handleMaintenanceList = (itemId: number) => {
-    setMaintenanceOrder((prev) => {
-      const itemExistInMaintenance = prev?.some(
-        (item) => item.ITEM_CODE === itemId
-      );
-
-      if (itemExistInMaintenance) {
-        // If the item exists, remove it from the list
-        const updatedMaintenanceOrder = prev?.filter(
-          (item) => item.ITEM_CODE !== itemId
-        );
-        return updatedMaintenanceOrder || [];
-      } else {
-        // If the item doesn't exist, add it to the list
-        return prev
-          ? [...prev, { ITEM_CODE: itemId }]
-          : [{ ITEM_CODE: itemId }];
-      }
-    });
+    setMaintenanceOrder({ITEM_ID: itemId});
   };
 
-  const checkItemIsInOrder = (id: number) =>
-    maintenanceOrder?.find((item) => item.ITEM_CODE === id);
+  const handlePlaceFixRequest = async () => {
+    setLoading(true)
+    try {
+      // Add logic to send the order data to the backend
+      await axios.post(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/fix/req",
+        maintenanceOrder,
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: 7977
+          }
+        }
+      );
+      setLoadingToTrue()
+      // Clear the order info and navigate to a success screen or perform other actions
+      setMaintenanceOrder({ITEM_ID: 0});
+      // Optionally, navigate to a success screen or perform other actions
+      router.replace('/(tabs)/home')
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  }
 
-  const buttonIsDisabled = maintenanceOrder?.length === 0 ? true : false;
+  const checkIfUserSelectItem = maintenanceOrder.ITEM_ID === 0 ? true : false
+
+  console.log(maintenanceOrder)
 
   return (
     <View style={styles.container}>
@@ -93,15 +101,15 @@ const Maintenance = () => {
                 ) : (
                   maintenanceData?.map((item, index) => (
                     <Pressable
-                      onPress={() => handleMaintenanceList(item.ITEM_CODE)}
+                      onPress={() => handleMaintenanceList(item.ITEM_ID)}
                       key={index + 1}
                     >
                       <MaintenanceCard
                         name={item.ITEM_NAME}
                         checked={
-                          checkItemIsInOrder(item.ITEM_CODE)
+                          item.ITEM_ID === maintenanceOrder.ITEM_ID
                             ? tintColorPrimary
-                            : "#f5ebe0"
+                            : tintColorDisabled
                         }
                       />
                     </Pressable>
@@ -112,21 +120,16 @@ const Maintenance = () => {
           </>
         )}
         <View style={styles.addOrderContainer}>
-          <View>
-            <Text style={styles.totalTitle}>
-              Total: {maintenanceOrder?.length === 0 ? 0 : maintenanceOrder?.length}
-            </Text>
-          </View>
-          <Pressable disabled={buttonIsDisabled}>
+          <Pressable disabled={checkIfUserSelectItem} onPress={() => handlePlaceFixRequest()}>
             <Text
               style={[
                 styles.orderButton,
                 {
-                  backgroundColor: buttonIsDisabled ? "#ccc" : tintColorPrimary,
+                  backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
                 },
               ]}
             >
-              {buttonIsDisabled ? "Empty" : "Send Request"}
+              {checkIfUserSelectItem ? "Empty" : "Send Request"}
             </Text>
           </Pressable>
         </View>
