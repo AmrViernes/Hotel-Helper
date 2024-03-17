@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import ProgramBox from "../components/ProgramBox";
 import { tripsData } from "../constants/demoData";
+import { tintColorWarmBackground } from "../constants/Colors";
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -25,6 +26,9 @@ const Program = () => {
         <Stack.Screen
           options={{
             headerTitle: "",
+            headerStyle:{
+              backgroundColor: tintColorWarmBackground 
+            },
             headerShadowVisible: false,
           }}
         />
@@ -40,7 +44,11 @@ const Program = () => {
                 }}
               >
                 <DaysBox
-                  color={item.getDate() === selectedDate.getDate() ? '#e76f51' : "#e9e9e9"}
+                  color={
+                    item.getDate() === selectedDate.getDate()
+                      ? "#e76f51"
+                      : "#e9e9e9"
+                  }
                   day={dayNames[item.getDay()]}
                   dayNum={item.getDate()}
                 />
@@ -59,15 +67,21 @@ const Program = () => {
             )
             .map((item) => (
               <SafeAreaProvider key={item.id}>
-              <ProgramBox
-                title={item.title}
-                details={item.details}
-                date={new Date(item.date)}
-                duration={item.duration}
-                startAt={item.startAt}
-                transportation={item.mode_of_transport}
-                />
-                </SafeAreaProvider>
+                <View
+                  style={styles.programsContainer}
+                >
+                  <ProgramBox
+                    title={item.title}
+                    details={item.details}
+                    date={new Date(item.date)}
+                    duration={"Trip Duration - " + item.duration + " Hours"}
+                    startAt={"Start at - " + item.startAt}
+                    transportation={
+                      "Transportation - " + item.mode_of_transport
+                    }
+                  />
+                </View>
+              </SafeAreaProvider>
             ))}
         </ScrollView>
       </SafeAreaProvider>
@@ -92,4 +106,10 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     fontSize: 20,
   },
+  programsContainer: {
+    padding: 10,
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
+  }
 });
