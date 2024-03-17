@@ -1,9 +1,15 @@
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+  useColorScheme,
+} from "react-native";
 import React from "react";
 import { useData } from "./context/DataContext";
-import {
-  tintColorPrimary,
-} from "../constants/Colors";
+import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
 import Loader from "../components/Loader";
 import OrderCard from "../components/Cards/OrderCard";
@@ -13,13 +19,26 @@ import StackScreen from "../components/StackScreen";
 type Props = {};
 
 const Orders = (props: Props) => {
-  const { loading, homeData } = useData();
+  const { loading, homeData, setLoadingToTrue } = useData();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const colorSchema = useColorScheme();
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setLoadingToTrue();
+    setRefreshing(false);
+  }, []);
+
   return (
-    <SafeAreaProvider style={styles.listContainer}>
+    <SafeAreaProvider style={[styles.listContainer, {backgroundColor: colorSchema === "light" ? tintColorWarmBackground : "black",}]}>
       <StackScreen />
-      <Text style={styles.sectionsTitle}>Your Orders</Text>
       {loading && <Loader />}
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Text style={styles.sectionsTitle}>Your Orders</Text>
         {!loading &&
           homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID).map(
             (req: any) => (
@@ -51,14 +70,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
     height: "100%",
-    width: "100%",
-    alignSelf: "center",
   },
   sectionsTitle: {
     fontFamily: "Poppins",
     fontSize: 26,
     color: tintColorPrimary,
     textTransform: "uppercase",
+    textAlign: 'center'
   },
   card: {
     display: "flex",
