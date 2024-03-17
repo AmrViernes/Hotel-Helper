@@ -1,22 +1,19 @@
 import { ScrollView, StyleSheet } from "react-native";
 import { View, Text } from "../../components/Themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import { tintColorSecondary } from "../../constants/Colors";
 import Stars from "../../components/Stars";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { FlashList } from "@shopify/flash-list";
-
-type Services = {
-  name: string;
-  rate: string;
-  rateMaxValue: number;
-};
+import Loader from "../../components/Loader";
+import axios from "axios";
+import { EvaluationT } from "../../types/types";
 
 const evaluation = () => {
-  const rates: string[] = ["Bad", "Normal", "Good", "Very Good", "Excellent"];
-
-  const [services, setServices] = useState<Services[]>([
+  const [loading, setLoading] = useState<boolean>(true);
+  const [evalState, setEvalState] = useState<string>();
+  const [services, setServices] = useState<EvaluationT[]>([
     { name: "Reception", rate: "", rateMaxValue: 0 },
     { name: "Cabin", rate: "", rateMaxValue: 0 },
     { name: "House Keeping", rate: "", rateMaxValue: 0 },
@@ -28,6 +25,8 @@ const evaluation = () => {
     { name: "Bar Services", rate: "", rateMaxValue: 0 },
     { name: "Bar Products Variety", rate: "", rateMaxValue: 0 },
   ]);
+
+  const rates: string[] = ["Bad", "Normal", "Good", "Very Good", "Excellent"];
 
   const handleClick = (serviceIndex: number, starIndex: number) => {
     const updatedService = {
@@ -43,44 +42,86 @@ const evaluation = () => {
 
   const checkEmptyRates = services.some((item) => item.rate === "");
 
+  useEffect(() => {
+    const abort = new AbortController();
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
+          {
+            signal: abort.signal,
+            params: {
+              P_APPID: 1,
+              P_LANGCODE: "E",
+              P_RCID: 7977,
+            },
+          }
+        );
+        setEvalState(response.data.RESPONSE[0].Message);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    return () => abort.abort();
+  }, []);
+
   return (
     <SafeAreaProvider>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Evaluation Points</Text>
+      {evalState === "Yes" && (
+        <View style={styles.evalDoneContainer}>
+          <Text style={styles.evalDoneTitle}>
+            Your Evaluation Was Submitted Successfully.
+          </Text>
+        </View>
+      )}
 
-          {services.map((service, serviceIndex) => (
-            <View key={serviceIndex}>
-              <Text style={styles.itemTitle}>{service.name}</Text>
-              <View style={styles.starsContainer}>
-                <FlashList
-                  data={rates}
-                  estimatedItemSize={100}
-                  keyExtractor={(item) => item}
-                  numColumns={5}
-                  renderItem={({ item, index }) => (
-                    <Stars
-                      key={index}
-                      value={index}
-                      maxValue={services[serviceIndex].rateMaxValue}
-                      onClick={() => handleClick(serviceIndex, index)}
+      {loading ? (
+        <Loader />
+      ) : (
+        evalState !== "Yes" && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.container}>
+              <Text style={styles.title}>Evaluation Points</Text>
+
+              {services.map((service, serviceIndex) => (
+                <View key={serviceIndex}>
+                  <Text style={styles.itemTitle}>{service.name}</Text>
+                  <View style={styles.starsContainer}>
+                    <FlashList
+                      data={rates}
+                      estimatedItemSize={100}
+                      keyExtractor={(item) => item}
+                      numColumns={5}
+                      renderItem={({ item, index }) => (
+                        <Stars
+                          key={index}
+                          value={index}
+                          maxValue={services[serviceIndex].rateMaxValue}
+                          onClick={() => handleClick(serviceIndex, index)}
+                        />
+                      )}
                     />
-                  )}
+                  </View>
+                </View>
+              ))}
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Submit"
+                  disabled={checkEmptyRates}
+                  color={checkEmptyRates ? "#ccc" : tintColorSecondary}
+                  onClick={() => {}}
                 />
               </View>
             </View>
-          ))}
-
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Submit"
-              disabled={checkEmptyRates}
-              color={checkEmptyRates ? "#ccc" : tintColorSecondary}
-              onClick={() => {}}
-            />
-          </View>
-        </View>
-      </ScrollView>
+          </ScrollView>
+        )
+      )}
     </SafeAreaProvider>
   );
 };
@@ -118,6 +159,19 @@ const styles = StyleSheet.create({
     width: 250,
     display: "flex",
     flexDirection: "row",
+  },
+  evalDoneContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    paddingHorizontal: 40,
+  },
+  evalDoneTitle: {
+    fontFamily: "Poppins",
+    fontSize: 33,
+    textAlign: "center",
   },
 });
 
