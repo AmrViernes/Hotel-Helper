@@ -54,8 +54,9 @@ export type DataContextValueT = {
 };
 
 export type EvaluationT = {
+  id: number
   name: string;
-  rate: string;
+  rate: number;
   rateMaxValue: number;
 };
 

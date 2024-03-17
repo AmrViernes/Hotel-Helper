@@ -15,20 +15,10 @@ import { AUTH_KEY } from "../context/AuthContext";
 const evaluation = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [evalState, setEvalState] = useState<string>();
-  const [services, setServices] = useState<EvaluationT[]>([
-    { name: "Reception", rate: "", rateMaxValue: 0 },
-    { name: "Cabin", rate: "", rateMaxValue: 0 },
-    { name: "House Keeping", rate: "", rateMaxValue: 0 },
-    { name: "Dinning Table", rate: "", rateMaxValue: 0 },
-    { name: "Food Quality", rate: "", rateMaxValue: 0 },
-    { name: "Food Quantity", rate: "", rateMaxValue: 0 },
-    { name: "Food Variety", rate: "", rateMaxValue: 0 },
-    { name: "Restaurant Services", rate: "", rateMaxValue: 0 },
-    { name: "Bar Services", rate: "", rateMaxValue: 0 },
-    { name: "Bar Products Variety", rate: "", rateMaxValue: 0 },
-  ]);
+  const [services, setServices] = useState<EvaluationT[]>([]);
+  const [finalData, setFinalData] = useState({ ITEMS: [] });
 
-  const rates: string[] = ["Bad", "Normal", "Good", "Very Good", "Excellent"];
+  const rates: number[] = [40, 50, 70, 90, 100];
 
   const handleClick = (serviceIndex: number, starIndex: number) => {
     const updatedService = {
@@ -39,17 +29,86 @@ const evaluation = () => {
     const newServices = [...services];
     newServices[serviceIndex] = updatedService;
 
+    setFinalData((prev) => {
+      const existingItemIndex = prev.ITEMS.findIndex(
+        (item: any) => item.EVALPOINT_CODE === services[serviceIndex].id
+      );
+
+      if (existingItemIndex !== -1) {
+        // Update existing item
+        const updatedItems: any = [...prev.ITEMS];
+        updatedItems[existingItemIndex] = {
+          EVALPOINT_CODE: services[serviceIndex].id,
+          EVALPOINT_DEGREE: rates[starIndex],
+        };
+
+        return {
+          ITEMS: updatedItems,
+        };
+      } else {
+        // Add new item
+        return {
+          ITEMS: [
+            ...prev.ITEMS,
+            {
+              EVALPOINT_CODE: services[serviceIndex].id,
+              EVALPOINT_DEGREE: rates[starIndex],
+            },
+          ],
+        };
+      }
+    });
     setServices(newServices);
   };
 
-  const checkEmptyRates = services.some((item) => item.rate === "");
+  const checkEmptyRates = services.some((item) => item.rate === 0);
+
+  const fetchDataFromApi = async () => {
+    const response = await axios.get(
+      "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
+      {
+        params: {
+          P_APPID: 1,
+          P_LANGCODE: "E",
+        },
+      }
+    );
+    return response?.data.ITEMS[0].EVAL_POINT.map(
+      (apiItem: { EVALPOINT_NAME: string; EVALPOINT_CODE: string }) => ({
+        id: apiItem.EVALPOINT_CODE,
+        name: apiItem.EVALPOINT_NAME.toUpperCase(),
+        rate: 0,
+        rateMaxValue: 0,
+      })
+    );
+  };
+
+  const submitDataToApi = async () => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string);
+    setLoading(true);
+    try {
+      await axios.put(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
+        finalData,
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: authData.RC_ID,
+          },
+        }
+      );
+    } catch (error) {
+      console.warn("Error submitting Eval data to API", error);
+    }
+  };
 
   useEffect(() => {
     const abort = new AbortController();
 
-    const fetchData = async () => {
+    const checkIfEvalDone = async () => {
       const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-      const authData = JSON.parse(gettingAuth as string)
+      const authData = JSON.parse(gettingAuth as string);
       try {
         const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
@@ -69,9 +128,19 @@ const evaluation = () => {
       }
     };
 
-    fetchData();
+    const updateServicesFromApi = async () => {
+      try {
+        const updatedServices = await fetchDataFromApi();
+        setServices(updatedServices);
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    };
+
+    updateServicesFromApi();
+    checkIfEvalDone();
     return () => abort.abort();
-  }, []);
+  }, [loading]);
 
   return (
     <SafeAreaProvider>
@@ -98,7 +167,7 @@ const evaluation = () => {
                     <FlashList
                       data={rates}
                       estimatedItemSize={100}
-                      keyExtractor={(item) => item}
+                      keyExtractor={(item) => item.toFixed()}
                       numColumns={5}
                       renderItem={({ item, index }) => (
                         <Stars
@@ -118,7 +187,7 @@ const evaluation = () => {
                   title="Submit"
                   disabled={checkEmptyRates}
                   color={checkEmptyRates ? "#ccc" : tintColorSecondary}
-                  onClick={() => {}}
+                  onClick={() => submitDataToApi()}
                 />
               </View>
             </View>
@@ -159,9 +228,13 @@ const styles = StyleSheet.create({
   },
   starsContainer: {
     height: 50,
-    width: 250,
+    width: "80%",
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    textAlign: "center",
   },
   evalDoneContainer: {
     display: "flex",
