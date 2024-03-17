@@ -19,7 +19,7 @@ const dates = tripsData
 
 const Program = () => {
   const [selectedDate, setSelectedDate] = React.useState<Date>(
-    new Date(dates[0])
+    new Date()
   );
   return (
     <View style={styles.container}>

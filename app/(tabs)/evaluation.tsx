@@ -69,7 +69,7 @@ const evaluation = () => {
               title="Submit"
               disabled={checkEmptyRates}
               color={checkEmptyRates ? "#ccc" : tintColorSecondary}
-              page="home"
+              onClick={() => {}}
             />
           </View>
         </View>
