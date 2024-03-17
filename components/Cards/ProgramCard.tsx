@@ -26,7 +26,7 @@ const ProgramCard = ({ id, title, description, startAt }: Program) => {
         imageStyle={{ borderRadius: 10, opacity: 0.25 }}
         contentFit="contain"
       >
-        <Text style={[styles.text, { fontSize: 22, color: tintColorPrimary }]}>
+        <Text style={[styles.text, { fontSize: 24, color: tintColorPrimary }]}>
           {title}
         </Text>
         {description && <Text style={styles.text}>{description}</Text>}
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: tintColorColdBackground,
   },
   text: {
-    color: "#789",
+    color: "black",
     fontFamily: "Poppins",
     paddingHorizontal: 3,
     fontSize: 20
