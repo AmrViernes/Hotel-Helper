@@ -1,26 +1,29 @@
 import { StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { Text, View } from "../components/Themed";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import DaysBox from "../components/DaysBox";
 import { Stack } from "expo-router";
-import { ScrollView} from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import ProgramBox from "../components/ProgramBox";
+import { tripsData } from "../constants/demoData";
+
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const dates = tripsData
+  .map((item) => new Date(item.date))
+  .filter(
+    (date, i, self) =>
+      self.findIndex((d) => d.getTime() === date.getTime()) === i
+  );
 
 const Program = () => {
-  const days = [
-    { day: "Sat", dayNum: 2 },
-    { day: "Sun", dayNum: 3 },
-    { day: "Mon", dayNum: 4 },
-    { day: "Thu", dayNum: 5 },
-    { day: "Wen", dayNum: 6 },
-    { day: "Tue", dayNum: 7 },
-    { day: "Fri", dayNum: 8 },
-  ];
-
+  const [selectedDate, setSelectedDate] = React.useState<Date>(
+    new Date(dates[0])
+  );
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider style={styles.container}>
         <Stack.Screen
           options={{
             headerTitle: "",
@@ -28,26 +31,40 @@ const Program = () => {
           }}
         />
         <Text style={styles.title}>Select A Day</Text>
-        <SafeAreaView style={styles.daysContainer}>
+        <View style={styles.daysContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {days.map((item, index) => (
-              <Pressable key={index}>
-                <DaysBox day={item.day} dayNum={item.dayNum} />
+            {dates.map((item, index) => (
+              <Pressable key={index} onPress={() => setSelectedDate(item)}>
+                <DaysBox
+                  day={dayNames[item.getDay()]}
+                  dayNum={item.getDate()}
+                />
               </Pressable>
             ))}
           </ScrollView>
-        </SafeAreaView>
+        </View>
 
-
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <ProgramBox />
-            <ProgramBox />
-            <ProgramBox />
-            <ProgramBox />
-            <ProgramBox />
-          </ScrollView>
-
-      </SafeAreaView>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {tripsData
+            .filter(
+              (item) =>
+                new Date(item.date).getDate() === selectedDate.getDate() &&
+                new Date(item.date).getMonth() === selectedDate.getMonth() &&
+                new Date(item.date).getFullYear() === selectedDate.getFullYear()
+            )
+            .map((item) => (
+              <ProgramBox
+                key={item.id}
+                title={item.title}
+                details={item.details}
+                date={new Date(item.date)}
+                duration={item.duration}
+                startAt={item.startAt}
+                transportation={item.mode_of_transport}
+              />
+            ))}
+        </ScrollView>
+      </SafeAreaProvider>
     </View>
   );
 };
@@ -62,7 +79,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginHorizontal: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   title: {
     textAlign: "center",
