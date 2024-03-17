@@ -1,4 +1,4 @@
-import { Link, Stack } from "expo-router";
+import { Link, Stack, router } from "expo-router";
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
@@ -12,7 +12,8 @@ export default function NotFoundScreen() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+      router.replace('/')
+    }, 0);
   }, []);
 
   return (
