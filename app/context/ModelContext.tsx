@@ -3,15 +3,13 @@ import React, {
   FC,
   ReactNode,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import {
   Modal,
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
-  TouchableHighlight,
   PanResponder,
   Animated,
 } from "react-native";
@@ -20,42 +18,28 @@ import {
   tintColorPrimary,
   tintColorWarmBackground,
 } from "../../constants/Colors";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 
 type ModalContextProps = {
   handleOpen: (content: ReactNode) => void;
   handleClose: () => void;
 }
 
+
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalHeight, setModalHeight] = useState(400);
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const modalHeight = 500
   const translateY = new Animated.Value(0);
-  const minHeight = 200; 
-  const maxHeight = 600;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => {
-      const newHeight = modalHeight - gestureState.dy;
-      if (newHeight >= minHeight && newHeight <= maxHeight) {
-        setModalHeight(newHeight);
-      }
-    },
     onPanResponderRelease: (_, gestureState) => {
       const newHeight = modalHeight - gestureState.dy;
-      if (newHeight < 200) {
+      if (gestureState.dy >= 50) {
         handleClose();
-      } else if (gestureState.dy <= -90) {
-        setModalHeight(700);
-        Animated.spring(translateY, {
-          toValue: 0,
-          speed: 5,
-          useNativeDriver: false,
-        }).start();
       }
     },
   });
@@ -68,7 +52,6 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const handleClose = () => {
     setModalVisible(false);
     setModalContent(null);
-    setModalHeight(400);
 
     Animated.timing(translateY, {
       toValue: 0,
@@ -77,11 +60,13 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }).start();
   };
 
-  const contextValue: ModalContextProps = {
-    handleOpen,
-    handleClose,
-  };
-
+  const contextValue: ModalContextProps = useMemo(() => {
+    return {
+      handleOpen,
+      handleClose,
+    };
+  }, [handleOpen, handleClose]);
+  
   return (
     <ModalContext.Provider value={contextValue}>
       {children}
