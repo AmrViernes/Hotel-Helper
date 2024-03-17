@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-tourism",
-    "slug": "rn-tourism",
+    "name": "GRA",
+    "slug": "GRA",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -33,7 +33,7 @@
       "expo-router"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
     }
   }
 }
