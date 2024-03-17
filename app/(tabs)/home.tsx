@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 import React, { ReactNode } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -25,7 +26,14 @@ const home = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
   const { handleOpen } = useModal();
-  const { homeData, loading } = useData();
+  const { homeData, loading, setLoadingToTrue } = useData();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setLoadingToTrue();
+    setRefreshing(false);
+  }, []);
   const screensIconsData = [
     {
       name: "Maintain",
@@ -118,7 +126,12 @@ const home = () => {
               </Pressable>
             ))}
           </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             {/* Orders Section */}
             <View style={styles.listTitle}>
               <Text style={styles.sectionsTitle}>Orders</Text>
