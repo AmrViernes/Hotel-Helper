@@ -22,9 +22,11 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: tintColorSecondary,
-        tabBarInactiveTintColor: '#fff',
+        tabBarInactiveTintColor: "#fff",
         headerShadowVisible: false,
-        header: () => <WeavyHeader />,
+        header: () => (
+          <WeavyHeader />
+        ),
         tabBarStyle: {
           height: 80,
           paddingBottom: 15,
