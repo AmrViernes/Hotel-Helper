@@ -54,9 +54,8 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setModalContent(null);
 
     Animated.timing(translateY, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: false,
+      toValue: 1,
+      useNativeDriver: true,
     }).start();
   };
 
@@ -121,17 +120,10 @@ export const useModal = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    display: 'none',
     justifyContent: "center",
     alignItems: "center",
-  },
-  button: {
-    backgroundColor: "#0077B5",
-    padding: 15,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
   },
   modalContainer: {
     flex: 1,
@@ -143,6 +135,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+  },
+  animatedView: {
+    
   },
   modalTitle: {
     fontSize: 18,
