@@ -10,7 +10,7 @@ const WavyHeader = () => {
   const {onLogout} = useAuth()
 
   const logout = async () => {
-    const result = await onLogout!()
+    return await onLogout!()
   }
 
   return (
@@ -26,7 +26,7 @@ const WavyHeader = () => {
         {/* Left Header Button */}
         <View style={styles.headerButton}>
 
-            <Pressable onPress={logout}>
+            <Pressable onPress={() => logout()}>
               {({ pressed }) => (
                 <FontAwesome
                   name="sign-out"
