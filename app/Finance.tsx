@@ -2,17 +2,21 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { Text, View } from "../components/Themed";
 import { Stack } from "expo-router";
-import { tintColorWarmBackground } from "../constants/Colors";
+import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 
 const Finance = () => {
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerTitle: "",
-          headerShadowVisible: false,
-        }}
-      />
+          <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
       <Text>Finance</Text>
     </View>
   );
