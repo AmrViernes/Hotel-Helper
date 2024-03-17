@@ -2,18 +2,22 @@ import {
   StyleSheet,
   Pressable,
   useColorScheme,
-  Dimensions,
   Text,
   View,
 } from "react-native";
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Colors, { tintColorSecondary } from "../../constants/Colors";
-import { useRouter } from "expo-router";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Colors, {
+  tintColorPrimary,
+  tintColorSecondary,
+  tintColorWarmBackground,
+} from "../../constants/Colors";
+import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import Orders from "../../components/Orders";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Programs from "../../components/Programs";
+import ProgramBox from "../../components/ProgramBox";
 
 const home = () => {
   const colorScheme = useColorScheme();
@@ -24,10 +28,10 @@ const home = () => {
       name: "Maintain",
       url: "Maintenance",
       icon: (
-        <FontAwesome
-          name="briefcase"
-          size={40}
-          color={Colors[colorScheme ?? "light"].text}
+        <MaterialCommunityIcons
+          name="auto-fix"
+          size={50}
+          color={Colors[colorScheme ?? "light"].iconOutLine}
         />
       ),
     },
@@ -35,10 +39,10 @@ const home = () => {
       name: "Food",
       url: "Food",
       icon: (
-        <FontAwesome
-          name="coffee"
-          size={40}
-          color={Colors[colorScheme ?? "light"].text}
+        <MaterialCommunityIcons
+          name="food"
+          size={50}
+          color={Colors[colorScheme ?? "light"].iconOutLine}
         />
       ),
     },
@@ -46,10 +50,10 @@ const home = () => {
       name: "Finance",
       url: "Finance",
       icon: (
-        <FontAwesome
-          name="money"
-          size={40}
-          color={Colors[colorScheme ?? "light"].text}
+        <MaterialCommunityIcons
+          name="account-cash"
+          size={50}
+          color={Colors[colorScheme ?? "light"].iconOutLine}
         />
       ),
     },
@@ -57,10 +61,10 @@ const home = () => {
       name: "Program",
       url: "Program",
       icon: (
-        <FontAwesome
-          name="th-list"
-          size={40}
-          color={Colors[colorScheme ?? "light"].text}
+        <MaterialCommunityIcons
+          name="animation"
+          size={50}
+          color={Colors[colorScheme ?? "light"].iconOutLine}
         />
       ),
     },
@@ -74,10 +78,14 @@ const home = () => {
         {/* Screens Sections */}
         <View style={styles.listContainer}>
           {mainScreensData.map((item, index) => (
-            <Pressable onPress={() => router.push(`/${item.url}`)} key={index}>
+            <Pressable
+              onPress={() => router.push(`/${item.url}`)}
+              key={index}
+              style={styles.list}
+            >
               <View style={styles.list}>
                 <Text>{item.icon}</Text>
-                <Text style={styles.listTitle}>{item.name}</Text>
+                {/* <Text style={styles.listTitle}>{item.name}</Text> */}
               </View>
             </Pressable>
           ))}
@@ -85,34 +93,37 @@ const home = () => {
 
         {/* Orders Section */}
         <View>
-          <View style={{ alignSelf: "flex-start", paddingHorizontal: 8, marginLeft: 4 }}>
+          <View style={styles.listTitle}>
             <Text style={styles.sectionsTitle}>Orders</Text>
+            <Link href="/Orders" style={styles.linkInTitle}>See All</Link>
           </View>
-          <ScrollView style={{paddingVertical: 6}} horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            <View style={{display: 'flex', flexDirection: 'row', paddingVertical: 10}}>
             <Orders
-              guestName="Amr"
               orderName="Breakfast Meal"
-              orderTime="7:00 AM"
-              orderType="On Room"
-              roomNumber="U202"
-            />
+              />
             <Orders
-              guestName="Amr"
-              orderName="Breakfast Meal"
-              orderTime="7:00 AM"
-              orderType="On Room"
-              roomNumber="U202"
-            />
+              orderName="Launch Meal"
+              />
+              </View>
           </ScrollView>
         </View>
 
         {/* Program Section */}
-        <View style={{paddingBottom: 10}}>
-          <View style={{ alignSelf: "flex-start", paddingHorizontal: 8, marginLeft: 4 }}>
+        <View style={{ paddingBottom: 10 }}>
+          <View style={styles.listTitle}>
             <Text style={styles.sectionsTitle}>Programs</Text>
+            <Link style={styles.linkInTitle} href="/Program">
+              See All
+            </Link>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Programs />
+          <View style={{display: 'flex', flexDirection: 'row', paddingVertical: 10}}>
+            <Programs/>
+            </View>
           </ScrollView>
         </View>
       </ScrollView>
@@ -126,39 +137,65 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     display: "flex",
-    backgroundColor: "#fff",
     height: "100%",
+
   },
   title: {
     fontSize: 20,
     fontFamily: "Poppins",
     textAlign: "center",
+    color: tintColorPrimary,
+    lineHeight: 24,
   },
   listContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 8,
   },
   list: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     margin: 5,
-    borderColor: "#466d86",
-    borderWidth: 2,
-    borderRadius: 7,
+    backgroundColor: tintColorSecondary,
+    borderRadius: 10,
     width: 75,
     height: 70,
+    textAlign: "center",
+    shadowColor: tintColorPrimary,
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 10,
   },
   listTitle: {
     fontFamily: "Poppins",
     fontSize: 12,
+    color: tintColorPrimary,
+    textTransform: "uppercase",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 8,
+    marginLeft: 4,
+  },
+  linkInTitle: {
+    textDecorationStyle: "solid",
+    textDecorationLine: "underline",
+    fontFamily: "PoppinsR",
+    color: tintColorSecondary
   },
   sectionsTitle: {
     fontFamily: "Poppins",
     fontSize: 24,
     textAlign: "left",
+    color: tintColorPrimary,
+    textTransform: "uppercase",
   },
 });
