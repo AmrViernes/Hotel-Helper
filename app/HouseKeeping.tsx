@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import {
+  tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
@@ -13,11 +14,13 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import MaintenanceCard from "../components/ServicesCard";
 import { ServicesT } from "../types/types";
+import { useData } from "./context/DataContext";
 
 const HouseKeeping = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [houseKeepingData, setHouseKeepingData] = useState<ServicesT[]>();
-  const [houseKeepingOrder, setHouseKeepingOrder] = useState<ServicesT[]>();
+  const [houseKeepingOrder, setHouseKeepingOrder] = useState<ServicesT>({ITEM_ID: 0});
+  const {setLoadingToTrue} = useData()
 
   useEffect(() => {
     const abort = new AbortController();
@@ -27,7 +30,6 @@ const HouseKeeping = () => {
         const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/hk/item",
           {
-            signal: abort.signal,
             params: {
               P_APPID: 1,
               P_LANGCODE: "E",
@@ -46,30 +48,33 @@ const HouseKeeping = () => {
     return () => abort.abort();
   }, []);
 
-  const handleHouseKeepingList = (itemId: number) => {
-    setHouseKeepingOrder((prev) => {
-      const itemExistInOrder = prev?.some((item) => item.ITEM_CODE === itemId);
+  const handlePlaceHouseKeepingRequest = async () => {
+    setLoading(true)
+    try {
+      // Add logic to send the order data to the backend
+      await axios.post(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/hk/req",
+        houseKeepingOrder,
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: 7977
+          }
+        }
+      );
+      setLoadingToTrue()
+      // Clear the order info and navigate to a success screen or perform other actions
+      setHouseKeepingOrder({ITEM_ID: 0});
+      // Optionally, navigate to a success screen or perform other actions
+      router.replace('/(tabs)/home')
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  }
 
-      if (itemExistInOrder) {
-        // If the item exists, remove it from the list
-        const updatedHouseKeepingOrder = prev?.filter(
-          (item) => item.ITEM_CODE !== itemId
-        );
-        return updatedHouseKeepingOrder || [];
-      } else {
-        // If the item doesn't exist, add it to the list
-        return prev
-          ? [...prev, { ITEM_CODE: itemId }]
-          : [{ ITEM_CODE: itemId }];
-      }
-    });
-  };
-
-  const checkItemIsInOrder = (id: number) =>
-    houseKeepingOrder?.find((item) => item.ITEM_CODE === id);
-
-  const buttonIsDisabled = houseKeepingOrder?.length === 0 ? true : false;
-
+  const checkIfUserSelectItem = houseKeepingOrder.ITEM_ID === 0 ? true : false
+console.log(houseKeepingData)
+console.log(houseKeepingOrder)
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
@@ -91,15 +96,15 @@ const HouseKeeping = () => {
                 ) : (
                   houseKeepingData?.map((item, index) => (
                     <Pressable
-                      onPress={() => handleHouseKeepingList(item.ITEM_CODE)}
+                      onPress={() => setHouseKeepingOrder({ITEM_ID: item.ITEM_CODE as number})}
                       key={index + 1}
                     >
                       <MaintenanceCard
                         name={item.ITEM_NAME}
                         checked={
-                          checkItemIsInOrder(item.ITEM_CODE)
+                          item.ITEM_CODE === houseKeepingOrder.ITEM_ID
                             ? tintColorPrimary
-                            : "#f5ebe0"
+                            : tintColorDisabled
                         }
                       />
                     </Pressable>
@@ -110,21 +115,16 @@ const HouseKeeping = () => {
           </>
         )}
         <View style={styles.addOrderContainer}>
-          <View>
-            <Text style={styles.totalTitle}>
-              Total: {houseKeepingOrder?.length === 0 ? 0 : houseKeepingOrder?.length}
-            </Text>
-          </View>
-          <Pressable disabled={buttonIsDisabled}>
+          <Pressable disabled={checkIfUserSelectItem} onPress={() => handlePlaceHouseKeepingRequest()}>
             <Text
               style={[
                 styles.orderButton,
                 {
-                  backgroundColor: buttonIsDisabled ? "#ccc" : tintColorPrimary,
+                  backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
                 },
               ]}
             >
-              {buttonIsDisabled ? "Empty" : "Send Request"}
+              {checkIfUserSelectItem ? "Empty" : "Send Request"}
             </Text>
           </Pressable>
         </View>
