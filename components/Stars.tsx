@@ -7,8 +7,16 @@ type Props = {
   name: string;
 };
 
-const Stars = (props: Props) => {
-  const [currentValue, setCurrentValue] = useState(0);
+const Stars = ({
+  value,
+  maxValue,
+  onClick,
+}: {
+  value: number;
+  maxValue: number;
+  onClick(): void;
+}) => {
+  /*   const [currentValue, setCurrentValue] = useState(0);
   const [form, setForm] = useState({
     Reception: "",
     Cabin: "",
@@ -21,9 +29,9 @@ const Stars = (props: Props) => {
     BarProductsVariety: "",
   });
 
-  const rates: string[] = ["Bad", "Normal", "Good", "Very Good", "Excellent"];
+  const rates: string[] = ["Bad", "Normal", "Good", "Very Good", "Excellent"]; */
 
-  const handleClick = (value: number) => {
+  /*   const handleClick = (value: number) => {
     setCurrentValue(value + 1);
 
     // Here We Gonna send post request with each rate or the full rate
@@ -31,22 +39,17 @@ const Stars = (props: Props) => {
       ...prev,
       [props.name]: rates[value],
     }));
-  };
+  }; */
 
   return (
-    <View style={styles.starsContainer}>
-      {rates.map((_, index) => (
-        <Pressable onPress={() => handleClick(index)} key={index}>
-          <Ionicons
-            name="ios-star"
-            size={40}
-            color={currentValue > index ? tintColorSecondary : "#cccc"}
-            style={styles.star}
-          />
-        </Pressable>
-      ))}
-      <Text style={{ display: "none" }}>{props.name}</Text>
-    </View>
+      <Pressable onPress={onClick}>
+        <Ionicons
+          name="ios-star"
+          size={40}
+          color={value < maxValue ? tintColorSecondary : "#cccc"}
+          style={styles.star}
+        />
+      </Pressable>
   );
 };
 
