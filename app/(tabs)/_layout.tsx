@@ -1,17 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Redirect, Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
 
-import Colors, {
+import {
   tintColorPrimary,
   tintColorSecondary,
 } from "../../constants/Colors";
-import WeavyHeader from "../../components/WeavyHeader";
+import WavyHeader from "../../components/WavyHeader";
 import { useAuth } from "../context/AuthContext";
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
@@ -20,8 +16,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const { authState, onLogout } = useAuth();
+  const { authState} = useAuth();
 
   return (
     <>
@@ -33,7 +28,7 @@ export default function TabLayout() {
             tabBarActiveTintColor: tintColorSecondary,
             tabBarInactiveTintColor: "#fff",
             headerShadowVisible: false,
-            header: () => <WeavyHeader />,
+            header: () => <WavyHeader />,
             tabBarStyle: {
               height: 80,
               paddingBottom: 15,
@@ -46,7 +41,7 @@ export default function TabLayout() {
             options={{
               title: "Home",
               tabBarIcon: ({ color }) => (
-                <TabBarIcon name="home" color={color} />
+                <TabBarIcon name="home" color={color}/>
               ),
             }}
           />
@@ -64,7 +59,7 @@ export default function TabLayout() {
             options={{
               title: "Evaluation",
               tabBarIcon: ({ color }) => (
-                <TabBarIcon name="500px" color={color} />
+                <TabBarIcon name="star-half-full" color={color} />
               ),
             }}
           />
