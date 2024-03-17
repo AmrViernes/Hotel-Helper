@@ -223,7 +223,7 @@ const home = () => {
                             ))}
                             <View style={styles.ordersDetailsContainer}>
                               {req.DEPT_NUMBER === 6 &&
-                                req.MINUTES_CREATED <= 20 && (
+                                req.EDITABLE === "TRUE" && (
                                   <Pressable
                                     onPress={() => {
                                       handleEditRedirect(
