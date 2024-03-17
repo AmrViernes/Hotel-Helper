@@ -2,6 +2,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
 import { useRouter } from "expo-router";
+import { tintColorPrimary } from "../constants/Colors";
 
 const Button = ({
   title,
@@ -31,8 +32,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 6,
     borderRadius: 50,
-    width: "60%",
+    width: "100%",
     margin: 8,
+    shadowColor: tintColorPrimary,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   title: {
     fontFamily: "Poppins",
