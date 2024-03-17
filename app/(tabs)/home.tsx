@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { StyleSheet, FlatList, Pressable, useColorScheme } from "react-native";
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Text, View } from "../../components/Themed";
@@ -65,7 +60,7 @@ const home = () => {
               keyExtractor={(item) => item.url}
               numColumns={2}
               renderItem={({ item, index }) => (
-                <TouchableOpacity
+                <Pressable
                   onPress={() => router.push(`/${item.url}`)}
                   style={styles.listContainer}
                 >
@@ -73,7 +68,7 @@ const home = () => {
                     <Text>{item.icon}</Text>
                     <Text style={styles.listTitle}>{item.name}</Text>
                   </View>
-                </TouchableOpacity>
+                </Pressable>
               )}
             />
           </Animated.View>
