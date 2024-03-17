@@ -12,6 +12,7 @@ import Toast from "react-native-toast-message";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY, useAuth } from "./context/AuthContext";
 import axios from "axios";
+import StackScreen from "../components/StackScreen";
 
 const ChangePassword = () => {
   const router = useRouter();
@@ -74,8 +75,20 @@ const ChangePassword = () => {
         if(authState?.RC_STATUS === 1) router.replace('/home')
         if(authState?.RC_STATUS === 2) router.replace('/Register')
       } catch (error) {
-        console.warn("Error submitting Change Password data to API", error);
-        throw error
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Something Went Wrong Try again.",
+          topOffset: 100,
+          text1Style: {
+            fontFamily: "Poppins",
+            fontSize: 18,
+          },
+          text2Style: {
+            fontFamily: "PoppinsR",
+            fontSize: 14,
+          },
+        });
       }
     }
   };
@@ -86,16 +99,7 @@ const ChangePassword = () => {
         <Loader />
       ) : (
         <>
-          <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground,
-              },
-              headerTintColor: tintColorPrimary,
-            }}
-          />
+        <StackScreen/>
           <View style={styles.container}>
             <View>
               <Text style={styles.passwordText}>Change Password</Text>
