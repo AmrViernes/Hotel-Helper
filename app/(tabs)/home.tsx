@@ -13,6 +13,30 @@ const home = () => {
 
   const data = [
     {
+      name: "Maintenance",
+      url: "Maintenance",
+      icon: (
+        <FontAwesome
+          name="briefcase"
+          size={40}
+          color={Colors[colorScheme ?? "light"].text}
+          style={{ marginRight: 15 }}
+        />
+      ),
+    },
+    {
+      name: "Food",
+      url: "Food",
+      icon: (
+        <FontAwesome
+          name="coffee"
+          size={40}
+          color={Colors[colorScheme ?? "light"].text}
+          style={{ marginRight: 15 }}
+        />
+      ),
+    },
+    {
       name: "Finance",
       url: "Finance",
       icon: (
