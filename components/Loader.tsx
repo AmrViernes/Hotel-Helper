@@ -14,7 +14,6 @@ const Loader = () => {
   const { height } = Dimensions.get("screen");
   const color = useColorScheme();
   const animation = React.useRef(null);
-  console.log(color);
 
   return (
     <View
