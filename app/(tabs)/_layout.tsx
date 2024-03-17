@@ -24,9 +24,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: tintColorSecondary,
         tabBarInactiveTintColor: "#fff",
         headerShadowVisible: false,
-        header: () => (
-          <WeavyHeader />
-        ),
+        header: () => <WeavyHeader />,
         tabBarStyle: {
           height: 80,
           paddingBottom: 15,
@@ -46,15 +44,15 @@ export default function TabLayout() {
         options={{
           title: "Barcode",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="barcode" color={color} />
+            <TabBarIcon name="qrcode" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="setting"
+        name="evaluation"
         options={{
-          title: "Settings",
-          tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
+          title: "Evaluation",
+          tabBarIcon: ({ color }) => <TabBarIcon name="500px" color={color} />,
         }}
       />
     </Tabs>

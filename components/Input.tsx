@@ -6,6 +6,7 @@ type Props =  TextInput["props"]
 
 const Input = (props: Props) => {
   const {...otherProps } = props
+  
   return (
     <View>
       <TextInput style={styles.input}  {...otherProps} />
