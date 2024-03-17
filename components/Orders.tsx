@@ -1,28 +1,27 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 import { ImageBackground } from "expo-image";
 
 type OrderProps = {
+  orderId?: number,
   orderName: string;
-  roomNumber?: string;
   guestName?: string;
   orderType?: string;
   orderTime?: string;
 };
 
 const Orders = ({
+  orderId,
   orderName,
-  roomNumber,
   guestName,
   orderType,
   orderTime,
 }: OrderProps) => {
   return (
     <ImageBackground source={require('../assets/images/orders.png')} style={styles.box} imageStyle={{borderRadius: 10, opacity: 0.25}} contentFit="cover">
+      <Text>{orderId}</Text>
       <Text style={{fontSize: 18, color: tintColorPrimary ,fontFamily: 'PoppinsR'}}>{orderName}</Text>
-      <Text>{roomNumber}</Text>
       <Text>{guestName}</Text>
       <Text>{orderType}</Text>
       <Text>{orderTime}</Text>

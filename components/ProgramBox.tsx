@@ -7,20 +7,17 @@ import { ImageBackground } from "expo-image";
 type Program = {
   id?: number;
   title: string;
-  details?: string;
+  description?: string;
   startAt?: string;
-  duration?: number | string;
   date?: Date;
-  transportation?: string;
 };
 
 const ProgramBox = ({
+  id,
   title,
-  details,
+  description,
   date,
   startAt,
-  duration,
-  transportation,
 }: Program) => {
   return (
     <ImageBackground
@@ -29,13 +26,12 @@ const ProgramBox = ({
       imageStyle={{ borderRadius: 10, opacity: 0.25 }}
       contentFit="cover"
     >
+      <Text style={styles.text}>{id}</Text>
       <Text style={[styles.text, { fontSize: 16, color: tintColorPrimary }]}>
         {title}
       </Text>
-      <Text style={styles.text}>{details}</Text>
+      <Text style={styles.text}>{description}</Text>
       <Text style={styles.text}>{startAt}</Text>
-      <Text style={styles.text}>{duration}</Text>
-      <Text style={styles.text}>{transportation}</Text>
     </ImageBackground>
   );
 };
