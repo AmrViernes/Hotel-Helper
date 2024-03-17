@@ -77,7 +77,7 @@ const Register = () => {
                 data={foreignCompanies}
                 title="Foreign Tourism Company"
               />
-              <Button color={tintColorSecondary} page="login" title="Sign Up" />
+              <Button color={tintColorSecondary} page="Login" title="Sign Up" />
             </View>
           </View>
         </ScrollView>
