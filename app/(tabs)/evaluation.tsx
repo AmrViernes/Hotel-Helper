@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Button from "../../components/Button";
 import { tintColorSecondary } from "../../constants/Colors";
 import Stars from "../../components/Stars";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 type Services = {
   name: string;
@@ -42,36 +43,38 @@ const evaluation = () => {
   const checkEmptyRates = services.some((item) => item.rate === "");
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Evaluation Points</Text>
+    <SafeAreaProvider>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Evaluation Points</Text>
 
-        {services.map((service, serviceIndex) => (
-          <View key={serviceIndex}>
-            <Text style={styles.itemTitle}>{service.name}</Text>
-            <View style={styles.starsContainer}>
-              {rates.map((_, starIndex) => (
-                <Stars
-                  key={starIndex}
-                  value={starIndex}
-                  maxValue={services[serviceIndex].rateMaxValue}
-                  onClick={() => handleClick(serviceIndex, starIndex)}
-                />
-              ))}
+          {services.map((service, serviceIndex) => (
+            <View key={serviceIndex}>
+              <Text style={styles.itemTitle}>{service.name}</Text>
+              <View style={styles.starsContainer}>
+                {rates.map((_, starIndex) => (
+                  <Stars
+                    key={starIndex}
+                    value={starIndex}
+                    maxValue={services[serviceIndex].rateMaxValue}
+                    onClick={() => handleClick(serviceIndex, starIndex)}
+                  />
+                ))}
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
 
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Submit"
-            disabled={checkEmptyRates}
-            color={checkEmptyRates ? "#ccc" : tintColorSecondary}
-            page="home"
-          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Submit"
+              disabled={checkEmptyRates}
+              color={checkEmptyRates ? "#ccc" : tintColorSecondary}
+              page="home"
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 

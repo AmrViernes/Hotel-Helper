@@ -1,14 +1,15 @@
-import { SafeAreaView, StyleSheet } from "react-native";
-import { Text, View } from "../../components/Themed";
+import { StyleSheet } from "react-native";
+import { View } from "../../components/Themed";
 import QRCode from "react-native-qrcode-svg";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function TabTwoScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaProvider style={{ flex: 1 }}>
       <View style={styles.container}>
         <QRCode value="test"  size={200}/>
       </View>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

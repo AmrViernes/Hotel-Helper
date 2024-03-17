@@ -4,7 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Text, View } from "../../components/Themed";
 import Colors from "../../constants/Colors";
 import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 
 const home = () => {
@@ -40,7 +40,7 @@ const home = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <SafeAreaView >
+      <SafeAreaProvider >
         <View style={styles.container}>
           <Animated.Text
             style={styles.title}
@@ -73,7 +73,7 @@ const home = () => {
             />
           </Animated.View>
         </View>
-      </SafeAreaView>
+      </SafeAreaProvider>
     </View>
   );
 };

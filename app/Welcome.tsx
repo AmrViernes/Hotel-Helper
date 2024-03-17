@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import { Image } from "expo-image";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider} from "react-native-safe-area-context";
 import { View, Text } from "../components/Themed";
 import Button from "../components/Button";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
@@ -11,8 +11,7 @@ const Welcome = () => {
   const { height } = Dimensions.get("window");
 
   return (
-    <View>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider style={styles.container}>
         <Stack.Screen
           options={{
             headerShown: false,
@@ -36,11 +35,10 @@ const Welcome = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button title="Login" color={tintColorPrimary} page="Login" />
-          <Button title="Register" color={tintColorSecondary} page="Register" />
+          <Button title="Login" color={tintColorPrimary} page="Login" disabled />
+          <Button title="Register" color={tintColorSecondary} page="Register" disabled/>
         </View>
-      </SafeAreaView>
-    </View>
+      </SafeAreaProvider>
   );
 };
 

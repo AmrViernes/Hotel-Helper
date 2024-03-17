@@ -1,5 +1,5 @@
 import { StyleSheet, Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import React from "react";
 import { useRouter, Stack } from "expo-router";
@@ -28,8 +28,7 @@ const Login = () => {
   const isLoginDataEmpty = Object.values(loginData).some((item) => item === "");
 
   return (
-    <View>
-      <SafeAreaView>
+    <SafeAreaProvider>
         <Stack.Screen
           options={{
             headerTitle: "",
@@ -70,8 +69,7 @@ const Login = () => {
             </Text>
           </Pressable>
         </View>
-      </SafeAreaView>
-    </View>
+    </SafeAreaProvider>
   );
 };
 

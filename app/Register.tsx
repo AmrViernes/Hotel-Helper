@@ -1,8 +1,8 @@
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import React, { ReactDOM, useState } from "react";
+import React, { useState } from "react";
 import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider} from "react-native-safe-area-context";
 
 import { tintColorSecondary } from "../constants/Colors";
 import Input from "../components/Input";
@@ -58,8 +58,8 @@ const Register = () => {
   );
 
   return (
-    <View>
-      <SafeAreaView>
+      <SafeAreaProvider>
+
         <Stack.Screen
           options={{
             headerTitle: "",
@@ -179,8 +179,8 @@ const Register = () => {
             </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
-    </View>
+      </SafeAreaProvider>
+
   );
 };
 
