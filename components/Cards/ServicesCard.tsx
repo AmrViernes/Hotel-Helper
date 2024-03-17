@@ -9,10 +9,8 @@ import { ServicesCardT } from "../../types/types";
 
 const ServicesCard = ({ id, name, checked }: ServicesCardT) => {
   return (
-    <View style={[styles.container, {backgroundColor: checked}]}>
-        <View style={styles.maintenanceContainer}>
-          <Text style={styles.text}>{name?.toLocaleUpperCase()}</Text>
-        </View>
+    <View style={[styles.container, { backgroundColor: checked }]}>
+      <Text style={styles.text}>{name?.toLocaleUpperCase()}</Text>
     </View>
   );
 };
@@ -22,6 +20,7 @@ export default ServicesCard;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: "flex",
     flexDirection: "row",
     borderWidth: 1,
     borderRadius: 10,
@@ -39,24 +38,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     margin: 5,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     width: "80%",
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   maintenanceContainer: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    width: '100%',
+    width: "100%",
   },
   text: {
     color: tintColorSecondary,
     fontFamily: "Poppins",
     paddingHorizontal: 3,
-    textAlign: 'left',
-    fontSize: 20
+    textAlign: "left",
+    fontSize: 20,
   },
 });
