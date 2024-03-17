@@ -10,6 +10,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
   tintColorSecondary,
+  tintColorWarmBackground,
 } from "../../constants/Colors";
 import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -80,12 +81,12 @@ const home = () => {
     <SafeAreaProvider style={styles.container}>
         <Text style={styles.title}>
           Room
-          <Text style={{ color: tintColorSecondary }}> {homeData.ROOM_NO}</Text>
+          <Text style={{ color: tintColorSecondary }}> {homeData?.ROOM_NO}</Text>
         </Text>
         <Text style={styles.title}>
           Next Event{" "}
           <Text style={{ color: tintColorSecondary }}>
-            {homeData.NEXT_EVENT}
+            {homeData?.NEXT_EVENT}
           </Text>
         </Text>
         {/* Screens Sections */}
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
     paddingTop: '8%',
     display: "flex",
     height: "100%",
+    backgroundColor: tintColorWarmBackground
   },
   title: {
     fontSize: 20,
