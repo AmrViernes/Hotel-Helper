@@ -1,49 +1,48 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import {
+  tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
 } from "../constants/Colors";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Loader from "../components/Loader";
 import FoodCard from "../components/FoodCard";
-import { FoodT, OrderT, OrderInfoT } from "../types/types";
-
-
+import { FoodT, OrderT, OrderInfoT, LocationT } from "../types/types";
+import LocationCard from "../components/LocationCard";
+import { useData } from "./context/DataContext";
 
 const Food = () => {
+  const {setLoadingToTrue} = useData()
   const [loading, setLoading] = useState<boolean>(true);
+  const [locations, setLocations] = useState<LocationT>([]);
+  const [orderIsDone, setOrderIsDone] = useState<boolean>(false);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("food");
   const [orderInfo, setOrderInfo] = useState<OrderInfoT>({
     totalPrice: 0,
     items: [],
   });
-  const [foodData, setFoodData] = useState<FoodT>([
-    {
-      CAT_CODE: 0,
-      CAT_NAME: "food",
-      ITEM: [],
-    },
-  ]);
+  const [foodData, setFoodData] = useState<FoodT>([]);
   const [order, setOrder] = useState<OrderT>({
-    LOCATIONTYPE_CODE: 2,
-    LOCATION_CODE: 4,
-    REQ_DESC: "Test",
+    LOCATIONTYPE_CODE: 0,
+    LOCATION_CODE: 0,
+    REQ_DESC: "",
     ITEMS: [],
   });
 
-  const foodSelectedColor =
+  const foodSelectedTextColor =
     selected === "food" ? tintColorSecondary : tintColorPrimary;
-  const beverageSelectedColor =
-    selected === "beverage" ? tintColorSecondary : tintColorPrimary;
-  const foodSelectedBGColor =
+  const foodSelectedButtonColor =
     selected === "food" ? tintColorPrimary : tintColorWarmBackground;
-  const beverageSelectedBGColor =
+  const beverageSelectedTextColor =
+    selected === "beverage" ? tintColorSecondary : tintColorPrimary;
+  const beverageSelectedButtonColor =
     selected === "beverage" ? tintColorPrimary : tintColorWarmBackground;
 
   useEffect(() => {
@@ -54,7 +53,6 @@ const Food = () => {
         const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/item",
           {
-            signal: abort.signal,
             params: {
               P_APPID: 1,
               P_LANGCODE: "E",
@@ -71,7 +69,7 @@ const Food = () => {
 
     fetchData();
     return () => abort.abort();
-  }, [loading]);
+  }, []);
 
   const handleIncrement = useCallback(
     (price: number, itemId: number, itemName: string) => {
@@ -167,14 +165,58 @@ const Food = () => {
     [orderInfo, setOrderInfo, order, setOrder]
   );
 
-  const isItemDisabled = useCallback(
-    (itemName: string) =>
-      !orderInfo.items.map((ite) => ite.itemName).includes(itemName),
-    [orderInfo.items]
-  );
+  const handleFetchOrderLocations = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/loc",
+        {
+          params: {
+            P_APPID: 1,
+            P_LANGCODE: "E",
+          },
+        }
+      );
+      setLocations(response.data.RESPONSE[0].LOCATION_TYPE);
+      setOrderIsDone(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const getQuantityForItem = useCallback(
-    (itemName: string) => {
+  const handlePlaceOrder = async () => {
+    try {
+      // Add logic to send the order data to the backend
+      await axios.post(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        order,
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: 7977
+          }
+        }
+      );
+      setLoadingToTrue()
+      // Clear the order info and navigate to a success screen or perform other actions
+      setOrderInfo({ totalPrice: 0, items: [] });
+      setOrder({ LOCATIONTYPE_CODE: 0, LOCATION_CODE: 0, REQ_DESC: "", ITEMS: [] });
+  
+      // Reset selected location
+      setSelectedLocation(null);
+      
+      // Optionally, navigate to a success screen or perform other actions
+      // navigation.navigate("OrderSuccessScreen");
+      router.replace('/(tabs)/home')
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
+  const getQuantityForItem = useMemo(
+    () => (itemName: string) => {
       const itemInfo = orderInfo.items.find(
         (item) => item.itemName === itemName
       );
@@ -183,7 +225,9 @@ const Food = () => {
     [orderInfo.items]
   );
 
-  const buttonIsDisabled = orderInfo.items.length === 0;
+  const checkIfOrderIsNotEmpty = orderInfo.items.length === 0;
+  const checkIfLocationIsNotEmpty = order.LOCATION_CODE === 0;
+
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
@@ -194,125 +238,223 @@ const Food = () => {
           }}
         />
 
-        <View style={styles.mainIconsContainer}>
-          <Pressable
-            style={[
-              styles.foodIcon,
-              {
-                backgroundColor: foodSelectedBGColor,
-                borderBottomLeftRadius: 10,
-              },
-            ]}
-          >
-            <Text
-              style={[styles.foodIconTitle, { color: foodSelectedColor }]}
-              onPress={() => setSelected("food")}
-            >
-              Food
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.foodIcon,
-              ,
-              {
-                backgroundColor: beverageSelectedBGColor,
-                borderBottomRightRadius: 10,
-              },
-            ]}
-          >
-            <Text
-              style={[styles.foodIconTitle, { color: beverageSelectedColor }]}
-              onPress={() => setSelected("beverage")}
-            >
-              Beverage
-            </Text>
-          </Pressable>
-        </View>
         {loading ? (
           <Loader />
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.foodItemsContainer}>
-              {selected === "food" &&
-                foodData[0].ITEM.map((item) => (
-                  <FoodCard
-                    key={item.ITEM_ID}
-                    name={item.ITEM_NAME}
-                    price={item.ITEM_PRICE}
-                    currency={item.CURRENCY}
-                    counter={getQuantityForItem(item.ITEM_NAME)}
-                    disabled={
-                      orderInfo.items.find(
-                        (ite) => ite.itemName === item.ITEM_NAME
-                      )
-                        ? false
-                        : true
-                    }
-                    disabledColor={
-                      orderInfo.items.find(
-                        (ite) => ite.itemName === item.ITEM_NAME
-                      )
-                        ? tintColorPrimary
-                        : "#ccc"
-                    }
-                    onDecrement={() =>
-                      handleDecrement(
-                        item.ITEM_PRICE,
-                        item.ITEM_ID,
-                        item.ITEM_NAME
-                      )
-                    }
-                    onIncrement={() =>
-                      handleIncrement(
-                        item.ITEM_PRICE,
-                        item.ITEM_ID,
-                        item.ITEM_NAME
-                      )
-                    }
-                  />
-                ))}
+          <>
+            {locations.length === 0 && (
+              <View style={styles.mainIconsContainer}>
+                <Pressable
+                  style={[
+                    styles.foodIcon,
+                    {
+                      backgroundColor: foodSelectedButtonColor,
+                      borderBottomLeftRadius: 10,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.foodIconTitle,
+                      { color: foodSelectedTextColor },
+                    ]}
+                    onPress={() => setSelected("food")}
+                  >
+                    Food
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[
+                    styles.foodIcon,
+                    ,
+                    {
+                      backgroundColor: beverageSelectedButtonColor,
+                      borderBottomRightRadius: 10,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.foodIconTitle,
+                      { color: beverageSelectedTextColor },
+                    ]}
+                    onPress={() => setSelected("beverage")}
+                  >
+                    Beverage
+                  </Text>
+                </Pressable>
+              </View>
+            )}
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.foodItemsContainer}>
+                {locations.length === 0 ? (
+                  <>
+                    {selected === "food" &&
+                      foodData[0]?.ITEM.map((item) => (
+                        <FoodCard
+                          key={item.ITEM_ID}
+                          name={item.ITEM_NAME}
+                          price={item.ITEM_PRICE}
+                          currency={item.CURRENCY}
+                          counter={getQuantityForItem(item.ITEM_NAME)}
+                          disabled={
+                            orderInfo.items.find(
+                              (ite) => ite.itemName === item.ITEM_NAME
+                            )
+                              ? false
+                              : true
+                          }
+                          disabledColor={
+                            orderInfo.items.find(
+                              (ite) => ite.itemName === item.ITEM_NAME
+                            )
+                              ? tintColorPrimary
+                              : "#ccc"
+                          }
+                          onDecrement={() =>
+                            handleDecrement(
+                              item.ITEM_PRICE,
+                              item.ITEM_ID,
+                              item.ITEM_NAME
+                            )
+                          }
+                          onIncrement={() =>
+                            handleIncrement(
+                              item.ITEM_PRICE,
+                              item.ITEM_ID,
+                              item.ITEM_NAME
+                            )
+                          }
+                        />
+                      ))}
 
-              {selected === "beverage" &&
-                foodData[1]?.ITEM?.map((item: any) => (
-                  <FoodCard
-                    key={item.ITEM_ID}
-                    name={item.ITEM_NAME}
-                    price={item.ITEM_PRICE}
-                    currency={item.CURRENCY}
-                    counter={getQuantityForItem(item.ITEM_NAME)}
-                    disabled={
-                      orderInfo.items.find(
-                        (ite) => ite.itemName === item.ITEM_NAME
-                      )
-                        ? false
-                        : true
-                    }
-                    disabledColor={
-                      orderInfo.items.find(
-                        (ite) => ite.itemName === item.ITEM_NAME
-                      )
-                        ? tintColorPrimary
-                        : "#ccc"
-                    }
-                    onDecrement={() =>
-                      handleDecrement(
-                        item.ITEM_PRICE,
-                        item.ITEM_ID,
-                        item.ITEM_NAME
-                      )
-                    }
-                    onIncrement={() =>
-                      handleIncrement(
-                        item.ITEM_PRICE,
-                        item.ITEM_ID,
-                        item.ITEM_NAME
-                      )
-                    }
-                  />
-                ))}
-            </View>
-          </ScrollView>
+                    {selected === "beverage" &&
+                      foodData[1]?.ITEM?.map((item: any) => (
+                        <FoodCard
+                          key={item.ITEM_ID}
+                          name={item.ITEM_NAME}
+                          price={item.ITEM_PRICE}
+                          currency={item.CURRENCY}
+                          counter={getQuantityForItem(item.ITEM_NAME)}
+                          disabled={
+                            orderInfo.items.find(
+                              (ite) => ite.itemName === item.ITEM_NAME
+                            )
+                              ? false
+                              : true
+                          }
+                          disabledColor={
+                            orderInfo.items.find(
+                              (ite) => ite.itemName === item.ITEM_NAME
+                            )
+                              ? tintColorPrimary
+                              : "#ccc"
+                          }
+                          onDecrement={() =>
+                            handleDecrement(
+                              item.ITEM_PRICE,
+                              item.ITEM_ID,
+                              item.ITEM_NAME
+                            )
+                          }
+                          onIncrement={() =>
+                            handleIncrement(
+                              item.ITEM_PRICE,
+                              item.ITEM_ID,
+                              item.ITEM_NAME
+                            )
+                          }
+                        />
+                      ))}
+                  </>
+                ) : (
+                  <View
+                    style={styles.locationContainer}
+                  >
+                    {locations?.map((location, index) => (
+                      <View key={index}>
+                        <Pressable
+                          onPress={() => {
+                            // Toggle selected location on press
+                            setSelectedLocation(location.LOCATIONTYPE_NAME);
+                            setOrder((prev) => {
+                              return {
+                                ...prev,
+                                LOCATIONTYPE_CODE: location.LOCATIONTYPE_CODE,
+                                LOCATION_CODE:
+                                  location.LOCATIONTYPE_NAME === "room"
+                                    ? null
+                                    : 0,
+                              };
+                            });
+                          }}
+                        >
+                          <LocationCard
+                            name={location.LOCATIONTYPE_NAME}
+                            backgroundColor={
+                              selectedLocation === location.LOCATIONTYPE_NAME
+                                ? tintColorPrimary
+                                : tintColorSecondary
+                            }
+                          />
+                        </Pressable>
+
+                        {/* Show items if the location is selected */}
+                        {selectedLocation === location.LOCATIONTYPE_NAME && (
+                          <View
+                            style={[
+                              styles.subLocations,
+                              {
+                                display:
+                                  selectedLocation === "room" ? "none" : "flex",
+                              },
+                            ]}
+                          >
+                            {location.LOCATION.map((item: any, index) => (
+                              <Pressable
+                                key={index}
+                                onPress={() => {
+                                  setOrder((prev) => {
+                                    return {
+                                      ...prev,
+                                      LOCATION_CODE:
+                                        location.LOCATIONTYPE_CODE === 1
+                                          ? null
+                                          : item.LOCATION_CODE,
+                                    };
+                                  });
+                                }}
+                              >
+                                <Text
+                                  style={[
+                                    styles.subTitle,
+                                    {
+                                      color:
+                                        order.LOCATION_CODE ===
+                                        item.LOCATION_CODE
+                                          ? tintColorSecondary
+                                          : tintColorPrimary,
+                                      backgroundColor:
+                                        order.LOCATION_CODE ===
+                                        item.LOCATION_CODE
+                                          ? tintColorPrimary
+                                          : tintColorSecondary,
+                                    },
+                                  ]}
+                                >
+                                  {item.LOCATION_NAME}
+                                </Text>
+                              </Pressable>
+                            ))}
+                          </View>
+                        )}
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          </>
         )}
 
         <View style={styles.addOrderContainer}>
@@ -321,18 +463,44 @@ const Food = () => {
               Total: {orderInfo.totalPrice} {foodData[0]?.ITEM[0]?.CURRENCY}
             </Text>
           </View>
-          <Pressable disabled={buttonIsDisabled}>
-            <Text
-              style={[
-                styles.orderButton,
-                {
-                  backgroundColor: buttonIsDisabled ? "#ccc" : tintColorPrimary,
-                },
-              ]}
+          {!orderIsDone && (
+            <Pressable
+              disabled={checkIfOrderIsNotEmpty}
+              onPress={() => handleFetchOrderLocations()}
             >
-              {buttonIsDisabled ? 'Empty Basket' : 'Place Your Order'}
-            </Text>
-          </Pressable>
+              <Text
+                style={[
+                  styles.orderButton,
+                  {
+                    backgroundColor: checkIfOrderIsNotEmpty
+                      ? "#ccc"
+                      : tintColorPrimary,
+                  },
+                ]}
+              >
+                Deliver To
+              </Text>
+            </Pressable>
+          )}
+          {orderIsDone && (
+            <Pressable
+              disabled={checkIfLocationIsNotEmpty}
+              onPress={() => handlePlaceOrder()}
+            >
+              <Text
+                style={[
+                  styles.orderButton,
+                  {
+                    backgroundColor: checkIfLocationIsNotEmpty
+                      ? "#ccc"
+                      : tintColorPrimary,
+                  },
+                ]}
+              >
+                Confirm Your Order
+              </Text>
+            </Pressable>
+          )}
         </View>
       </SafeAreaProvider>
     </View>
@@ -378,13 +546,46 @@ const styles = StyleSheet.create({
   orderButton: {
     fontFamily: "Poppins",
     fontSize: 26,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    padding: 15,
+    paddingVertical: 0,
     borderRadius: 50,
   },
   totalTitle: {
     fontFamily: "PoppinsR",
     fontSize: 22,
     margin: 5,
+  },
+  locationContainer: {
+    padding: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation: 5,
+  },
+  subLocations: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: tintColorDisabled,
+    width: "60%",
+    alignSelf: "center",
+    paddingVertical: 10,
+    marginTop: -5,
+    marginBottom: 10,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    zIndex: -5,
+  },
+  subTitle: {
+    fontFamily: "Poppins",
+    fontSize: 18,
+    color: tintColorSecondary,
+    backgroundColor: tintColorPrimary,
+    padding: 8,
+    margin: 2,
+    borderRadius: 500,
+    minWidth: 40,
+    width: "auto",
+    height: 40,
+    textAlign: "center",
   },
 });
