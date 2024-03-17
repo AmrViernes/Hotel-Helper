@@ -4,6 +4,7 @@ import Svg, { Path } from "react-native-svg";
 import React from "react";
 import Logo from "./Logo";
 import { useAuth } from "../app/context/AuthContext";
+import { router } from "expo-router";
 
 const WavyHeader = () => {
   const {onLogout} = useAuth()
@@ -25,10 +26,10 @@ const WavyHeader = () => {
         {/* Left Header Button */}
         <View style={styles.headerButton}>
 
-            <Pressable onPress={() => logout()}>
+            <Pressable onPress={() => router.push("/Settings")}>
               {({ pressed }) => (
                 <FontAwesome
-                  name="sign-out"
+                  name="gear"
                   size={25}
                   color={`#fff`}
                   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
