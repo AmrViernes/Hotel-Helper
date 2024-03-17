@@ -23,13 +23,11 @@ import axios from "axios";
 import ProgramBox from "../../components/ProgramBox";
 import { useData } from "../context/DataContext";
 
-
-
 const home = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
   const { handleOpen } = useModal();
-  const { homeData, loading } = useData()
+  const { homeData, loading } = useData();
   const screensIconsData = [
     {
       name: "Maintain",
@@ -81,6 +79,14 @@ const home = () => {
     handleOpen(dynamicContent);
   };
 
+  const ordersImage = (num: number) => {
+    if (num == 3) {
+      return "../assets/images/fix.jpeg";
+    } else if (num == 6) {
+      return "../assets/images/orders.png";
+    }
+    return "../assets/images/hk.jpeg";
+  };
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -129,7 +135,7 @@ const home = () => {
                         height: 200,
                       }}
                     >
-                      <Orders orderName={req.DEPT_NAME} />
+                      <Orders orderName={req.DEPT_NAME} imageUrl={ordersImage(req.DEPT_NUMBER)} />
                     </View>
                   </Pressable>
                 ))}
