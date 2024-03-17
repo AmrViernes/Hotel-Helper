@@ -1,24 +1,28 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { tripsData } from "../constants/demoData";
-import ProgramBox from "./ProgramBox";
+import ProgramCard from "./ProgramCard";
+import { useData } from "../app/context/DataContext";
 
 const Programs = () => {
+  const { homeData } = useData();
+  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
+
   return (
     <View style={styles.container}>
-      {tripsData
-        .filter(
-          (item) =>
-            new Date(item.date).getDate() === new Date().getDate() &&
-            new Date(item.date).getMonth() === new Date().getMonth() &&
-            new Date(item.date).getFullYear() === new Date().getFullYear()
-        )
-        .map((item) => (
-            <ProgramBox
-              key={item.id}
-              title={item.title}
-            />
-        ))}
+      {homeData.PROGRAM.filter(
+        (item) =>
+          new Date(item.PROG_DATE).getDate() === selectedDate.getDate() &&
+          new Date(item.PROG_DATE).getMonth() === selectedDate.getMonth() &&
+          new Date(item.PROG_DATE).getFullYear() === selectedDate.getFullYear()
+      ).map((item) => (
+        <ProgramCard
+          key={item.PROG_ID}
+          title={item.PROG_TITLE}
+          description={item.PROG_DESCRIPTION}
+          date={new Date(item.PROG_DATE)}
+          startAt={"Start at - " + item.PROG_TIME}
+        />
+      ))}
     </View>
   );
 };
