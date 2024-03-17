@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 
 export default function Page() {
-  const { height } = Dimensions.get("window");
+  const { height } = Dimensions.get("screen");
 
   return (
     <SafeAreaProvider>
@@ -19,19 +19,18 @@ export default function Page() {
           }}
         />
         <Image
-          source={require("../assets/images/welcome.jpg")}
-          contentFit="contain"
+          source={require("../assets/images/svg/login.svg")}
+          contentFit="fill"
           style={{
             height: height / 2,
             width: "100%",
-            backgroundColor: 'white'
           }}
         />
         <View style={styles.titleContainer}>
           <Image
-            source={require("../assets/images/adaptive-icon.png")}
+            source={require("../assets/images/Logo.png")}
             contentFit="contain"
-            style={{ width: 80, height: 80 }}
+            style={{ width: 120, height: 100 }}
           />
           <Text style={styles.text}>Welcome To Royal Beau Rivage.</Text>
         </View>
@@ -57,20 +56,21 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     alignItems: "center",
-    backgroundColor: 'white'
+    flexDirection: 'column',
+    justifyContent: 'space-around'
   },
   text: {
     fontFamily: "Poppins",
     textAlign: "center",
-    fontSize: 22,
+    fontSize: 20,
+    color: tintColorPrimary
   },
   titleContainer: {
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    marginTop: -40,
-    marginBottom: 20,
-    backgroundColor: 'white'
+    height: '18%',
+    marginTop: '-15%'
   },
   buttonsContainer: {
     width: "80%",
@@ -78,6 +78,5 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: 'white'
   },
 });

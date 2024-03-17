@@ -14,9 +14,9 @@ import { AUTH_KEY } from "../context/AuthContext";
 
 const evaluation = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [evalState, setEvalState] = useState<string>();
+  const [evalStatus, setEvalStatus] = useState<string>();
   const [services, setServices] = useState<EvaluationT[]>([]);
-  const [finalData, setFinalData] = useState({ ITEMS: [] });
+  const [finalData, setFinalData] = useState<{ ITEMS: any[] }>({ ITEMS: [] });
 
   const rates: number[] = [40, 50, 70, 90, 100];
 
@@ -26,66 +26,52 @@ const evaluation = () => {
       rate: rates[starIndex],
       rateMaxValue: starIndex + 1,
     };
-    const newServices = [...services];
-    newServices[serviceIndex] = updatedService;
 
-    setFinalData((prev) => {
-      const existingItemIndex = prev.ITEMS.findIndex(
-        (item: any) => item.EVALPOINT_CODE === services[serviceIndex].id
-      );
+    const updatedServices = [...services];
+    updatedServices[serviceIndex] = updatedService;
 
-      if (existingItemIndex !== -1) {
-        // Update existing item
-        const updatedItems: any = [...prev.ITEMS];
-        updatedItems[existingItemIndex] = {
-          EVALPOINT_CODE: services[serviceIndex].id,
-          EVALPOINT_DEGREE: rates[starIndex],
-        };
+    const existingItemIndex = finalData.ITEMS.findIndex(
+      (item: any) => item.EVALPOINT_CODE === services[serviceIndex].id
+    );
 
-        return {
-          ITEMS: updatedItems,
-        };
-      } else {
-        // Add new item
-        return {
-          ITEMS: [
-            ...prev.ITEMS,
-            {
-              EVALPOINT_CODE: services[serviceIndex].id,
-              EVALPOINT_DEGREE: rates[starIndex],
-            },
-          ],
-        };
-      }
-    });
-    setServices(newServices);
+    const updatedFinalData =
+      existingItemIndex !== -1
+        ? [...finalData.ITEMS]
+        : [...finalData.ITEMS, { EVALPOINT_CODE: services[serviceIndex].id }];
+
+    updatedFinalData[existingItemIndex] = {
+      EVALPOINT_CODE: services[serviceIndex].id,
+      EVALPOINT_DEGREE: rates[starIndex],
+    };
+
+    setFinalData({ ITEMS: updatedFinalData });
+    setServices(updatedServices);
   };
 
   const checkEmptyRates = services.some((item) => item.rate === 0);
 
   const fetchDataFromApi = async () => {
-    const response = await axios.get(
-      "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
-      {
-        params: {
-          P_APPID: 1,
-          P_LANGCODE: "E",
-        },
-      }
-    );
-    return response?.data.ITEMS[0].EVAL_POINT.map(
-      (apiItem: { EVALPOINT_NAME: string; EVALPOINT_CODE: string }) => ({
+    try {
+      const response = await axios.get(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
+        { params: { P_APPID: 1, P_LANGCODE: "E" } }
+      );
+      return response.data.ITEMS[0].EVAL_POINT.map((apiItem: any) => ({
         id: apiItem.EVALPOINT_CODE,
         name: apiItem.EVALPOINT_NAME.toUpperCase(),
         rate: 0,
         rateMaxValue: 0,
-      })
-    );
+      }));
+    } catch (error) {
+      console.error("Error fetching data from API:", error);
+      throw error; // Propagate the error for proper error handling
+    }
   };
 
   const submitDataToApi = async () => {
-    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-    const authData = JSON.parse(gettingAuth as string);
+    const authData = JSON.parse(
+      (await secureStore.getItemAsync(AUTH_KEY)) as string
+    );
     setLoading(true);
     try {
       await axios.put(
@@ -100,51 +86,56 @@ const evaluation = () => {
       );
     } catch (error) {
       console.warn("Error submitting Eval data to API", error);
+      throw error;
+    }
+  };
+
+  const checkIfEvalIsDone = async () => {
+    const authData = JSON.parse(
+      (await secureStore.getItemAsync(AUTH_KEY)) as string
+    );
+    try {
+      const response = await axios.get(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
+        {
+          params: {
+            P_APPID: 1,
+            P_LANGCODE: "E",
+            P_RCID: authData.RC_ID,
+          },
+        }
+      );
+      setEvalStatus(response.data.RESPONSE[0].Message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateServicesFromApi = async () => {
+    try {
+      const updatedServices = await fetchDataFromApi();
+      setServices(updatedServices);
+    } catch (error) {
+      console.error("Error fetching data from API:", error);
+      throw error;
     }
   };
 
   useEffect(() => {
     const abort = new AbortController();
 
-    const checkIfEvalDone = async () => {
-      const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-      const authData = JSON.parse(gettingAuth as string);
-      try {
-        const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
-          {
-            params: {
-              P_APPID: 1,
-              P_LANGCODE: "E",
-              P_RCID: authData.RC_ID,
-            },
-          }
-        );
-        setEvalState(response.data.RESPONSE[0].Message);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const updateServicesFromApi = async () => {
-      try {
-        const updatedServices = await fetchDataFromApi();
-        setServices(updatedServices);
-      } catch (error) {
-        console.error("Error fetching data from API:", error);
-      }
-    };
-
+    checkIfEvalIsDone();
     updateServicesFromApi();
-    checkIfEvalDone();
+
     return () => abort.abort();
   }, [loading]);
 
   return (
     <SafeAreaProvider>
-      {evalState === "Yes" && (
+      {evalStatus === "Yes" && (
         <View style={styles.evalDoneContainer}>
           <Text style={styles.evalDoneTitle}>
             Your Evaluation Was Submitted Successfully.
@@ -155,7 +146,7 @@ const evaluation = () => {
       {loading ? (
         <Loader />
       ) : (
-        evalState !== "Yes" && (
+        evalStatus !== "Yes" && (
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
               <Text style={styles.title}>Evaluation Points</Text>
@@ -231,10 +222,7 @@ const styles = StyleSheet.create({
     width: "80%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    textAlign: "center",
+    paddingLeft: 10,
   },
   evalDoneContainer: {
     display: "flex",

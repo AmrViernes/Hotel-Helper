@@ -1,24 +1,38 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Link, Stack } from "expo-router";
+import { StyleSheet } from "react-native";
 
-import { Text, View } from '../components/Themed';
-import { tintColorPrimary, tintColorSecondary } from '../constants/Colors';
+import { Text, View } from "../components/Themed";
+import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
+import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
 
 export default function NotFoundScreen() {
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
+
   return (
     <>
       <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-        />
-      <View style={styles.container}>
-        <Text style={styles.title}>This Screen Doesn't Exist.</Text>
+        options={{
+          headerShown: false,
+        }}
+      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.title}>This Screen Doesn't Exist.</Text>
 
-        <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to Home Screen!</Text>
-        </Link>
-      </View>
+          <Link href="/" style={styles.link}>
+            <Text style={styles.linkText}>Go to Home Screen!</Text>
+          </Link>
+        </View>
+      )}
     </>
   );
 }
@@ -26,14 +40,14 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   title: {
     fontSize: 22,
     fontFamily: "Poppins",
-    color: tintColorSecondary
+    color: tintColorSecondary,
   },
   link: {
     marginTop: 15,
@@ -42,6 +56,6 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     color: tintColorPrimary,
-    fontFamily: 'PoppinsR',
+    fontFamily: "PoppinsR",
   },
 });

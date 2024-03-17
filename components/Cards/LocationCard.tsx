@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: 20,
     marginHorizontal: 10,
     backgroundColor: tintColorDisabled,
     shadowColor: tintColorPrimary,

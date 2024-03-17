@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack, router } from "expo-router";
+import { router } from "expo-router";
 import {
   tintColorDisabled,
   tintColorPrimary,
@@ -18,9 +18,10 @@ import LocationCard from "../components/Cards/LocationCard";
 import { useData } from "./context/DataContext";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "./context/AuthContext";
+import StackScreen from "../components/StackScreen";
 
 const Food = () => {
-  const {setLoadingToTrue} = useData()
+  const { setLoadingToTrue } = useData();
   const [loading, setLoading] = useState<boolean>(true);
   const [locations, setLocations] = useState<LocationT>([]);
   const [orderIsDone, setOrderIsDone] = useState<boolean>(false);
@@ -190,7 +191,7 @@ const Food = () => {
 
   const handlePlaceOrder = async () => {
     const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-    const authData = JSON.parse(gettingAuth as string)
+    const authData = JSON.parse(gettingAuth as string);
     try {
       // Add logic to send the order data to the backend
       await axios.post(
@@ -199,21 +200,26 @@ const Food = () => {
         {
           params: {
             P_APPID: 1,
-            P_RCID: authData.RC_ID
-          }
+            P_RCID: authData.RC_ID,
+          },
         }
       );
-      setLoadingToTrue()
+      setLoadingToTrue();
       // Clear the order info and navigate to a success screen or perform other actions
       setOrderInfo({ totalPrice: 0, items: [] });
-      setOrder({ LOCATIONTYPE_CODE: 0, LOCATION_CODE: 0, REQ_DESC: "", ITEMS: [] });
-  
+      setOrder({
+        LOCATIONTYPE_CODE: 0,
+        LOCATION_CODE: 0,
+        REQ_DESC: "",
+        ITEMS: [],
+      });
+
       // Reset selected location
       setSelectedLocation(null);
-      
+
       // Optionally, navigate to a success screen or perform other actions
       // navigation.navigate("OrderSuccessScreen");
-      router.replace('/(tabs)/home')
+      router.replace("/(tabs)/home");
     } catch (error) {
       console.error("Error placing order:", error);
     }
@@ -235,16 +241,7 @@ const Food = () => {
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-      <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+        <StackScreen />
 
         {loading ? (
           <Loader />
@@ -376,9 +373,7 @@ const Food = () => {
                       ))}
                   </>
                 ) : (
-                  <View
-                    style={styles.locationContainer}
-                  >
+                  <View style={styles.locationContainer}>
                     {locations?.map((location, index) => (
                       <View key={index}>
                         <Pressable
@@ -483,7 +478,7 @@ const Food = () => {
                     backgroundColor: checkIfOrderIsNotEmpty
                       ? "#ccc"
                       : tintColorPrimary,
-                      color: checkIfOrderIsNotEmpty ? tintColorPrimary : 'white'
+                    color: checkIfOrderIsNotEmpty ? tintColorPrimary : "white",
                   },
                 ]}
               >
@@ -503,6 +498,9 @@ const Food = () => {
                     backgroundColor: checkIfLocationIsNotEmpty
                       ? "#ccc"
                       : tintColorPrimary,
+                    color: checkIfLocationIsNotEmpty
+                      ? tintColorPrimary
+                      : "white",
                   },
                 ]}
               >
@@ -555,21 +553,18 @@ const styles = StyleSheet.create({
   orderButton: {
     fontFamily: "Poppins",
     fontSize: 26,
-    padding: 15,
-    paddingVertical: 0,
-    borderRadius: 50,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    borderRadius: 10,
   },
   totalTitle: {
     fontFamily: "PoppinsR",
     fontSize: 22,
     padding: 5,
-    backgroundColor: tintColorSecondary
+    backgroundColor: tintColorSecondary,
   },
   locationContainer: {
-    padding: 16,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    elevation: 5,
+    padding: 20,
   },
   subLocations: {
     display: "flex",

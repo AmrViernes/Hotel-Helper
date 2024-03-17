@@ -1,14 +1,13 @@
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import React, { useState } from "react";
-import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import { tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
+import { tintColorSecondary} from "../constants/Colors";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import DropdownMenu from "../components/DropdownMenu";
 import { RegisterT } from "../types/types";
+import StackScreen from "../components/StackScreen";
 
 const Register = () => {
   const localCompanies = ["JEM", "Star"];
@@ -45,16 +44,7 @@ const Register = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-      <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+        <StackScreen/>
         {/* <ActivityIndicator size="large" color={tintColorPrimary} /> */}
         <ScrollView style={{ height: "100%" }}>
           <View style={styles.container}>
@@ -68,16 +58,19 @@ const Register = () => {
             <View style={styles.inputContainer}>
               <Input
                 placeholder="Username"
+                showEye={false}
                 onChangeText={(value) => handleSetUserData("username", value)}
               />
               <Input
                 placeholder="Password"
                 secureTextEntry
+                showEye={true}
                 onChangeText={(value) => handleSetUserData("password", value)}
               />
               <Input
                 placeholder="Confirm Password"
                 secureTextEntry
+                showEye={true}
                 onChangeText={(value) =>
                   handleSetUserData("confirmPassword", value)
                 }
@@ -94,12 +87,14 @@ const Register = () => {
                 <>
                   <Input
                     placeholder="First Guest Name"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("firstGuestName", value)
                     }
                   />
                   <Input
                     placeholder="First Guest Passport"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("firstGuestPassport", value)
                     }
@@ -110,12 +105,14 @@ const Register = () => {
                 <>
                   <Input
                     placeholder="Second Guest Name"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("secondGuestName", value)
                     }
                   />
                   <Input
                     placeholder="Second Guest Passport"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("secondGuestPassport", value)
                     }
@@ -126,12 +123,14 @@ const Register = () => {
                 <>
                   <Input
                     placeholder="Third Guest Name"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("thirdGuestName", value)
                     }
                   />
                   <Input
                     placeholder="Third Guest Passport"
+                    showEye={false}
                     onChangeText={(value) =>
                       handleSetUserData("thirdGuestPassport", value)
                     }

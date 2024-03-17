@@ -3,11 +3,15 @@ import React from "react";
 import { Text, View } from "../components/Themed";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import DaysBox from "../components/DaysBox";
-import { Stack } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import ProgramCard from "../components/Cards/ProgramCard";
 import { useData } from "./context/DataContext";
-import { tintColorDisabled, tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
+import {
+  tintColorDisabled,
+  tintColorPrimary,
+  tintColorSecondary,
+} from "../constants/Colors";
+import StackScreen from "../components/StackScreen";
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -15,23 +19,16 @@ const Program = () => {
   const { homeData } = useData();
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
 
-  const dates = homeData?.PROGRAM.map((item) => new Date(item.PROG_DATE)).filter(
+  const dates = homeData?.PROGRAM.map(
+    (item) => new Date(item.PROG_DATE)
+  ).filter(
     (date, i, self) =>
       self.findIndex((d) => d.getTime() === date.getTime()) === i
   );
 
   return (
     <SafeAreaProvider style={styles.container}>
-          <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+      <StackScreen />
       <Text style={styles.title}>Select A Day</Text>
       <View style={styles.daysContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -78,7 +75,6 @@ export default Program;
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-    backgroundColor: tintColorWarmBackground
   },
   daysContainer: {
     display: "flex",
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Poppins",
     fontSize: 26,
-    color: tintColorPrimary
+    color: tintColorPrimary,
   },
   programsContainer: {
     padding: 10,

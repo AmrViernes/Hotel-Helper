@@ -1,7 +1,11 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { Text } from "../Themed";
+import { Text, View } from "../Themed";
 import React from "react";
-import { tintColorDisabled, tintColorPrimary } from "../../constants/Colors";
+import {
+  tintColorColdBackground,
+  tintColorDisabled,
+  tintColorPrimary,
+} from "../../constants/Colors";
 import { ImageBackground } from "expo-image";
 
 type Program = {
@@ -12,27 +16,23 @@ type Program = {
   date?: Date;
 };
 
-const ProgramCard = ({
-  id,
-  title,
-  description,
-  date,
-  startAt,
-}: Program) => {
+const ProgramCard = ({ id, title, description, startAt }: Program) => {
   return (
-    <ImageBackground
-      source={require("../../assets/images/events.jpg")}
-      style={styles.container}
-      imageStyle={{ borderRadius: 10, opacity: 0.25 }}
-      contentFit="cover"
-    >
-      <Text style={styles.text}>{id}</Text>
-      <Text style={[styles.text, { fontSize: 16, color: tintColorPrimary }]}>
-        {title}
-      </Text>
-      <Text style={styles.text}>{description}</Text>
-      <Text style={styles.text}>{startAt}</Text>
-    </ImageBackground>
+    <View style={styles.container}>
+      <View style={styles.overlay}></View>
+      <ImageBackground
+        source={require("../../assets/images/svg/plan.svg")}
+        style={styles.imageContainer}
+        imageStyle={{ borderRadius: 10, opacity: 0.25 }}
+        contentFit="contain"
+      >
+        <Text style={[styles.text, { fontSize: 22, color: tintColorPrimary }]}>
+          {title}
+        </Text>
+        {description && <Text style={styles.text}>{description}</Text>}
+        {startAt && <Text style={styles.text}>{startAt}</Text>}
+      </ImageBackground>
+    </View>
   );
 };
 
@@ -41,11 +41,9 @@ export default ProgramCard;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 1,
     borderRadius: 10,
     height: Dimensions.get("screen").height / 5,
     marginHorizontal: 10,
-    borderColor: "#eed7c5",
     backgroundColor: tintColorDisabled,
     shadowColor: tintColorPrimary,
     textAlign: "center",
@@ -56,14 +54,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    width: '90%'
+    paddingHorizontal: 10,
+    width: "90%",
+  },
+  imageContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "80%",
+  },
+  overlay: {
+    position: "absolute",
+    borderRadius: 10,
+    opacity: 0.7,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: tintColorColdBackground,
   },
   text: {
     color: "#789",
     fontFamily: "Poppins",
     paddingHorizontal: 3,
+    fontSize: 20
   },
 });

@@ -1,12 +1,14 @@
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useData } from "./context/DataContext";
-import { tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
+import {
+  tintColorPrimary,
+} from "../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
 import Loader from "../components/Loader";
 import OrderCard from "../components/Cards/OrderCard";
-import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import StackScreen from "../components/StackScreen";
 
 type Props = {};
 
@@ -14,16 +16,7 @@ const Orders = (props: Props) => {
   const { loading, homeData } = useData();
   return (
     <SafeAreaProvider style={styles.listContainer}>
-          <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+      <StackScreen />
       <Text style={styles.sectionsTitle}>Your Orders</Text>
       {loading && <Loader />}
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -34,6 +27,8 @@ const Orders = (props: Props) => {
                 <View style={styles.card}>
                   <OrderCard
                     orderName={req.DEPT_NAME}
+                    orderStatus={req.REQ_STATUS}
+                    orderQuantity={req.ITEM_COUNT}
                     imageUrl={req.DEPT_NUMBER}
                     loading={loading}
                   />
@@ -58,15 +53,17 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     alignSelf: "center",
-    backgroundColor: tintColorWarmBackground
   },
   sectionsTitle: {
     fontFamily: "Poppins",
     fontSize: 26,
     color: tintColorPrimary,
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
   card: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     minHeight: 100,
     maxHeight: 200,
     height: 150,

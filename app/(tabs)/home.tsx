@@ -4,6 +4,7 @@ import {
   useColorScheme,
   Text,
   View,
+  Dimensions,
 } from "react-native";
 import React, { ReactNode } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -77,36 +78,41 @@ const home = () => {
     handleOpen(dynamicContent);
   };
 
+  const homePrograms = homeData?.PROGRAM.filter(
+    (item) =>
+      new Date(item.PROG_DATE).getDate() === new Date().getDate() &&
+      new Date(item.PROG_DATE).getMonth() === new Date().getMonth() &&
+      new Date(item.PROG_DATE).getFullYear() === new Date().getFullYear()
+  ).sort((a: any, b: any) => a.PROG_ID - b.PROG_ID);
+
   return (
     <SafeAreaProvider style={styles.container}>
-        <Text style={styles.title}>
-          Room
-          <Text style={{ color: tintColorSecondary }}> {homeData?.ROOM_NO}</Text>
+      <Text style={styles.title}>
+        Room
+        <Text style={{ color: tintColorSecondary }}> {homeData?.ROOM_NO}</Text>
+      </Text>
+      <Text style={styles.title}>
+        Next Event{" "}
+        <Text style={{ color: tintColorSecondary }}>
+          {homeData?.NEXT_EVENT}
         </Text>
-        <Text style={styles.title}>
-          Next Event{" "}
-          <Text style={{ color: tintColorSecondary }}>
-            {homeData?.NEXT_EVENT}
-          </Text>
-        </Text>
-        {/* Screens Sections */}
-        <View style={styles.listContainer}>
-          {screensIconsData.map((item, index) => (
-            <Pressable
-              onPress={() => router.push(`/${item.url}`)}
-              key={index}
-              style={{ alignItems: "center" }}
-            >
-              <View style={styles.list}>
-                <Text>{item.icon}</Text>
-              </View>
-              <Text style={styles.listTitle}>{item.name}</Text>
-            </Pressable>
-          ))}
-        </View>
+      </Text>
+      {/* Screens Sections */}
+      <View style={styles.listContainer}>
+        {screensIconsData.map((item, index) => (
+          <Pressable
+            onPress={() => router.push(`/${item.url}`)}
+            key={index}
+            style={{ alignItems: "center" }}
+          >
+            <View style={styles.list}>
+              <Text>{item.icon}</Text>
+            </View>
+            <Text style={styles.listTitle}>{item.name}</Text>
+          </Pressable>
+        ))}
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-
-
         {/* Orders Section */}
         <View style={styles.listTitle}>
           <Text style={styles.sectionsTitle}>Orders</Text>
@@ -123,9 +129,11 @@ const home = () => {
                   key={req.REQ_ID}
                   onPress={() =>
                     openModel(
-                      <View style={{ display: "flex", alignItems: "center" }}>
-                        <Text>{req.DEPT_NAME}</Text>
-                        <Text>{req.REQ_STATUS}</Text>
+                      <View style={styles.modelContainer}>
+                        <Text style={styles.modelHeader}>
+                          Your Order Status
+                        </Text>
+                        <Text style={styles.modelText}>{req.REQ_STATUS}</Text>
                       </View>
                     )
                   }
@@ -136,40 +144,53 @@ const home = () => {
                     loading={loading}
                   />
                 </Pressable>
-              ))
-              .slice(0, 4)}
+              )).slice(0, 4)
+              }
+              {homeData?.REQUEST.length === 0 && <View style={styles.emptyProgramsContainer}>
+              <Text style={styles.emptyProgramsTitle}>Orders have not yet been placed.</Text></View>}
         </ScrollView>
 
         {/* Program Section */}
-          <View style={styles.listTitle}>
-            <Text style={styles.sectionsTitle}>Programs</Text>
-            <Link style={styles.linkInTitle} href="/Programs">
-              See All
-            </Link>
-          </View>
-          {loading && <Loader />}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {!loading &&
-              homeData?.PROGRAM.sort((a: any, b: any) => a.PROG_ID - b.PROG_ID)
-                .map((program: any) => (
-                  <Pressable
-                    key={program.PROG_ID}
-                    onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingVertical: 10,
-                        width: 200,
-                      }}
-                    >
-                      <ProgramCard title={program.PROG_TITLE} />
+        <View style={styles.listTitle}>
+          <Text style={styles.sectionsTitle}>Programs</Text>
+          <Link style={styles.linkInTitle} href="/Programs">
+            See All
+          </Link>
+        </View>
+        {loading && <Loader />}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingBottom: 6}}>
+          {!loading &&
+            homePrograms?.map((program: any) => (
+              <Pressable
+                key={program.PROG_ID}
+                onPress={() =>
+                  openModel(
+                    <View style={styles.modelContainer}>
+                      <Text style={styles.modelText}>{program.PROG_TITLE}</Text>
+                      <Text style={[styles.listTitle, { fontSize: 18 }]}>
+                        {"Start at - " + program.PROG_TIME}
+                      </Text>
+                      <Text style={styles.modelHeader}>
+                        {program.PROG_DESCRIPTION}
+                      </Text>
                     </View>
-                  </Pressable>
-                ))
-                .slice(0, 4)}
-          </ScrollView>
+                  )
+                }
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: 200,
+                  }}
+                >
+                  <ProgramCard title={program.PROG_TITLE} />
+                </View>
+              </Pressable>
+            ))}
+            {homePrograms?.length === 0 && <View style={styles.emptyProgramsContainer}>
+              <Text style={styles.emptyProgramsTitle}>Today there are no programs scheduled.</Text></View>}
+        </ScrollView>
       </ScrollView>
     </SafeAreaProvider>
   );
@@ -179,10 +200,9 @@ export default home;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: '8%',
+    paddingTop: "8%",
     display: "flex",
     height: "100%",
-    backgroundColor: tintColorWarmBackground
   },
   title: {
     fontSize: 20,
@@ -196,7 +216,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 12,
   },
   list: {
     display: "flex",
@@ -229,6 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 10,
+    paddingTop: 6,
   },
   linkInTitle: {
     textDecorationStyle: "solid",
@@ -243,4 +263,35 @@ const styles = StyleSheet.create({
     color: tintColorPrimary,
     textTransform: "uppercase",
   },
+  modelContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  modelHeader: {
+    fontFamily: "Poppins",
+    fontSize: 22,
+    color: tintColorPrimary,
+  },
+  modelText: {
+    fontFamily: "Poppins",
+    fontSize: 22,
+    color: tintColorPrimary,
+    backgroundColor: tintColorSecondary,
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+  },
+  emptyProgramsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Dimensions.get('screen').width,
+    padding: 15,
+    paddingVertical: 30
+  },
+  emptyProgramsTitle: {
+    fontFamily: 'PoppinsR',
+    fontSize: 16,
+    color: tintColorSecondary
+  }
 });

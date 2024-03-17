@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: any) => {
       const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
       const authData = JSON.parse(gettingAuth as string);
 
-      if (authData === null) {
+      if (authData === null && authState.authenticated === false) {
         router.replace('/')
       }
     };
@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: any) => {
         setAuthState({
           ACCESS_TOKEN: result.data.RESPONSE[0].ACCESS_TOKEN,
           RC_ID: result.data.RESPONSE[0].RC_ID,
+          PW_CHANGED: result.data.RESPONSE[0].PW_CHANGED,
           authenticated: true,
         });
 
@@ -90,7 +91,7 @@ export const AuthProvider = ({ children }: any) => {
           AUTH_KEY,
           JSON.stringify(result?.data?.RESPONSE[0])
         )
-
+          // Redirect where PW number for New Password or Fill data
         router.replace("/home")
         
       } else {
@@ -125,6 +126,9 @@ export const AuthProvider = ({ children }: any) => {
 
     setAuthState({
       ACCESS_TOKEN: null,
+      RC_ID: null,
+      PW_CHANGED: null,
+      RC_STATUS: null,
       authenticated: false,
     });
 

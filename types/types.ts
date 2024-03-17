@@ -20,6 +20,14 @@ export type LoginT = {
   loading: boolean;
 };
 
+export type ChangePasswordT = {
+  password: string;
+  confirmPassword: string;
+  showPassword: boolean,
+  showConfirmPassword: boolean,
+  loading: boolean;
+};
+
 export type HomeDataT = {
   ROOM_NO: string;
   NEXT_EVENT: string;

@@ -1,11 +1,10 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack, router } from "expo-router";
+import { router } from "expo-router";
 import {
   tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
-  tintColorWarmBackground,
 } from "../constants/Colors";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
@@ -17,12 +16,15 @@ import { ServicesT } from "../types/types";
 import { useData } from "./context/DataContext";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "./context/AuthContext";
+import StackScreen from "../components/StackScreen";
 
 const HouseKeeping = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [houseKeepingData, setHouseKeepingData] = useState<ServicesT[]>();
-  const [houseKeepingOrder, setHouseKeepingOrder] = useState<ServicesT>({ITEM_ID: 0});
-  const {setLoadingToTrue} = useData()
+  const [houseKeepingOrder, setHouseKeepingOrder] = useState<ServicesT>({
+    ITEM_ID: 0,
+  });
+  const { setLoadingToTrue } = useData();
 
   useEffect(() => {
     const abort = new AbortController();
@@ -52,8 +54,8 @@ const HouseKeeping = () => {
 
   const handlePlaceHouseKeepingRequest = async () => {
     const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-    const authData = JSON.parse(gettingAuth as string)
-    setLoading(true)
+    const authData = JSON.parse(gettingAuth as string);
+    setLoading(true);
     try {
       // Add logic to send the order data to the backend
       await axios.post(
@@ -62,36 +64,26 @@ const HouseKeeping = () => {
         {
           params: {
             P_APPID: 1,
-            P_RCID: authData.RC_ID
-          }
+            P_RCID: authData.RC_ID,
+          },
         }
       );
-      setLoadingToTrue()
+      setLoadingToTrue();
       // Clear the order info and navigate to a success screen or perform other actions
-      setHouseKeepingOrder({ITEM_ID: 0});
+      setHouseKeepingOrder({ ITEM_ID: 0 });
       // Optionally, navigate to a success screen or perform other actions
-      router.replace('/(tabs)/home')
+      router.replace("/(tabs)/home");
     } catch (error) {
       console.error("Error placing order:", error);
     }
-  }
+  };
 
-  const checkIfUserSelectItem = houseKeepingOrder.ITEM_ID === 0 ? true : false
-console.log(houseKeepingData)
-console.log(houseKeepingOrder)
+  const checkIfUserSelectItem = houseKeepingOrder.ITEM_ID === 0 ? true : false;
+
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-      <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+        <StackScreen />
         {loading ? (
           <Loader />
         ) : (
@@ -104,7 +96,11 @@ console.log(houseKeepingOrder)
                 ) : (
                   houseKeepingData?.map((item, index) => (
                     <Pressable
-                      onPress={() => setHouseKeepingOrder({ITEM_ID: item.ITEM_CODE as number})}
+                      onPress={() =>
+                        setHouseKeepingOrder({
+                          ITEM_ID: item.ITEM_CODE as number,
+                        })
+                      }
                       key={index + 1}
                     >
                       <MaintenanceCard
@@ -123,12 +119,17 @@ console.log(houseKeepingOrder)
           </>
         )}
         <View style={styles.addOrderContainer}>
-          <Pressable disabled={checkIfUserSelectItem} onPress={() => handlePlaceHouseKeepingRequest()}>
+          <Pressable
+            disabled={checkIfUserSelectItem}
+            onPress={() => handlePlaceHouseKeepingRequest()}
+          >
             <Text
               style={[
                 styles.orderButton,
                 {
-                  backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
+                  backgroundColor: checkIfUserSelectItem
+                    ? "#ccc"
+                    : tintColorPrimary,
                   color: checkIfUserSelectItem ? tintColorPrimary : "white",
                 },
               ]}
@@ -169,8 +170,8 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     fontSize: 26,
     paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 50,
+    paddingVertical: 6,
+    borderRadius: 10,
   },
   totalTitle: {
     fontFamily: "PoppinsR",

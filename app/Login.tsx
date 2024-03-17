@@ -1,14 +1,15 @@
-import { StyleSheet, Pressable, ActivityIndicator } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import React from "react";
-import { useRouter, Stack } from "expo-router";
+import { useRouter } from "expo-router";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 import { useAuth } from "./context/AuthContext";
 import Loader from "../components/Loader";
 import { LoginT } from "../types/types";
+import StackScreen from "../components/StackScreen";
 
 const Login = () => {
   const router = useRouter();
@@ -56,19 +57,10 @@ const Login = () => {
   return (
     <SafeAreaProvider>
       {loginData.loading ? (
-        <Loader/>
+        <Loader />
       ) : (
         <>
-          <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+          <StackScreen />
           <View style={styles.container}>
             <View style={styles.textsContainers}>
               <Text style={styles.loginText}>Login Here</Text>
@@ -80,11 +72,13 @@ const Login = () => {
             <View style={styles.inputContainer}>
               <Input
                 placeholder="User"
+                showEye={false}
                 onChangeText={(value) => handleLoginEntry("username", value)}
               />
               <Input
                 placeholder="Password"
                 secureTextEntry
+                showEye={true}
                 onChangeText={(value) => handleLoginEntry("password", value)}
               />
               <Button

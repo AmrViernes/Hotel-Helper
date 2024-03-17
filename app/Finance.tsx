@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "../components/Themed";
-import { Stack } from "expo-router";
-import { tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
+import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 import axios from "axios";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "./context/AuthContext";
 import Loader from "../components/Loader";
+import StackScreen from "../components/StackScreen";
+import { Image } from "expo-image";
 
 const Finance = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,21 +44,25 @@ const Finance = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerTitle: "",
-          headerShadowVisible: false,
-          headerStyle: {
-            backgroundColor: tintColorWarmBackground,
-          },
-          headerTintColor: tintColorPrimary,
-        }}
-      />
-      
-      {loading ? <Loader /> : <>
-      <Text style={styles.title}>Your Debt Amount</Text>
-      <Text style={[styles.title, {color: tintColorSecondary}]}>{amount}</Text>
-      </>}
+      <StackScreen />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Image
+            source={require("../assets/images/svg/payment.svg")}
+            placeholder='Payment'
+            style={{ width: '30%', height: '20%'}}
+            contentFit="contain"
+          />
+          <View>
+          <Text style={styles.title}>Your Debt Amount</Text>
+          <Text style={[styles.title, { color: tintColorSecondary }]}>
+            {amount}
+          </Text>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -66,10 +71,11 @@ export default Finance;
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    display: 'flex',
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
+    marginTop: -40
   },
   title: {
     fontSize: 30,

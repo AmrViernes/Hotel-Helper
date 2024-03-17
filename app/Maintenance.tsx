@@ -1,11 +1,10 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Stack, router } from "expo-router";
+import { router } from "expo-router";
 import {
   tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
-  tintColorWarmBackground,
 } from "../constants/Colors";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
@@ -14,15 +13,18 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import MaintenanceCard from "../components/Cards/ServicesCard";
 import { ServicesT } from "../types/types";
-import { useData } from './context/DataContext'
+import { useData } from "./context/DataContext";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "./context/AuthContext";
+import StackScreen from "../components/StackScreen";
 
 const Maintenance = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [maintenanceData, setMaintenanceData] = useState<ServicesT[]>();
-  const [maintenanceOrder, setMaintenanceOrder] = useState<ServicesT>({ITEM_ID: 0});
-const { setLoadingToTrue } = useData()
+  const [maintenanceOrder, setMaintenanceOrder] = useState<ServicesT>({
+    ITEM_ID: 0,
+  });
+  const { setLoadingToTrue } = useData();
   useEffect(() => {
     const abort = new AbortController();
 
@@ -50,13 +52,13 @@ const { setLoadingToTrue } = useData()
   }, []);
 
   const handleMaintenanceList = (itemId: number) => {
-    setMaintenanceOrder({ITEM_ID: itemId});
+    setMaintenanceOrder({ ITEM_ID: itemId });
   };
 
   const handlePlaceFixRequest = async () => {
     const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
-    const authData = JSON.parse(gettingAuth as string)
-    setLoading(true)
+    const authData = JSON.parse(gettingAuth as string);
+    setLoading(true);
     try {
       // Add logic to send the order data to the backend
       await axios.post(
@@ -65,37 +67,28 @@ const { setLoadingToTrue } = useData()
         {
           params: {
             P_APPID: 1,
-            P_RCID: authData.RC_ID
-          }
+            P_RCID: authData.RC_ID,
+          },
         }
       );
-      setLoadingToTrue()
+      setLoadingToTrue();
       // Clear the order info and navigate to a success screen or perform other actions
-      setMaintenanceOrder({ITEM_ID: 0});
+      setMaintenanceOrder({ ITEM_ID: 0 });
       // Optionally, navigate to a success screen or perform other actions
-      router.replace('/(tabs)/home')
+      router.replace("/(tabs)/home");
     } catch (error) {
       console.error("Error placing order:", error);
     }
-  }
+  };
 
-  const checkIfUserSelectItem = maintenanceOrder.ITEM_ID === 0 ? true : false
+  const checkIfUserSelectItem = maintenanceOrder.ITEM_ID === 0 ? true : false;
 
-  console.log(maintenanceOrder)
+  console.log(maintenanceOrder);
 
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-      <Stack.Screen
-            options={{
-              headerTitle: "",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor: tintColorWarmBackground
-              },
-              headerTintColor: tintColorPrimary
-            }}
-          />
+        <StackScreen />
         {loading ? (
           <Loader />
         ) : (
@@ -127,13 +120,18 @@ const { setLoadingToTrue } = useData()
           </>
         )}
         <View style={styles.addOrderContainer}>
-          <Pressable disabled={checkIfUserSelectItem} onPress={() => handlePlaceFixRequest()}>
+          <Pressable
+            disabled={checkIfUserSelectItem}
+            onPress={() => handlePlaceFixRequest()}
+          >
             <Text
               style={[
                 styles.orderButton,
                 {
-                  backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
-                  color: checkIfUserSelectItem ? tintColorPrimary : 'white'
+                  backgroundColor: checkIfUserSelectItem
+                    ? "#ccc"
+                    : tintColorPrimary,
+                  color: checkIfUserSelectItem ? tintColorPrimary : "white",
                 },
               ]}
             >
@@ -172,8 +170,8 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     fontSize: 26,
     paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 50,
+    paddingVertical: 6,
+    borderRadius: 10,
   },
   totalTitle: {
     fontFamily: "PoppinsR",

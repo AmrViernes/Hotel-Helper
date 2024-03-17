@@ -4,10 +4,11 @@ import { tintColorPrimary, tintColorSecondary } from "../../constants/Colors";
 import WavyHeader from "../../components/WavyHeader";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
-import { AppState, StyleSheet } from "react-native";
+import { AppState, StyleSheet, BackHandler, Alert } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { Text, View } from "../../components/Themed";
-import { useData } from "../context/DataContext";
+import { router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -19,20 +20,63 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const [appState, setAppState] = useState<string>(AppState.currentState);
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
-  const { setLoadingToTrue } = useData();
+  const {onLogout} = useAuth()
 
-  const handleAppStateChange = async (nextAppState: string) => {
-    setAppState(nextAppState);
-
-    if (nextAppState === "background") {
-      // User don't using the App
-      setLoadingToTrue();
-    } else if (nextAppState === "active") {
-      // User is using the App
-    }
-  };
+  const logout = async () => {
+    return await onLogout!()
+  }
 
   useEffect(() => {
+    const handleBackButton = () => {
+      Alert.alert(
+        "Confirmation",
+        "Are you sure you want to exit?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => {},
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              logout()
+              BackHandler.exitApp();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+      // Return true to prevent the default behavior (exit the app
+      // Return false to allow the default behavior (navigate back)
+      return true;
+    };
+
+    // Add event listener for hardware back button press
+    const backHandlerListener = BackHandler.addEventListener(
+      "hardwareBackPress",
+      handleBackButton
+    );
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      backHandlerListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleAppStateChange = async (nextAppState: string) => {
+      setAppState(nextAppState);
+
+      if (nextAppState === "background" || nextAppState === "inactive") {
+        // User don't using the App
+        logout()
+      } else if (nextAppState === "active") {
+        // User is using the App
+        //logout()
+      }
+    };
+
     // Subscribe to app state changes
     const subscription = AppState.addEventListener(
       "change",
@@ -50,7 +94,7 @@ export default function TabLayout() {
     return () => {
       subscription.remove();
     };
-  }, [appState, isConnected]);
+  }, [isConnected]);
 
   return (
     <SafeAreaProvider>
@@ -61,6 +105,9 @@ export default function TabLayout() {
             tabBarInactiveTintColor: "#fff",
             headerShadowVisible: false,
             header: () => <WavyHeader />,
+            tabBarLabelStyle: {
+              fontFamily: 'PoppinsR'
+            },
             tabBarStyle: {
               height: 80,
               paddingBottom: 13,
