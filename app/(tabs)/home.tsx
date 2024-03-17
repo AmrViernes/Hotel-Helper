@@ -1,4 +1,5 @@
-import { StyleSheet, FlatList, Pressable, useColorScheme } from "react-native";
+import { StyleSheet, Pressable, useColorScheme } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Text, View } from "../../components/Themed";
@@ -6,6 +7,8 @@ import Colors from "../../constants/Colors";
 import { useRouter } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
+import { ScrollView } from "react-native-gesture-handler";
+import Orders from "../../components/Orders";
 
 const home = () => {
   const colorScheme = useColorScheme();
@@ -13,14 +16,13 @@ const home = () => {
 
   const data = [
     {
-      name: "Maintenance",
+      name: "Maintain",
       url: "Maintenance",
       icon: (
         <FontAwesome
           name="briefcase"
           size={40}
           color={Colors[colorScheme ?? "light"].text}
-          style={{ marginRight: 15 }}
         />
       ),
     },
@@ -32,7 +34,6 @@ const home = () => {
           name="coffee"
           size={40}
           color={Colors[colorScheme ?? "light"].text}
-          style={{ marginRight: 15 }}
         />
       ),
     },
@@ -44,7 +45,6 @@ const home = () => {
           name="money"
           size={40}
           color={Colors[colorScheme ?? "light"].text}
-          style={{ marginRight: 15 }}
         />
       ),
     },
@@ -56,49 +56,90 @@ const home = () => {
           name="th-list"
           size={40}
           color={Colors[colorScheme ?? "light"].text}
-          style={{ marginRight: 15 }}
         />
       ),
     },
   ];
 
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaProvider >
-        <View style={styles.container}>
-          <Animated.Text
-            style={styles.title}
-            entering={FadeInUp}
-            exiting={FadeOutDown}
-          >
-            Hello Mr Welcome To GRA Company
-          </Animated.Text>
-          <Animated.View
-            style={styles.container}
-            entering={FadeInUp}
-            exiting={FadeOutDown}
-          >
-            <FlatList
-              style={{ marginVertical: "30%" }}
-              data={data}
-              keyExtractor={(item) => item.url}
-              numColumns={2}
-              renderItem={({ item, index }) => (
-                <Pressable
-                  onPress={() => router.push(`/${item.url}`)}
-                  style={styles.listContainer}
-                >
-                  <View style={styles.list}>
-                    <Text>{item.icon}</Text>
-                    <Text style={styles.listTitle}>{item.name}</Text>
-                  </View>
-                </Pressable>
-              )}
-            />
-          </Animated.View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <Text
+          style={styles.title}
+        >
+          Hello Mr Welcome To GRA Company
+        </Text>
+
+        <View style={{ height: "100%", width: "90%"}}>
+          <FlashList
+            data={data}
+            estimatedItemSize={4}
+            keyExtractor={(item) => item.url}
+            numColumns={4}
+            renderItem={({ item, index }) => (
+              <Pressable
+                onPress={() => router.push(`/${item.url}`)}
+                style={styles.listContainer}
+              >
+                <View style={styles.list}>
+                  <Text>{item.icon}</Text>
+                  <Text style={styles.listTitle}>{item.name}</Text>
+                </View>
+              </Pressable>
+            )}
+          />
+
+            <Text>Orders</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.ordersContainer}>
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+                <Orders
+                  guestName="Amr"
+                  orderName="Breakfast Meal"
+                  orderTime="7:00 AM"
+                  orderType="On Room"
+                  roomNumber="U202"
+                />
+              </View>
+            </ScrollView>
+
         </View>
-      </SafeAreaProvider>
-    </View>
+      </View>
+    </SafeAreaProvider>
   );
 };
 
@@ -106,11 +147,9 @@ export default home;
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   title: {
     fontSize: 20,
@@ -120,22 +159,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   listContainer: {
-    margin: 6,
-    padding: 20,
+    margin: 5,
+    padding: 4,
     borderColor: "#466d86",
     borderWidth: 2,
-    borderRadius: 10,
-    width: 100,
-    height: 100,
+    borderRadius: 7,
+    width: 75,
+    height: 70,
   },
   list: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   listTitle: {
     fontFamily: "Poppins",
     fontWeight: "bold",
     fontSize: 12,
+  },
+  ordersContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

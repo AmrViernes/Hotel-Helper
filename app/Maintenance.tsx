@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text, View } from "../components/Themed";
 
 const Maintenance = () => {
   return (
-    <div>Maintenance</div>
+    <Text>Maintain</Text>
   )
 }
 

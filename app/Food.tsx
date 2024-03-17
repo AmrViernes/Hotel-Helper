@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text, View } from "../components/Themed";
 
 const Food = () => {
   return (
-    <div>Food</div>
+    <Text>Food</Text>
   )
 }
 
