@@ -1,11 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Redirect, Tabs } from "expo-router";
-import {
-  tintColorPrimary,
-  tintColorSecondary,
-} from "../../constants/Colors";
+import { Tabs } from "expo-router/tabs";
+import { tintColorPrimary, tintColorSecondary } from "../../constants/Colors";
 import WavyHeader from "../../components/WavyHeader";
-import { useAuth } from "../context/AuthContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useEffect, useState } from "react";
+import { AppState, StyleSheet } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
+import { Text, View } from "../../components/Themed";
+import { useData } from "../context/DataContext";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -15,13 +17,44 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const { authState} = useAuth();
+  const [appState, setAppState] = useState<string>(AppState.currentState);
+  const [isConnected, setIsConnected] = useState<boolean | null>(true);
+  const { setLoadingToTrue } = useData();
+
+  const handleAppStateChange = async (nextAppState: string) => {
+    setAppState(nextAppState);
+
+    if (nextAppState === "background") {
+      // User don't using the App
+      setLoadingToTrue();
+    } else if (nextAppState === "active") {
+      // User is using the App
+    }
+  };
+
+  useEffect(() => {
+    // Subscribe to app state changes
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    const checkConnection = () =>
+      NetInfo.addEventListener((state) => {
+        setIsConnected(state.isConnected);
+      });
+
+    checkConnection();
+
+    // Unsubscribe when the component unmounts
+    return () => {
+      subscription.remove();
+    };
+  }, [appState, isConnected]);
 
   return (
-    <>
-      {authState?.authenticated === false ? (
-        <Redirect href="/Welcome" />
-      ) : (
+    <SafeAreaProvider>
+      {isConnected && (
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: tintColorSecondary,
@@ -41,8 +74,9 @@ export default function TabLayout() {
             name="home"
             options={{
               title: "Home",
+              href: "/home",
               tabBarIcon: ({ color }) => (
-                <TabBarIcon name="home" color={color}/>
+                <TabBarIcon name="home" color={color} />
               ),
             }}
           />
@@ -50,6 +84,7 @@ export default function TabLayout() {
             name="barcode"
             options={{
               title: "Barcode",
+              href: "/barcode",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="qrcode" color={color} />
               ),
@@ -59,6 +94,7 @@ export default function TabLayout() {
             name="evaluation"
             options={{
               title: "Evaluation",
+              href: "/evaluation",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="star-half-full" color={color} />
               ),
@@ -68,6 +104,7 @@ export default function TabLayout() {
             name="settings"
             options={{
               title: "Settings",
+              href: "/settings",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="gear" color={color} />
               ),
@@ -75,6 +112,30 @@ export default function TabLayout() {
           />
         </Tabs>
       )}
-    </>
+      {!isConnected && (
+        <View style={Styles.Container}>
+          <Text style={Styles.message}>
+            No Internet Connection Please Check Your Connection.
+          </Text>
+        </View>
+      )}
+    </SafeAreaProvider>
   );
 }
+
+const Styles = StyleSheet.create({
+  Container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    paddingHorizontal: 40,
+  },
+  message: {
+    fontFamily: "Poppins",
+    fontSize: 33,
+    textAlign: "center",
+    color: tintColorSecondary,
+  },
+});
