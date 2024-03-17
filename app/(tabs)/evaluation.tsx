@@ -11,6 +11,7 @@ import axios from "axios";
 import { EvaluationT } from "../../types/types";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "../context/AuthContext";
+import Toast from "react-native-toast-message";
 
 const evaluation = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,8 +64,20 @@ const evaluation = () => {
         rateMaxValue: 0,
       }));
     } catch (error) {
-      console.error("Error fetching data from API:", error);
-      throw error; // Propagate the error for proper error handling
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something Went Wrong Try again.",
+        topOffset: 100,
+        text1Style: {
+          fontFamily: "Poppins",
+          fontSize: 18,
+        },
+        text2Style: {
+          fontFamily: "PoppinsR",
+          fontSize: 14,
+        },
+      });
     }
   };
 
@@ -85,8 +98,20 @@ const evaluation = () => {
         }
       );
     } catch (error) {
-      console.warn("Error submitting Eval data to API", error);
-      throw error;
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something Went Wrong Try again.",
+        topOffset: 100,
+        text1Style: {
+          fontFamily: "Poppins",
+          fontSize: 18,
+        },
+        text2Style: {
+          fontFamily: "PoppinsR",
+          fontSize: 14,
+        },
+      });
     }
   };
 
@@ -107,8 +132,20 @@ const evaluation = () => {
       );
       setEvalStatus(response.data.RESPONSE[0].Message);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something Went Wrong Try again.",
+        topOffset: 100,
+        text1Style: {
+          fontFamily: "Poppins",
+          fontSize: 18,
+        },
+        text2Style: {
+          fontFamily: "PoppinsR",
+          fontSize: 14,
+        },
+      });
     } finally {
       setLoading(false);
     }
@@ -119,8 +156,20 @@ const evaluation = () => {
       const updatedServices = await fetchDataFromApi();
       setServices(updatedServices);
     } catch (error) {
-      console.error("Error fetching data from API:", error);
-      throw error;
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something Went Wrong Try again.",
+        topOffset: 100,
+        text1Style: {
+          fontFamily: "Poppins",
+          fontSize: 18,
+        },
+        text2Style: {
+          fontFamily: "PoppinsR",
+          fontSize: 14,
+        },
+      });
     }
   };
 
