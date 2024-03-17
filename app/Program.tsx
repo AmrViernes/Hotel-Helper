@@ -5,8 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import DaysBox from "../components/DaysBox";
 import { Stack } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
-import ProgramBox from "../components/ProgramCard";
-import { tintColorWarmBackground } from "../constants/Colors";
+import ProgramCard from "../components/ProgramCard";
 import { useData } from "./context/DataContext";
 
 
@@ -68,7 +67,7 @@ const Program = () => {
                 <View
                   style={styles.programsContainer}
                 >
-                  <ProgramBox
+                  <ProgramCard
                     title={item.PROG_TITLE}
                     description={item.PROG_DESCRIPTION}
                     date={new Date(item.PROG_DATE)}
