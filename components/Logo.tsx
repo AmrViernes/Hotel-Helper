@@ -1,11 +1,11 @@
-import { View, Text } from 'react-native'
+import { View, Text } from './Themed'
 import React from 'react'
-import { Image } from 'react-native'
+import { Image } from "expo-image";
 
 const Logo = () => {
   return (
-    <View style={{padding:6}}>
-      <Image source={require('../assets/images/Logo.png')} resizeMode='contain' style={{width: 70 , height: 70}}/>
+    <View style={{marginLeft: 15}}>
+      <Image source={require('../assets/images/Logo.png')} contentFit='fill' style={{width: 90 , height: 70}}/>
     </View>
   )
 }
