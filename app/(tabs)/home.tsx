@@ -5,23 +5,24 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
+import React, { ReactNode } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
   tintColorSecondary,
-  tintColorWarmBackground,
 } from "../../constants/Colors";
 import { Link, useRouter } from "expo-router";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView} from "react-native-gesture-handler";
 import Orders from "../../components/Orders";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import Programs from "../../components/Programs";
-import ProgramBox from "../../components/ProgramBox";
+import { useModal } from './../context/ModelContext';
+import Toast from 'react-native-toast-message';
 
 const home = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const { handleOpen } = useModal();
 
   const mainScreensData = [
     {
@@ -70,6 +71,10 @@ const home = () => {
     },
   ];
 
+const openModel = (dynamicContent: ReactNode) => {
+  handleOpen(dynamicContent);
+}
+
   return (
     <SafeAreaProvider style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -95,20 +100,23 @@ const home = () => {
         <View>
           <View style={styles.listTitle}>
             <Text style={styles.sectionsTitle}>Orders</Text>
-            <Link href="/Orders" style={styles.linkInTitle}>See All</Link>
+            <Link href="/Orders" style={styles.linkInTitle}>
+              See All
+            </Link>
           </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
-            <View style={{display: 'flex', flexDirection: 'row', paddingVertical: 10}}>
-            <Orders
-              orderName="Breakfast Meal"
-              />
-            <Orders
-              orderName="Launch Meal"
-              />
-              </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingVertical: 10,
+              }}
+            >
+              <Pressable  onPress={() => openModel(<Text>Order Name</Text>)}>
+              <Orders orderName="Breakfast Meal"/>
+              </Pressable>
+              <Orders orderName="Launch Meal" />
+            </View>
           </ScrollView>
         </View>
 
@@ -121,8 +129,14 @@ const home = () => {
             </Link>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={{display: 'flex', flexDirection: 'row', paddingVertical: 10}}>
-            <Programs/>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingVertical: 10,
+              }}
+            >
+              <Programs />
             </View>
           </ScrollView>
         </View>
@@ -138,7 +152,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     display: "flex",
     height: "100%",
-
   },
   title: {
     fontSize: 20,
@@ -189,7 +202,7 @@ const styles = StyleSheet.create({
     textDecorationStyle: "solid",
     textDecorationLine: "underline",
     fontFamily: "PoppinsR",
-    color: tintColorSecondary
+    color: tintColorSecondary,
   },
   sectionsTitle: {
     fontFamily: "Poppins",
