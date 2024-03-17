@@ -90,8 +90,20 @@ const home = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
+      {
+        loading ? <Loader/> : (
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Hello Mr Welcome To GRA Company</Text>
+        <Text style={styles.title}>
+          Room
+          <Text style={{ color: tintColorSecondary }}> {homeData.ROOM_NO}</Text>
+        </Text>
+        <Text style={styles.title}>
+          Next Event{" "}
+          <Text style={{ color: tintColorSecondary }}>
+            {homeData.NEXT_EVENT}
+          </Text>
+        </Text>
 
         {/* Screens Sections */}
         <View style={styles.listContainer}>
@@ -110,75 +122,73 @@ const home = () => {
         </View>
 
         {/* Orders Section */}
-        <View>
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              <View style={styles.listTitle}>
-                <Text style={styles.sectionsTitle}>Orders</Text>
-                <Link href="/Orders" style={styles.linkInTitle}>
-                  See All
-                </Link>
-              </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {homeData?.REQUEST.map((req: any) => (
-                  <Pressable
-                    key={req.REQ_ID}
-                    onPress={() => openModel(<Text>{req.DEPT_NAME}</Text>)}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingVertical: 10,
-                        height: 200,
-                      }}
-                    >
-                      <Orders orderName={req.DEPT_NAME} imageUrl={ordersImage(req.DEPT_NUMBER)} />
-                    </View>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            </>
-          )}
+        <View style={styles.listTitle}>
+          <Text style={styles.sectionsTitle}>Orders</Text>
+          <Link href="/Orders" style={styles.linkInTitle}>
+            See All
+          </Link>
         </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {homeData?.REQUEST.map((req: any) => (
+            <Pressable
+              key={req.REQ_ID}
+              onPress={() =>
+                openModel(
+                  <View style={{ display: "flex", alignItems: "center" }}>
+                    <Text>{req.DEPT_NAME}</Text>
+                    <Text>{req.REQ_STATUS}</Text>
+                  </View>
+                )
+              }
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  paddingVertical: 10,
+                  height: 200,
+                }}
+              >
+                <Orders
+                  orderName={req.DEPT_NAME}
+                  imageUrl={ordersImage(req.DEPT_NUMBER)}
+                />
+              </View>
+            </Pressable>
+          ))}
+        </ScrollView>
 
         {/* Program Section */}
         <View style={{ paddingBottom: 10 }}>
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              <View style={styles.listTitle}>
-                <Text style={styles.sectionsTitle}>Programs</Text>
-                <Link style={styles.linkInTitle} href="/Program">
-                  See All
-                </Link>
-              </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {homeData?.PROGRAM.map((program: any) => (
-                  <Pressable
-                    key={program.PROG_ID}
-                    onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingVertical: 10,
-                        width: 200,
-                      }}
-                    >
-                      <ProgramBox title={program.PROG_TITLE} />
-                    </View>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            </>
-          )}
+          <View style={styles.listTitle}>
+            <Text style={styles.sectionsTitle}>Programs</Text>
+            <Link style={styles.linkInTitle} href="/Program">
+              See All
+            </Link>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {homeData?.PROGRAM.map((program: any) => (
+              <Pressable
+                key={program.PROG_ID}
+                onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
+              >
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    paddingVertical: 10,
+                    width: 200,
+                  }}
+                >
+                  <ProgramBox title={program.PROG_TITLE} />
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
+        )
+      }
     </SafeAreaProvider>
   );
 };
