@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { tintColorSecondary } from "../constants/Colors";
+import { tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import DropdownMenu from "../components/DropdownMenu";
@@ -45,12 +45,16 @@ const Register = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Stack.Screen
-          options={{
-            headerTitle: "",
-            headerShadowVisible: false,
-          }}
-        />
+      <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
         {/* <ActivityIndicator size="large" color={tintColorPrimary} /> */}
         <ScrollView style={{ height: "100%" }}>
           <View style={styles.container}>
