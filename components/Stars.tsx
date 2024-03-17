@@ -25,10 +25,6 @@ const Stars = ({ value, maxValue, onClick }: Props) => {
 export default Stars;
 
 const styles = StyleSheet.create({
-  starsContainer: {
-    display: "flex",
-    flexDirection: "row",
-  },
   star: {
     padding: 3,
   },
