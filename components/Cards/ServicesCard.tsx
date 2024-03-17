@@ -1,11 +1,11 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { Text, View } from "./Themed";
+import { Text, View } from "../Themed";
 import React from "react";
 import {
   tintColorPrimary,
   tintColorSecondary,
-} from "../constants/Colors";
-import { ServicesCardT } from "../types/types";
+} from "../../constants/Colors";
+import { ServicesCardT } from "../../types/types";
 
 const ServicesCard = ({ id, name, checked }: ServicesCardT) => {
   return (
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 1,
     borderRadius: 10,
-    height: Dimensions.get("screen").height / 9,
+    height: Dimensions.get("screen").height / 11,
     marginHorizontal: 10,
     shadowColor: tintColorPrimary,
     textAlign: "center",

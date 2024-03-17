@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { Text, View } from "./Themed";
+import { Text } from "../Themed";
 import React from "react";
-import { tintColorDisabled, tintColorPrimary } from "../constants/Colors";
+import { tintColorDisabled, tintColorPrimary } from "../../constants/Colors";
 import { ImageBackground } from "expo-image";
 
 type Program = {
@@ -21,7 +21,7 @@ const ProgramCard = ({
 }: Program) => {
   return (
     <ImageBackground
-      source={require("../assets/images/events.jpg")}
+      source={require("../../assets/images/events.jpg")}
       style={styles.container}
       imageStyle={{ borderRadius: 10, opacity: 0.25 }}
       contentFit="cover"
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
+    width: '90%'
   },
   text: {
     color: "#789",

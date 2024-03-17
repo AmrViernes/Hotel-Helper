@@ -1,12 +1,12 @@
 import { Dimensions, Pressable, StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { Text, View } from "../Themed";
 import React from "react";
 import {
   tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
-} from "../constants/Colors";
+} from "../../constants/Colors";
 
 type FoodCard = {
   id?: number;
