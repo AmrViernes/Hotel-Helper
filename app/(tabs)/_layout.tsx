@@ -5,9 +5,9 @@ import WavyHeader from "../../components/WavyHeader";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { AppState, StyleSheet, BackHandler, Alert } from "react-native";
-import NetInfo from "@react-native-community/netinfo";
-import { Text, View } from "../../components/Themed";
-import { router } from "expo-router";
+// import NetInfo from "@react-native-community/netinfo";
+// import { Text, View } from "../../components/Themed";
+// import { router } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 
 function TabBarIcon(props: {
@@ -18,8 +18,8 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const [appState, setAppState] = useState<string>(AppState.currentState);
-  const [isConnected, setIsConnected] = useState<boolean | null>(true);
+  // const [appState, setAppState] = useState<string>(AppState.currentState);
+  // const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const {onLogout} = useAuth()
 
   const logout = async () => {
@@ -64,41 +64,42 @@ export default function TabLayout() {
     };
   }, []);
 
-  useEffect(() => {
-    const handleAppStateChange = async (nextAppState: string) => {
-      setAppState(nextAppState);
+  // To Check If the Device Connected To internet or Not
+  // useEffect(() => {
+  //   const handleAppStateChange = async (nextAppState: string) => {
+  //     setAppState(nextAppState);
 
-      if (nextAppState === "background" || nextAppState === "inactive") {
-        // User don't using the App
-        logout()
-      } else if (nextAppState === "active") {
-        // User is using the App
-        //logout()
-      }
-    };
+  //     if (nextAppState === "background" || nextAppState === "inactive") {
+  //       // User don't using the App
+  //       logout()
+  //     } else if (nextAppState === "active") {
+  //       // User is using the App
+  //       //logout()
+  //     }
+  //   };
 
-    // Subscribe to app state changes
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
+  //   // Subscribe to app state changes
+  //   const subscription = AppState.addEventListener(
+  //     "change",
+  //     handleAppStateChange
+  //   );
 
-    const checkConnection = () =>
-      NetInfo.addEventListener((state) => {
-        setIsConnected(state.isConnected);
-      });
+  //   const checkConnection = () =>
+  //     NetInfo.addEventListener((state) => {
+  //       setIsConnected(state.isConnected);
+  //     });
 
-    checkConnection();
+  //   checkConnection();
 
-    // Unsubscribe when the component unmounts
-    return () => {
-      subscription.remove();
-    };
-  }, [isConnected]);
+  //   // Unsubscribe when the component unmounts
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, [isConnected]);
 
   return (
     <SafeAreaProvider>
-      {isConnected && (
+      {/* {isConnected && ( */}
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: tintColorSecondary,
@@ -158,14 +159,14 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
-      )}
-      {!isConnected && (
+      {/*  )} */}
+      {/* {!isConnected && (
         <View style={Styles.Container}>
           <Text style={Styles.message}>
             No Internet Connection Please Check Your Connection.
           </Text>
         </View>
-      )}
+      )} */}
     </SafeAreaProvider>
   );
 }
