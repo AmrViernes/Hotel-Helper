@@ -2,13 +2,14 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
+import { ImageBackground } from "expo-image";
 
 type OrderProps = {
   orderName: string;
-  roomNumber: string;
-  guestName: string;
-  orderType: string;
-  orderTime: string;
+  roomNumber?: string;
+  guestName?: string;
+  orderType?: string;
+  orderTime?: string;
 };
 
 const Orders = ({
@@ -19,13 +20,13 @@ const Orders = ({
   orderTime,
 }: OrderProps) => {
   return (
-    <View style={styles.box}>
-      <Text>{orderName}</Text>
+    <ImageBackground source={require('../assets/images/orders.png')} style={styles.box} imageStyle={{borderRadius: 10, opacity: 0.25}} contentFit="cover">
+      <Text style={{fontSize: 18, color: tintColorPrimary ,fontFamily: 'PoppinsR'}}>{orderName}</Text>
       <Text>{roomNumber}</Text>
       <Text>{guestName}</Text>
       <Text>{orderType}</Text>
       <Text>{orderTime}</Text>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -33,6 +34,7 @@ export default Orders;
 
 const styles = StyleSheet.create({
   box: {
+    flex: 1,
     borderWidth: 1,
     borderRadius: 10,
     height: Dimensions.get("screen").height / 5,
