@@ -31,8 +31,10 @@ export default function TabLayout() {
             header: () => <WavyHeader />,
             tabBarStyle: {
               height: 80,
-              paddingBottom: 15,
+              paddingBottom: 13,
               backgroundColor: tintColorPrimary,
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
             },
           }}
         >
