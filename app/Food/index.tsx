@@ -1,24 +1,24 @@
 import { Pressable, StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { Text, View } from "../../components/Themed";
 import { router } from "expo-router";
 import {
   tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
   tintColorWarmBackground,
-} from "../constants/Colors";
+} from "../../constants/Colors";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import Loader from "../components/Loader";
-import FoodCard from "../components/Cards/FoodCard";
-import { FoodT, OrderT, OrderInfoT, LocationT } from "../types/types";
-import LocationCard from "../components/Cards/LocationCard";
-import { useData } from "./context/DataContext";
+import Loader from "../../components/Loader";
+import FoodCard from "../../components/Cards/FoodCard";
+import { FoodT, OrderT, OrderInfoT, LocationT } from "../../types/types";
+import LocationCard from "../../components/Cards/LocationCard";
+import { useData } from "../context/DataContext";
 import * as secureStore from "expo-secure-store";
-import { AUTH_KEY } from "./context/AuthContext";
-import StackScreen from "../components/StackScreen";
+import { AUTH_KEY } from "../context/AuthContext";
+import StackScreen from "../../components/StackScreen";
 
 const Food = () => {
   const { setLoadingToTrue } = useData();
