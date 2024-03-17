@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
-import { SafeAreaProvider} from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { tintColorSecondary } from "../constants/Colors";
 import Input from "../components/Input";
@@ -58,8 +58,8 @@ const Register = () => {
   );
 
   return (
-      <SafeAreaProvider>
-
+    <SafeAreaProvider>
+      <View style={styles.container}>
         <Stack.Screen
           options={{
             headerTitle: "",
@@ -173,14 +173,14 @@ const Register = () => {
               <Button
                 disabled={isDataEmpty}
                 color={isDataEmpty ? "#cccc" : tintColorSecondary}
-                page="Login"
                 title="Sign Up"
+                onClick={() => {}}
               />
             </View>
           </View>
         </ScrollView>
-      </SafeAreaProvider>
-
+      </View>
+    </SafeAreaProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable } from "react-native";
+import { StyleSheet, Pressable, ActivityIndicator } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import React from "react";
@@ -11,6 +11,7 @@ import { useAuth } from "./context/AuthContext";
 type Login = {
   username: string;
   password: string;
+  loading: boolean;
 };
 
 const Login = () => {
@@ -19,13 +20,35 @@ const Login = () => {
   const [loginData, setLoginData] = React.useState<Login>({
     username: "",
     password: "",
+    loading: false,
   });
 
-  const {onLogin} = useAuth()
+  const { onLogin } = useAuth();
 
-const login = async () => {
-  const result = await onLogin!(loginData.username, loginData.password)
-}
+  const login = async () => {
+    setLoginData((prev) => {
+      return {
+        ...prev,
+        loading: true,
+      };
+    });
+    const result = await onLogin!(loginData.username, loginData.password);
+    if (result === "success") {
+      setLoginData((prev) => {
+        return {
+          ...prev,
+          loading: false,
+        };
+      });
+    } else {
+      setLoginData((prev) => {
+        return {
+          ...prev,
+          loading: false,
+        };
+      });
+    }
+  };
 
   const handleLoginEntry = (name: string, value: string) =>
     setLoginData((prev) => {
@@ -36,46 +59,57 @@ const login = async () => {
 
   return (
     <SafeAreaProvider>
-        <Stack.Screen
-          options={{
-            headerTitle: "",
-            headerShadowVisible: false,
-          }}
-        />
+      {loginData.loading ? (
         <View style={styles.container}>
-          <View style={styles.textsContainers}>
-            <Text style={styles.loginText}>Login Here</Text>
-            <Text style={styles.welcomeText}>
-              Welcome Back You've Been Missed!
-            </Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Input
-              placeholder="User"
-              onChangeText={(value) => handleLoginEntry("username", value)}
-            />
-            <Input
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={(value) => handleLoginEntry("password", value)}
-            />
-            <Button
-              disabled={isLoginDataEmpty}
-              title="Sign In"
-              color={isLoginDataEmpty ? "#ccc" : tintColorPrimary}
-              onClick={login}
-            />
-          </View>
-
-          <Pressable onPress={() => router.push(`/${"Register"}`)}>
-            <Text
-              style={{ fontFamily: "Poppins", textDecorationLine: "underline" }}
-            >
-              Create New Account
-            </Text>
-          </Pressable>
+          <ActivityIndicator size="large" color={tintColorPrimary} />
         </View>
+      ) : (
+        <>
+          <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+            }}
+          />
+          <View style={styles.container}>
+            <View style={styles.textsContainers}>
+              <Text style={styles.loginText}>Login Here</Text>
+              <Text style={styles.welcomeText}>
+                Welcome Back You've Been Missed!
+              </Text>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Input
+                placeholder="User"
+                onChangeText={(value) => handleLoginEntry("username", value)}
+              />
+              <Input
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={(value) => handleLoginEntry("password", value)}
+              />
+              <Button
+                disabled={isLoginDataEmpty}
+                title="Sign In"
+                color={isLoginDataEmpty ? "#ccc" : tintColorPrimary}
+                onClick={login}
+              />
+            </View>
+
+            <Pressable onPress={() => router.push(`/${"Register"}`)}>
+              <Text
+                style={{
+                  fontFamily: "Poppins",
+                  textDecorationLine: "underline",
+                }}
+              >
+                Create New Account
+              </Text>
+            </Pressable>
+          </View>
+        </>
+      )}
     </SafeAreaProvider>
   );
 };

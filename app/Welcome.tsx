@@ -1,18 +1,18 @@
 import { Dimensions, StyleSheet } from "react-native";
 import React from "react";
-import { Stack,router } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Image } from "expo-image";
-import { SafeAreaProvider} from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View, Text } from "../components/Themed";
 import Button from "../components/Button";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
-
 
 const Welcome = () => {
   const { height } = Dimensions.get("window");
 
   return (
-      <SafeAreaProvider style={styles.container}>
+    <SafeAreaProvider>
+      <View style={styles.container}>
         <Stack.Screen
           options={{
             headerShown: false,
@@ -36,10 +36,19 @@ const Welcome = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button title="Login" color={tintColorPrimary} onClick={() => router.push('/Login')}/>
-          <Button title="Register" color={tintColorSecondary} onClick={() => router.push('/Register')}/>
+          <Button
+            title="Login"
+            color={tintColorPrimary}
+            onClick={() => router.push("/Login")}
+          />
+          <Button
+            title="Register"
+            color={tintColorSecondary}
+            onClick={() => router.push("/Register")}
+          />
         </View>
-      </SafeAreaProvider>
+      </View>
+    </SafeAreaProvider>
   );
 };
 
