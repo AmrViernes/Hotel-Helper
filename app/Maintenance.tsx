@@ -12,7 +12,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import axios from "axios";
-import MaintenanceCard from "../components/ServicesCard";
+import MaintenanceCard from "../components/Cards/ServicesCard";
 import { ServicesT } from "../types/types";
 import { useData } from './context/DataContext'
 
