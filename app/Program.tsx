@@ -8,18 +8,23 @@ import { ScrollView } from "react-native-gesture-handler";
 import ProgramBox from "../components/ProgramBox";
 import { tripsData } from "../constants/demoData";
 import { tintColorWarmBackground } from "../constants/Colors";
+import { useData } from "./context/DataContext";
+
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const dates = tripsData
-  .map((item) => new Date(item.date))
-  .filter(
-    (date, i, self) =>
-      self.findIndex((d) => d.getTime() === date.getTime()) === i
-  );
 
 const Program = () => {
+  const { homeData } = useData();
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
+
+  const dates = homeData.PROGRAM
+    .map((item) => new Date(item.PROG_DATE))
+    .filter(
+      (date, i, self) =>
+        self.findIndex((d) => d.getTime() === date.getTime()) === i
+    );
+
   return (
     <View style={styles.container}>
       <SafeAreaProvider style={styles.container}>
@@ -58,27 +63,23 @@ const Program = () => {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          {tripsData
+          {homeData.PROGRAM
             .filter(
               (item) =>
-                new Date(item.date).getDate() === selectedDate.getDate() &&
-                new Date(item.date).getMonth() === selectedDate.getMonth() &&
-                new Date(item.date).getFullYear() === selectedDate.getFullYear()
+                new Date(item.PROG_DATE).getDate() === selectedDate.getDate() &&
+                new Date(item.PROG_DATE).getMonth() === selectedDate.getMonth() &&
+                new Date(item.PROG_DATE).getFullYear() === selectedDate.getFullYear()
             )
             .map((item) => (
-              <SafeAreaProvider key={item.id}>
+              <SafeAreaProvider key={item.PROG_ID}>
                 <View
                   style={styles.programsContainer}
                 >
                   <ProgramBox
-                    title={item.title}
-                    details={item.details}
-                    date={new Date(item.date)}
-                    duration={"Trip Duration - " + item.duration + " Hours"}
-                    startAt={"Start at - " + item.startAt}
-                    transportation={
-                      "Transportation - " + item.mode_of_transport
-                    }
+                    title={item.PROG_TITLE}
+                    description={item.PROG_DESCRIPTION}
+                    date={new Date(item.PROG_DATE)}
+                    startAt={"Start at - " + item.PROG_TIME}
                   />
                 </View>
               </SafeAreaProvider>
