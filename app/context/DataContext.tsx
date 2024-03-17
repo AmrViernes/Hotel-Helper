@@ -1,7 +1,6 @@
 // DataContext.js
 import axios from "axios";
 import {
-  ReactNode,
   createContext,
   useContext,
   useEffect,
@@ -38,7 +37,7 @@ export const DataProvider: React.FC<DataContextPropsT> = ({ children }) => {
           }
         );
         setHomeData(response.data.RESPONSE[0]);
-        console.log(response.data.RESPONSE[0]);
+        console.log(homeData);
         
       } catch (error) {
         console.error("Error fetching data:", error);
