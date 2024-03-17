@@ -1,6 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Redirect, Tabs } from "expo-router";
-
 import {
   tintColorPrimary,
   tintColorSecondary,
@@ -62,6 +61,15 @@ export default function TabLayout() {
               title: "Evaluation",
               tabBarIcon: ({ color }) => (
                 <TabBarIcon name="star-half-full" color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: "Settings",
+              tabBarIcon: ({ color }) => (
+                <TabBarIcon name="gear" color={color} />
               ),
             }}
           />
