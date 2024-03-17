@@ -7,8 +7,25 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { tintColorPrimary } from "../constants/Colors";
 
+type Login = {
+  username: string;
+  password: string;
+};
+
 const Login = () => {
   const router = useRouter();
+
+  const [loginData, setLoginData] = React.useState<Login>({
+    username: "",
+    password: "",
+  });
+
+  const handleLoginEntry = (name: string, value: string) =>
+    setLoginData((prev) => {
+      return { ...prev, [name]: value };
+    });
+
+  const isLoginDataEmpty = Object.values(loginData).some((item) => item === "");
 
   return (
     <View>
@@ -19,7 +36,7 @@ const Login = () => {
             headerShadowVisible: false,
           }}
         />
-        <View style={styles.contanier}>
+        <View style={styles.container}>
           <View style={styles.textsContainers}>
             <Text style={styles.loginText}>Login Here</Text>
             <Text style={styles.welcomeText}>
@@ -28,9 +45,21 @@ const Login = () => {
           </View>
 
           <View style={styles.inputContainer}>
-            <Input placeholder="User" />
-            <Input placeholder="Password" secureTextEntry />
-            <Button title="Sign In" color={tintColorPrimary} page="home" />
+            <Input
+              placeholder="User"
+              onChangeText={(value) => handleLoginEntry("username", value)}
+            />
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={(value) => handleLoginEntry("password", value)}
+            />
+            <Button
+              disabled={isLoginDataEmpty}
+              title="Sign In"
+              color={isLoginDataEmpty ? "#ccc" : tintColorPrimary}
+              page="home"
+            />
           </View>
 
           <Pressable onPress={() => router.push(`/${"Register"}`)}>
@@ -49,7 +78,7 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  contanier: {
+  container: {
     height: "100%",
     display: "flex",
     justifyContent: "space-evenly",
