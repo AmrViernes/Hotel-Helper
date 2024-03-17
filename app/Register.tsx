@@ -9,22 +9,17 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import DropdownMenu from "../components/DropdownMenu";
 
-/* Fields
-User Name
-Password
-Confirm Password
-Tour Guide > List
-Reservation Type > List
-Group Name > List
-Guest Name
-Guest Passport
-Local Tourism Company > List
-Foreign Tourism Company > list */
-
 const Register = () => {
   const localCompanies = ["JEM", "Star"];
   const foreignCompanies = ["Wander", "Sowan"];
   const guideData = ["Moubark", "Hany Gabr"];
+  const guestData = [1, 2, 3];
+
+  const [guestsNumber, setGuestsNumber] = React.useState<any>(0);
+
+  const handleSetGuestsNumber = (newCount: any) => {
+    setGuestsNumber(newCount);
+  };
 
   return (
     <View>
@@ -49,8 +44,30 @@ const Register = () => {
               <Input placeholder="Username" />
               <Input placeholder="Password" secureTextEntry />
               <Input placeholder="Confirm Password" secureTextEntry />
-              <Input placeholder="Guest Name" />
-              <Input placeholder="Guest Passport" />
+              <DropdownMenu
+                data={guestData}
+                title="Number of Guests"
+                setGuests={handleSetGuestsNumber}
+              />
+
+              {guestsNumber >= 1 && (
+                <>
+                  <Input placeholder="First Guest Name" />
+                  <Input placeholder="First Guest Passport" />
+                </>
+              )}
+              {guestsNumber >= 2 && (
+                <>
+                  <Input placeholder="Second Guest Name" />
+                  <Input placeholder="Second Guest Passport" />
+                </>
+              )}
+              {guestsNumber === 3 && (
+                <>
+                  <Input placeholder="Third Guest Name" />
+                  <Input placeholder="Third Guest Passport" />
+                </>
+              )}
               <DropdownMenu data={guideData} title="Select Tour Guide" />
               <DropdownMenu
                 data={localCompanies}
@@ -60,7 +77,7 @@ const Register = () => {
                 data={foreignCompanies}
                 title="Foreign Tourism Company"
               />
-              <Button color={tintColorSecondary} page="home" title="Sign Up" />
+              <Button color={tintColorSecondary} page="login" title="Sign Up" />
             </View>
           </View>
         </ScrollView>
@@ -97,5 +114,12 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     paddingBottom: 20,
+  },
+  guestContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 4,
   },
 });
