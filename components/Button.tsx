@@ -1,25 +1,23 @@
 import { StyleSheet, Pressable } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
-import { useRouter } from "expo-router";
 import { tintColorPrimary } from "../constants/Colors";
 
 const Button = ({
   title,
   color,
-  page,
-  disabled
+  disabled,
+  onClick,
 }: {
   title: string;
   color: string;
-  page: string;
-  disabled: boolean
+  disabled?: boolean;
+  onClick: Function;
 }) => {
-  const router = useRouter();
   return (
     <Pressable
       style={[styles.button, { backgroundColor: color }]}
-      onPress={() => router.push(`/${page}`)}
+      onPress={() => onClick()}
       disabled={disabled}
     >
       <Text style={styles.title}>{title}</Text>

@@ -6,6 +6,7 @@ import { useRouter, Stack } from "expo-router";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { tintColorPrimary } from "../constants/Colors";
+import { useAuth } from "./context/AuthContext";
 
 type Login = {
   username: string;
@@ -19,6 +20,12 @@ const Login = () => {
     username: "",
     password: "",
   });
+
+  const {onLogin} = useAuth()
+
+const login = async () => {
+  const result = await onLogin!(loginData.username, loginData.password)
+}
 
   const handleLoginEntry = (name: string, value: string) =>
     setLoginData((prev) => {
@@ -57,7 +64,7 @@ const Login = () => {
               disabled={isLoginDataEmpty}
               title="Sign In"
               color={isLoginDataEmpty ? "#ccc" : tintColorPrimary}
-              page="home"
+              onClick={login}
             />
           </View>
 

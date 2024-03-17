@@ -4,8 +4,15 @@ import Svg, { Path } from "react-native-svg";
 import { Link } from "expo-router";
 import React from "react";
 import Logo from "./Logo";
+import { useAuth } from "../app/context/AuthContext";
 
 const WeavyHeader = () => {
+  const {onLogout} = useAuth()
+
+  const logout = async () => {
+    const result = await onLogout!()
+  }
+
   return (
     <View style={styles.svgCurve}>
       <View style={styles.headerContainer}>
@@ -18,8 +25,8 @@ const WeavyHeader = () => {
 
         {/* Left Header Button */}
         <View style={styles.headerButton}>
-          <Link href="/Welcome" asChild>
-            <Pressable>
+
+            <Pressable onPress={logout}>
               {({ pressed }) => (
                 <FontAwesome
                   name="sign-out"
@@ -29,7 +36,6 @@ const WeavyHeader = () => {
                 />
               )}
             </Pressable>
-          </Link>
         </View>
       </View>
       <Svg
