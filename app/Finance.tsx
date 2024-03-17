@@ -10,9 +10,6 @@ const Finance = () => {
       <Stack.Screen
         options={{
           headerTitle: "",
-          headerStyle: {
-            backgroundColor: tintColorWarmBackground,
-          },
           headerShadowVisible: false,
         }}
       />
