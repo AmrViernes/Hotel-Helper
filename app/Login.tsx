@@ -17,6 +17,7 @@ const Login = () => {
   const [loginData, setLoginData] = React.useState<LoginT>({
     username: "",
     password: "",
+    showPassword: false,
     loading: false,
   });
 
@@ -29,7 +30,9 @@ const Login = () => {
         loading: true,
       };
     });
+
     const result = await onLogin!(loginData.username, loginData.password);
+
     if (result === "success") {
       setLoginData((prev) => {
         return {
@@ -77,8 +80,17 @@ const Login = () => {
               />
               <Input
                 placeholder="Password"
-                secureTextEntry
+                secureTextEntry={!loginData.showPassword}
+                secureText={loginData.showPassword}
                 showEye={true}
+                onClick={() =>
+                  setLoginData((prev) => {
+                    return {
+                      ...prev,
+                      showPassword: !prev.showPassword,
+                    };
+                  })
+                }
                 onChangeText={(value) => handleLoginEntry("password", value)}
               />
               <Button
@@ -89,7 +101,7 @@ const Login = () => {
               />
             </View>
 
-            <Pressable onPress={() => router.push(`/${"Register"}`)}>
+            {/* <Pressable onPress={() => router.push(`/${"Register"}`)}>
               <Text
                 style={{
                   fontFamily: "Poppins",
@@ -98,7 +110,7 @@ const Login = () => {
               >
                 Create New Account
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
         </>
       )}
@@ -112,12 +124,12 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
   },
   textsContainers: {
     alignItems: "center",
-    paddingVertical: 26,
+    paddingBottom: 26,
   },
   loginText: {
     fontFamily: "Poppins",

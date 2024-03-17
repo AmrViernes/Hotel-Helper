@@ -38,9 +38,9 @@ export const AuthProvider = ({ children }: any) => {
     authenticated: boolean;
   }>({
     ACCESS_TOKEN: null,
-    RC_ID: null,
-    PW_CHANGED: null,
-    RC_STATUS: null,
+    RC_ID: 0,
+    PW_CHANGED: 0,
+    RC_STATUS: 0,
     authenticated: false,
   });
 
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: any) => {
       const authData = JSON.parse(gettingAuth as string);
 
       if (authData === null && authState.authenticated === false) {
-        router.replace('/')
+        router.replace("/");
       }
     };
     loadToken();
@@ -75,11 +75,12 @@ export const AuthProvider = ({ children }: any) => {
           P_APPID: 1,
         },
       });
-      //console.log(result.data)
+
       if (result?.data?.RESPONSE[0]?.ACCESS_TOKEN) {
         setAuthState({
           ACCESS_TOKEN: result.data.RESPONSE[0].ACCESS_TOKEN,
           RC_ID: result.data.RESPONSE[0].RC_ID,
+          RC_STATUS: result.data.RESPONSE[0].RC_STATUS,
           PW_CHANGED: result.data.RESPONSE[0].PW_CHANGED,
           authenticated: true,
         });
@@ -90,10 +91,12 @@ export const AuthProvider = ({ children }: any) => {
         await secureStore.setItemAsync(
           AUTH_KEY,
           JSON.stringify(result?.data?.RESPONSE[0])
-        )
-          // Redirect where PW number for New Password or Fill data
-        router.replace("/home")
-        
+        );
+
+        // Redirect where PW number for New Password or Fill data
+        if (result?.data?.RESPONSE[0].PW_CHANGED === 1 && result?.data?.RESPONSE[0].RC_STATUS === 1) router.replace("/home");
+        if (result?.data?.RESPONSE[0].PW_CHANGED === 1 && result?.data?.RESPONSE[0].RC_STATUS === 2) router.replace("/Register");
+        if (result?.data?.RESPONSE[0].PW_CHANGED === 2) router.replace("/ChangePassword");
       } else {
         Toast.show({
           type: "error",
@@ -132,7 +135,7 @@ export const AuthProvider = ({ children }: any) => {
       authenticated: false,
     });
 
-    router.replace('/')
+    router.replace("/");
   };
 
   const value = {

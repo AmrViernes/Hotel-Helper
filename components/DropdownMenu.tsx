@@ -8,6 +8,7 @@ type Props = {
   data: string[] | number[];
   title: string;
   handleInput?: any
+  defaultValue?: number
 };
 
 const DropdownMenu = (props: Props) => {
@@ -20,7 +21,6 @@ const DropdownMenu = (props: Props) => {
       dropdownStyle={styles.dropdownMenu}
       buttonStyle={styles.dropdownButton}
       data={props.data}
-      defaultButtonText={props.title}
       renderDropdownIcon={(isOpened) => {
         return (
           <FontAwesome
@@ -34,6 +34,7 @@ const DropdownMenu = (props: Props) => {
         handleInputChange(selectedItem)
         return selectedItem;
       }}
+      defaultValue={props.defaultValue}
       buttonTextAfterSelection={(selectedItem, index) => {
         // text represented after item is selected
         // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -47,9 +48,9 @@ const DropdownMenu = (props: Props) => {
       buttonTextStyle={{
         color: tintColorPrimary,
         fontFamily: "PoppinsR",
+        fontWeight: 'bold',
         fontSize: 15,
-        opacity: 0.5,
-        paddingTop: 2,
+        opacity: 0.8,
       }}
     />
   );
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E6F4F1",
     borderRadius: 10,
     fontFamily: "PoppinsR",
-    color: tintColorPrimary,
+
   },
   dropdownButton: {
     fontFamily: "PoppinsR",

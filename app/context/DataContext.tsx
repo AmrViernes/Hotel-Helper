@@ -36,6 +36,7 @@ export const DataProvider: React.FC<DataContextPropsT> = ({ children }) => {
           setHomeData(response.data.RESPONSE[0]);
         } catch (error) {
           console.error("Error fetching data:", error);
+          throw error
         } finally {
           setLoading(false);
         }

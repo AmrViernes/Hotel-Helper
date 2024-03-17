@@ -1,22 +1,32 @@
+export type CompanyT = {
+  companyId: number;
+  companyName: string;
+}
 export type RegisterT = {
-  username: string;
-  password: string;
-  confirmPassword: string;
-  numberOfGuests: number;
+  loading: boolean
+  formIsCompleted: boolean
+  guestsNumber: number
   firstGuestName: string;
   firstGuestPassport: string;
-  secondGuestName: string | null;
-  secondGuestPassport: string | null;
-  thirdGuestName: string | null;
-  thirdGuestPassport: string | null;
-  tourGuideName: string;
-  localCompanyName: string;
-  foreignCompanyName: string;
+  secondGuestName?: string | null;
+  secondGuestPassport?: string | null;
+  thirdGuestName?: string | null;
+  thirdGuestPassport?: string | null;
+  localCompanyId: number;
+  foreignCompanyId: number;
+  arrivalDate?: Date
+  leavingDate?: Date
+  companies: {
+    localCompanies: CompanyT[]
+    foreignCompanies: CompanyT[]
+  }
 };
+
 
 export type LoginT = {
   username: string;
   password: string;
+  showPassword: boolean,
   loading: boolean;
 };
 

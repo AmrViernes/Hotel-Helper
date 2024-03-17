@@ -1,7 +1,6 @@
 import { Dimensions, StyleSheet, Text, View, Pressable } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Svg, { Path } from "react-native-svg";
-import { Link } from "expo-router";
 import React from "react";
 import Logo from "./Logo";
 import { useAuth } from "../app/context/AuthContext";

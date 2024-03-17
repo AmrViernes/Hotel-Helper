@@ -4,7 +4,6 @@ import {
   tintColorColdBackground,
   tintColorDisabled,
   tintColorPrimary,
-  tintColorSecondary,
 } from "../../constants/Colors";
 import { ImageBackground } from "expo-image";
 import { View } from "../Themed";
@@ -97,14 +96,13 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 10,
-    width: '90%'
+    width: '95%',
   },
   imageContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    minWidth: '25%',
     height: "80%",
   },
   overlay: {

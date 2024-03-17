@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { Text, View } from "../components/Themed";
 import { Stack, useRouter } from "expo-router";
@@ -10,12 +10,12 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Toast from "react-native-toast-message";
 import * as secureStore from "expo-secure-store";
-import { AUTH_KEY } from "./context/AuthContext";
+import { AUTH_KEY, useAuth } from "./context/AuthContext";
 import axios from "axios";
 
 const ChangePassword = () => {
   const router = useRouter();
-
+ const {authState} = useAuth()
   const [passwordData, setPasswordData] = React.useState<ChangePasswordT>({
     password: "",
     confirmPassword: "",
@@ -61,18 +61,21 @@ const ChangePassword = () => {
         };
       });
       try {
-        await axios.put(
+        await axios.post(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/user/pwd",
           {
             params: {
               P_APPID: 1,
-              P_RCID: authData.RC_ID,
+              P_RCID: authData?.RC_ID || authState?.RC_ID,
               P_PWD: passwordData.password,
             },
           }
         );
+        if(authState?.RC_STATUS === 1) router.replace('/home')
+        if(authState?.RC_STATUS === 2) router.replace('/Register')
       } catch (error) {
         console.warn("Error submitting Change Password data to API", error);
+        throw error
       }
     }
   };
@@ -102,7 +105,7 @@ const ChangePassword = () => {
               <Input
                 placeholder="Password"
                 secureTextEntry={!passwordData.showPassword}
-                secureText={!passwordData.showPassword}
+                secureText={passwordData.showPassword}
                 showEye={true}
                 onClick={() =>
                   setPasswordData((prev) => {
@@ -119,7 +122,7 @@ const ChangePassword = () => {
               <Input
                 placeholder="Confirm Password"
                 secureTextEntry={!passwordData.showConfirmPassword}
-                secureText={!passwordData.showConfirmPassword}
+                secureText={passwordData.showConfirmPassword}
                 showEye={true}
                 onClick={() =>
                   setPasswordData((prev) => {
@@ -153,13 +156,14 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     alignItems: "center",
+    paddingTop: '50%'
   },
   passwordText: {
     fontFamily: "Poppins",
-    fontSize: 32,
-    marginVertical: 10,
+    fontSize: 33,
+    marginBottom: 30,
   },
   welcomeText: {
     fontFamily: "PoppinsR",

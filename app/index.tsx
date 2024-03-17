@@ -41,11 +41,11 @@ export default function Page() {
             color={tintColorPrimary}
             onClick={() => router.push("/Login")}
           />
-          <Button
+          {/* <Button
             title="Register"
             color={tintColorSecondary}
             onClick={() => router.push("/Register")}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaProvider>

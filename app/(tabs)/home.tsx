@@ -11,7 +11,6 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
   tintColorSecondary,
-  tintColorWarmBackground,
 } from "../../constants/Colors";
 import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -87,111 +86,139 @@ const home = () => {
 
   return (
     <SafeAreaProvider style={styles.container}>
-      <Text style={styles.title}>
-        Room
-        <Text style={{ color: tintColorSecondary }}> {homeData?.ROOM_NO}</Text>
-      </Text>
-      <Text style={styles.title}>
-        Next Event{" "}
-        <Text style={{ color: tintColorSecondary }}>
-          {homeData?.NEXT_EVENT}
-        </Text>
-      </Text>
-      {/* Screens Sections */}
-      <View style={styles.listContainer}>
-        {screensIconsData.map((item, index) => (
-          <Pressable
-            onPress={() => router.push(`/${item.url}`)}
-            key={index}
-            style={{ alignItems: "center" }}
-          >
-            <View style={styles.list}>
-              <Text>{item.icon}</Text>
-            </View>
-            <Text style={styles.listTitle}>{item.name}</Text>
-          </Pressable>
-        ))}
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Orders Section */}
-        <View style={styles.listTitle}>
-          <Text style={styles.sectionsTitle}>Orders</Text>
-          <Link href="/Orders" style={styles.linkInTitle}>
-            See All
-          </Link>
-        </View>
-        {loading && <Loader />}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {!loading &&
-            homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID)
-              .map((req: any) => (
-                <Pressable
-                  key={req.REQ_ID}
-                  onPress={() =>
-                    openModel(
-                      <View style={styles.modelContainer}>
-                        <Text style={styles.modelHeader}>
-                          Your Order Status
-                        </Text>
-                        <Text style={styles.modelText}>{req.REQ_STATUS}</Text>
-                      </View>
-                    )
-                  }
-                >
-                  <OrderCard
-                    orderName={req.DEPT_NAME}
-                    imageUrl={req.DEPT_NUMBER}
-                    loading={loading}
-                  />
-                </Pressable>
-              )).slice(0, 4)
-              }
-              {homeData?.REQUEST.length === 0 && <View style={styles.emptyProgramsContainer}>
-              <Text style={styles.emptyProgramsTitle}>Orders have not yet been placed.</Text></View>}
-        </ScrollView>
-
-        {/* Program Section */}
-        <View style={styles.listTitle}>
-          <Text style={styles.sectionsTitle}>Programs</Text>
-          <Link style={styles.linkInTitle} href="/Programs">
-            See All
-          </Link>
-        </View>
-        {loading && <Loader />}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingBottom: 6}}>
-          {!loading &&
-            homePrograms?.map((program: any) => (
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Text style={styles.title}>
+            Room
+            <Text style={{ color: tintColorSecondary }}>
+              {" "}
+              {homeData?.ROOM_NO}
+            </Text>
+          </Text>
+          <Text style={styles.title}>
+            Next Event{" "}
+            <Text style={{ color: tintColorSecondary }}>
+              {homeData?.NEXT_EVENT}
+            </Text>
+          </Text>
+          {/* Screens Sections */}
+          <View style={styles.listContainer}>
+            {screensIconsData.map((item, index) => (
               <Pressable
-                key={program.PROG_ID}
-                onPress={() =>
-                  openModel(
-                    <View style={styles.modelContainer}>
-                      <Text style={styles.modelText}>{program.PROG_TITLE}</Text>
-                      <Text style={[styles.listTitle, { fontSize: 18 }]}>
-                        {"Start at - " + program.PROG_TIME}
-                      </Text>
-                      <Text style={styles.modelHeader}>
-                        {program.PROG_DESCRIPTION}
-                      </Text>
-                    </View>
-                  )
-                }
+                onPress={() => router.push(`/${item.url}`)}
+                key={index}
+                style={{ alignItems: "center" }}
               >
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    width: 200,
-                  }}
-                >
-                  <ProgramCard title={program.PROG_TITLE} />
+                <View style={styles.list}>
+                  <Text>{item.icon}</Text>
                 </View>
+                <Text style={styles.listTitle}>{item.name}</Text>
               </Pressable>
             ))}
-            {homePrograms?.length === 0 && <View style={styles.emptyProgramsContainer}>
-              <Text style={styles.emptyProgramsTitle}>Today there are no programs scheduled.</Text></View>}
-        </ScrollView>
-      </ScrollView>
+          </View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Orders Section */}
+            <View style={styles.listTitle}>
+              <Text style={styles.sectionsTitle}>Orders</Text>
+              <Link href="/Orders" style={styles.linkInTitle}>
+                See All
+              </Link>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {homeData?.REQUEST.length === 0 ? (
+                <View style={styles.emptyProgramsContainer}>
+                  <Text style={styles.emptyProgramsTitle}>
+                    Orders have not yet been placed.
+                  </Text>
+                </View>
+              ) : (
+                homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID)
+                  .map((req: any) => (
+                    <Pressable
+                      style={{
+                        paddingBottom: 6,
+                        minWidth: 100,
+                        width: 200,
+                        paddingRight: 6,
+                      }}
+                      key={req.REQ_ID}
+                      onPress={() =>
+                        openModel(
+                          <View style={styles.modelContainer}>
+                            <Text style={styles.modelHeader}>
+                              Your Order Status
+                            </Text>
+                            <Text style={styles.modelText}>
+                              {req.REQ_STATUS}
+                            </Text>
+                          </View>
+                        )
+                      }
+                    >
+                      <OrderCard
+                        orderName={req.DEPT_NAME}
+                        imageUrl={req.DEPT_NUMBER}
+                        loading={loading}
+                      />
+                    </Pressable>
+                  ))
+                  .splice(0, 4)
+              )}
+            </ScrollView>
+
+            {/* Program Section */}
+            <View style={styles.listTitle}>
+              <Text style={styles.sectionsTitle}>Programs</Text>
+              <Link style={styles.linkInTitle} href="/Programs">
+                See All
+              </Link>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {homePrograms?.length === 0 ? (
+                <View style={styles.emptyProgramsContainer}>
+                  <Text style={styles.emptyProgramsTitle}>
+                    Today there are no programs scheduled.
+                  </Text>
+                </View>
+              ) : (
+                homePrograms?.map((program: any) => (
+                  <Pressable
+                    key={program.PROG_ID}
+                    style={{ paddingBottom: 6 }}
+                    onPress={() =>
+                      openModel(
+                        <View style={styles.modelContainer}>
+                          <Text style={styles.modelText}>
+                            {program.PROG_TITLE}
+                          </Text>
+                          <Text style={[styles.listTitle, { fontSize: 18 }]}>
+                            {"Start at - " + program.PROG_TIME}
+                          </Text>
+                          <Text style={styles.modelHeader}>
+                            {program.PROG_DESCRIPTION}
+                          </Text>
+                        </View>
+                      )
+                    }
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        width: 200,
+                      }}
+                    >
+                      <ProgramCard title={program.PROG_TITLE} />
+                    </View>
+                  </Pressable>
+                ))
+              )}
+            </ScrollView>
+          </ScrollView>
+        </>
+      )}
     </SafeAreaProvider>
   );
 };
@@ -282,16 +309,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   emptyProgramsContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: Dimensions.get('screen').width,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: Dimensions.get("screen").width,
     padding: 15,
-    paddingVertical: 30
+    paddingVertical: 30,
   },
   emptyProgramsTitle: {
-    fontFamily: 'PoppinsR',
+    fontFamily: "PoppinsR",
     fontSize: 16,
-    color: tintColorSecondary
-  }
+    color: tintColorSecondary,
+  },
 });
