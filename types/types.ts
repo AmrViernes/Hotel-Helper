@@ -56,6 +56,7 @@ export type HomeDataT = {
     REQ_DESC: string;
     REQ_STATUS?: string;
     ITEM_COUNT?: number;
+    REQUEST_ITEMS: []
   }>;
 } | undefined
 

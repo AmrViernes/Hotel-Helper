@@ -10,6 +10,7 @@ import {
 import React, { ReactNode } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
+  tintColorColdBackground,
   tintColorPrimary,
   tintColorSecondary,
 } from "../../constants/Colors";
@@ -21,6 +22,9 @@ import ProgramCard from "../../components/Cards/ProgramCard";
 import { useData } from "../context/DataContext";
 import Loader from "../../components/Loader";
 import OrderCard from "../../components/Cards/OrderCard";
+import axios from "axios";
+import { AUTH_KEY } from "../context/AuthContext";
+import * as secureStore from "expo-secure-store";
 
 const home = () => {
   const colorScheme = useColorScheme();
@@ -91,6 +95,43 @@ const home = () => {
       new Date(item.PROG_DATE).getMonth() === new Date().getMonth() &&
       new Date(item.PROG_DATE).getFullYear() === new Date().getFullYear()
   ).sort((a: any, b: any) => a.PROG_ID - b.PROG_ID);
+
+  const handleDeleteOrder = async (id: number) => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string);
+    console.log(id);
+
+    try {
+      await axios.delete(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: authData.RC_ID,
+            P_REQID: id,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      handleClose();
+      setLoadingToTrue();
+    }
+  };
+
+  const handleEditRedirect = (departType: number, orderId: number) => {
+    if (departType === 6) {
+      router.push(`/Food/${orderId}`);
+      return;
+    } else if (departType === 10) {
+      router.push(`/HouseKeeping/${orderId}`);
+      return;
+    } else {
+      router.push(`/Maintenance/${orderId}`);
+      return;
+    }
+  };
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -166,10 +207,50 @@ const home = () => {
                             <Text style={styles.modelText}>
                               {req.REQ_STATUS}
                             </Text>
-                            <Pressable onPress={() => {
-                              router.push(`/Food/${req.REQ_ID}`)
-                              handleClose()
-                              }}><Text>Go to Order</Text></Pressable>
+                            {req.REQUEST_ITEMS.map((item: any) => (
+                              <Text
+                                style={[
+                                  styles.listTitle,
+                                  { fontSize: 20, textAlign: "left" },
+                                ]}
+                                key={item.ITEM_ID}
+                              >
+                                {item.ITEM_NAME} ×{" "}
+                                <Text style={styles.sectionsTitle}>
+                                  {item.ITEM_QTY}
+                                </Text>
+                              </Text>
+                            ))}
+                            <View style={styles.ordersDetailsContainer}>
+                              <Pressable
+                                onPress={() => {
+                                  handleEditRedirect(
+                                    req.DEPT_NUMBER,
+                                    req.REQ_ID
+                                  );
+                                  handleClose();
+                                }}
+                              >
+                                <Text style={styles.editOrderButton}>
+                                  <MaterialCommunityIcons
+                                    name="clock-edit"
+                                    size={24}
+                                    color="white"
+                                  />
+                                </Text>
+                              </Pressable>
+                              <Pressable
+                                onPress={() => handleDeleteOrder(req.REQ_ID)}
+                              >
+                                <Text style={styles.deleteOrderButton}>
+                                  <MaterialCommunityIcons
+                                    name="delete"
+                                    size={24}
+                                    color="white"
+                                  />
+                                </Text>
+                              </Pressable>
+                            </View>
                           </View>
                         )
                       }
@@ -321,7 +402,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: tintColorPrimary,
     backgroundColor: tintColorSecondary,
-    padding: 10,
+    paddingHorizontal: 10,
     margin: 5,
     borderRadius: 10,
   },
@@ -337,5 +418,31 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsR",
     fontSize: 16,
     color: tintColorSecondary,
+  },
+  ordersDetailsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    alignItems: "center",
+    marginTop: 16,
+    width: Dimensions.get("screen").width,
+    paddingHorizontal: 8,
+  },
+  editOrderButton: {
+    fontFamily: "Poppins",
+    fontSize: 16,
+    backgroundColor: "#0D9276",
+    borderRadius: 8,
+    padding: 10,
+    color: "#fff",
+  },
+  deleteOrderButton: {
+    fontFamily: "Poppins",
+    fontSize: 16,
+    backgroundColor: "#A94438",
+    borderRadius: 8,
+    padding: 10,
+    color: "#fff",
   },
 });

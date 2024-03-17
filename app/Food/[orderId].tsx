@@ -19,164 +19,45 @@ import { useData } from "../context/DataContext";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY } from "../context/AuthContext";
 import StackScreen from "../../components/StackScreen";
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from "expo-router";
 
 export default function edit() {
-    const {edit} = useLocalSearchParams()
+  const { orderId } = useLocalSearchParams();
 
+  const { setLoadingToTrue } = useData();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [locations, setLocations] = useState<LocationT>([]);
+  const [orderIsDone, setOrderIsDone] = useState<boolean>(false);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string>("food");
+  const [orderInfo, setOrderInfo] = useState<OrderInfoT>({
+    totalPrice: 0,
+    items: [],
+  });
+  const [foodData, setFoodData] = useState<FoodT>([]);
+  const [order, setOrder] = useState<OrderT>({
+    LOCATIONTYPE_CODE: 0,
+    LOCATION_CODE: 0,
+    REQ_DESC: "",
+    ITEMS: [],
+  });
 
-    const { setLoadingToTrue } = useData();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [locations, setLocations] = useState<LocationT>([]);
-    const [orderIsDone, setOrderIsDone] = useState<boolean>(false);
-    const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-    const [selected, setSelected] = useState<string>("food");
-    const [orderInfo, setOrderInfo] = useState<OrderInfoT>({
-      totalPrice: 0,
-      items: [],
-    });
-    const [foodData, setFoodData] = useState<FoodT>([]);
-    const [order, setOrder] = useState<OrderT>({
-      LOCATIONTYPE_CODE: 0,
-      LOCATION_CODE: 0,
-      REQ_DESC: "",
-      ITEMS: [],
-    });
-  
-    const foodSelectedTextColor =
-      selected === "food" ? tintColorSecondary : tintColorPrimary;
-    const foodSelectedButtonColor =
-      selected === "food" ? tintColorPrimary : tintColorWarmBackground;
-    const beverageSelectedTextColor =
-      selected === "beverage" ? tintColorSecondary : tintColorPrimary;
-    const beverageSelectedButtonColor =
-      selected === "beverage" ? tintColorPrimary : tintColorWarmBackground;
-  
-    useEffect(() => {
-      const abort = new AbortController();
-  
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/item",
-            {
-              params: {
-                P_APPID: 1,
-                P_LANGCODE: "E",
-              },
-            }
-          );
-          setFoodData(response.data.RESPONSE[0].CATEGORY);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchData();
-      return () => abort.abort();
-    }, []);
-  
-    const handleIncrement = useCallback(
-      (price: number, itemId: number, itemName: string) => {
-        setOrderInfo((prev) => {
-          const existingItem = prev.items.find(
-            (item) => item.itemName === itemName
-          );
-  
-          if (existingItem) {
-            existingItem.quantity += 1;
-          } else {
-            prev.items.push({
-              itemName,
-              quantity: 1,
-            });
-          }
-  
-          return {
-            totalPrice: prev.totalPrice >= 0 ? prev.totalPrice + price : 0,
-            items: [...prev.items],
-          };
-        });
-  
-        setOrder((prevOrder) => {
-          const existingItemOrder = prevOrder.ITEMS.find(
-            (item) => item.ITEM_ID === itemId
-          );
-  
-          if (existingItemOrder) {
-            existingItemOrder.ITEM_QTY += 1;
-          } else {
-            prevOrder.ITEMS.push({
-              ITEM_ID: itemId,
-              ITEM_QTY: 1,
-            });
-          }
-  
-          return {
-            ...prevOrder,
-            ITEMS: [...prevOrder.ITEMS],
-          } as OrderT;
-        });
-      },
-      [orderInfo, setOrderInfo, order, setOrder]
-    );
-  
-    const handleDecrement = useCallback(
-      (price: number, itemId: number, itemName: string) => {
-        setOrderInfo((prev) => {
-          const existingItem = prev.items.find(
-            (item) => item.itemName === itemName
-          );
-  
-          if (existingItem) {
-            existingItem.quantity = Math.max(0, existingItem.quantity - 1);
-  
-            if (existingItem.quantity === 0) {
-              prev.items = prev.items.filter(
-                (item) => item.itemName !== itemName
-              );
-            }
-          }
-  
-          return {
-            totalPrice: Math.max(0, prev.totalPrice - price),
-            items: [...prev.items],
-          };
-        });
-  
-        setOrder((prevOrder) => {
-          const existingItemOrder = prevOrder.ITEMS.find(
-            (item) => item.ITEM_ID === itemId
-          );
-  
-          if (existingItemOrder) {
-            existingItemOrder.ITEM_QTY = Math.max(
-              0,
-              existingItemOrder.ITEM_QTY - 1
-            );
-          } else {
-            prevOrder.ITEMS.push({
-              ITEM_ID: itemId,
-              ITEM_QTY: 0,
-            });
-          }
-  
-          return {
-            ...prevOrder,
-            ITEMS: [...prevOrder.ITEMS],
-          } as OrderT;
-        });
-      },
-      [orderInfo, setOrderInfo, order, setOrder]
-    );
-  
-    const handleFetchOrderLocations = async () => {
-      setLoading(true);
+  const foodSelectedTextColor =
+    selected === "food" ? tintColorSecondary : tintColorPrimary;
+  const foodSelectedButtonColor =
+    selected === "food" ? tintColorPrimary : tintColorWarmBackground;
+  const beverageSelectedTextColor =
+    selected === "beverage" ? tintColorSecondary : tintColorPrimary;
+  const beverageSelectedButtonColor =
+    selected === "beverage" ? tintColorPrimary : tintColorWarmBackground;
+
+  useEffect(() => {
+    const abort = new AbortController();
+
+    const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/loc",
+          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/item",
           {
             params: {
               P_APPID: 1,
@@ -184,63 +65,218 @@ export default function edit() {
             },
           }
         );
-        setLocations(response.data.RESPONSE[0].LOCATION_TYPE);
-        setOrderIsDone(true);
+        setFoodData(response.data.RESPONSE[0].CATEGORY);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-  
-    const handlePlaceOrder = async () => {
+
+    const fetchOldOrderData = async () => {
       const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
       const authData = JSON.parse(gettingAuth as string);
       try {
-        // Add logic to send the order data to the backend
-        await axios.post(
+        const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
-          order,
           {
             params: {
               P_APPID: 1,
+              P_LANGCODE: "E",
+              P_REQID: orderId,
               P_RCID: authData.RC_ID,
             },
           }
         );
-        setLoadingToTrue();
-        // Clear the order info and navigate to a success screen or perform other actions
-        setOrderInfo({ totalPrice: 0, items: [] });
-        setOrder({
-          LOCATIONTYPE_CODE: 0,
-          LOCATION_CODE: 0,
-          REQ_DESC: "",
-          ITEMS: [],
+        setOrderInfo((prev) => {
+          return {
+            totalPrice: response.data.RESPONSE[0].REQUEST[0].TOTAL_PRICE,
+            items: response.data.RESPONSE[0].REQUEST[0].REQUEST_ITEMS?.map((item: any) => {
+              return {
+                itemName: item.ITEM_NAME,
+                quantity: item.ITEM_QTY,
+              };
+            }),
+          };
         });
-  
-        // Reset selected location
-        setSelectedLocation(null);
-  
-        // Optionally, navigate to a success screen or perform other actions
-        // navigation.navigate("OrderSuccessScreen");
-        router.replace("/(tabs)/home");
       } catch (error) {
-        console.error("Error placing order:", error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
-  
-    const getQuantityForItem = useMemo(
-      () => (itemName: string) => {
-        const itemInfo = orderInfo.items.find(
+
+    fetchData();
+    fetchOldOrderData()
+    return () => abort.abort();
+  }, []);
+
+  console.log(order);
+
+  const handleIncrement = useCallback(
+    (price: number, itemId: number, itemName: string) => {
+      setOrderInfo((prev) => {
+        const existingItem = prev.items.find(
           (item) => item.itemName === itemName
         );
-        return itemInfo ? itemInfo.quantity : 0;
-      },
-      [orderInfo.items]
-    );
-  
-    const checkIfOrderIsNotEmpty = orderInfo.items.length === 0;
-    const checkIfLocationIsNotEmpty = order.LOCATION_CODE === 0;
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          prev.items.push({
+            itemName,
+            quantity: 1,
+          });
+        }
+
+        return {
+          totalPrice: prev.totalPrice >= 0 ? prev.totalPrice + price : 0,
+          items: [...prev.items],
+        };
+      });
+
+      setOrder((prevOrder) => {
+        const existingItemOrder = prevOrder.ITEMS.find(
+          (item) => item.ITEM_ID === itemId
+        );
+
+        if (existingItemOrder) {
+          existingItemOrder.ITEM_QTY += 1;
+        } else {
+          prevOrder.ITEMS.push({
+            ITEM_ID: itemId,
+            ITEM_QTY: 1,
+          });
+        }
+
+        return {
+          ...prevOrder,
+          ITEMS: [...prevOrder.ITEMS],
+        } as OrderT;
+      });
+    },
+    [orderInfo, setOrderInfo, order, setOrder]
+  );
+
+  const handleDecrement = useCallback(
+    (price: number, itemId: number, itemName: string) => {
+      setOrderInfo((prev) => {
+        const existingItem = prev.items.find(
+          (item) => item.itemName === itemName
+        );
+
+        if (existingItem) {
+          existingItem.quantity = Math.max(0, existingItem.quantity - 1);
+
+          if (existingItem.quantity === 0) {
+            prev.items = prev.items.filter(
+              (item) => item.itemName !== itemName
+            );
+          }
+        }
+
+        return {
+          totalPrice: Math.max(0, prev.totalPrice - price),
+          items: [...prev.items],
+        };
+      });
+
+      setOrder((prevOrder) => {
+        const existingItemOrder = prevOrder.ITEMS.find(
+          (item) => item.ITEM_ID === itemId
+        );
+
+        if (existingItemOrder) {
+          existingItemOrder.ITEM_QTY = Math.max(
+            0,
+            existingItemOrder.ITEM_QTY - 1
+          );
+        } else {
+          prevOrder.ITEMS.push({
+            ITEM_ID: itemId,
+            ITEM_QTY: 0,
+          });
+        }
+
+        return {
+          ...prevOrder,
+          ITEMS: [...prevOrder.ITEMS],
+        } as OrderT;
+      });
+    },
+    [orderInfo, setOrderInfo, order, setOrder]
+  );
+
+  const handleFetchOrderLocations = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/loc",
+        {
+          params: {
+            P_APPID: 1,
+            P_LANGCODE: "E",
+          },
+        }
+      );
+      setLocations(response.data.RESPONSE[0].LOCATION_TYPE);
+      setOrderIsDone(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string);
+    try {
+      // Add logic to send the order data to the backend
+      await axios.put(
+        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        order,
+        {
+          params: {
+            P_APPID: 1,
+            P_RCID: authData.RC_ID,
+            P_REQID: orderId,
+          },
+        }
+      );
+      setLoadingToTrue();
+      // Clear the order info and navigate to a success screen or perform other actions
+      setOrderInfo({ totalPrice: 0, items: [] });
+      setOrder({
+        LOCATIONTYPE_CODE: 0,
+        LOCATION_CODE: 0,
+        REQ_DESC: "",
+        ITEMS: [],
+      });
+
+      // Reset selected location
+      setSelectedLocation(null);
+
+      // Optionally, navigate to a success screen or perform other actions
+      // navigation.navigate("OrderSuccessScreen");
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
+  const getQuantityForItem = useMemo(
+    () => (itemName: string) => {
+      const itemInfo = orderInfo.items.find(
+        (item) => item.itemName === itemName
+      );
+      return itemInfo ? itemInfo.quantity : 0;
+    },
+    [orderInfo.items]
+  );
+
+  const checkIfOrderIsNotEmpty = orderInfo.items.length === 0;
+  const checkIfLocationIsNotEmpty = order.LOCATION_CODE === 0;
 
   return (
     <View style={styles.container}>
