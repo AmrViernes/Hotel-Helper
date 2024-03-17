@@ -63,9 +63,12 @@ const evaluation = () => {
         ))}
 
         <View style={styles.buttonContainer}>
-          {!checkEmptyRates && (
-            <Button title="Submit" color={tintColorSecondary} page="home" />
-          )}
+          <Button
+            title="Submit"
+            disabled={checkEmptyRates}
+            color={checkEmptyRates ? "#ccc" : tintColorSecondary}
+            page="home"
+          />
         </View>
       </View>
     </ScrollView>

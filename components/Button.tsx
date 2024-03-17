@@ -8,16 +8,19 @@ const Button = ({
   title,
   color,
   page,
+  disabled
 }: {
   title: string;
   color: string;
   page: string;
+  disabled: boolean
 }) => {
   const router = useRouter();
   return (
     <Pressable
       style={[styles.button, { backgroundColor: color }]}
       onPress={() => router.push(`/${page}`)}
+      disabled={disabled}
     >
       <Text style={styles.title}>{title}</Text>
     </Pressable>
