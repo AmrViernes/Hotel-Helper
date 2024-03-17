@@ -7,7 +7,7 @@ import { Stack } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import ProgramCard from "../components/Cards/ProgramCard";
 import { useData } from "./context/DataContext";
-import { tintColorDisabled, tintColorSecondary } from "../constants/Colors";
+import { tintColorDisabled, tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -15,23 +15,27 @@ const Program = () => {
   const { homeData } = useData();
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
 
-  const dates = homeData.PROGRAM.map((item) => new Date(item.PROG_DATE)).filter(
+  const dates = homeData?.PROGRAM.map((item) => new Date(item.PROG_DATE)).filter(
     (date, i, self) =>
       self.findIndex((d) => d.getTime() === date.getTime()) === i
   );
 
   return (
     <SafeAreaProvider style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerTitle: "",
-          headerShadowVisible: false,
-        }}
-      />
+          <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
       <Text style={styles.title}>Select A Day</Text>
       <View style={styles.daysContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {dates.map((item, index) => (
+          {dates?.map((item, index) => (
             <Pressable key={index} onPress={() => setSelectedDate(item)}>
               <DaysBox
                 color={
@@ -48,7 +52,7 @@ const Program = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {homeData.PROGRAM.filter(
+        {homeData?.PROGRAM.filter(
           (item) =>
             new Date(item.PROG_DATE).getDate() === selectedDate.getDate() &&
             new Date(item.PROG_DATE).getMonth() === selectedDate.getMonth() &&
@@ -74,6 +78,7 @@ export default Program;
 const styles = StyleSheet.create({
   container: {
     height: "100%",
+    backgroundColor: tintColorWarmBackground
   },
   daysContainer: {
     display: "flex",
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Poppins",
     fontSize: 26,
+    color: tintColorPrimary
   },
   programsContainer: {
     padding: 10,

@@ -1,7 +1,7 @@
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useData } from "./context/DataContext";
-import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
+import { tintColorPrimary, tintColorSecondary, tintColorWarmBackground } from "../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
 import Loader from "../components/Loader";
 import OrderCard from "../components/Cards/OrderCard";
@@ -14,12 +14,16 @@ const Orders = (props: Props) => {
   const { loading, homeData } = useData();
   return (
     <SafeAreaProvider style={styles.listContainer}>
-      <Stack.Screen
-        options={{
-          headerTitle: "",
-          headerShadowVisible: false,
-        }}
-      />
+          <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
       <Text style={styles.sectionsTitle}>Your Orders</Text>
       {loading && <Loader />}
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -54,12 +58,13 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     alignSelf: "center",
+    backgroundColor: tintColorWarmBackground
   },
   sectionsTitle: {
     fontFamily: "Poppins",
     fontSize: 26,
-    color: "white",
-    textTransform: "uppercase",
+    color: tintColorPrimary,
+    textTransform: "uppercase"
   },
   card: {
     minHeight: 100,
