@@ -8,38 +8,50 @@ import {
 } from "../../types/types";
 import * as secureStore from "expo-secure-store";
 import { AUTH_KEY, useAuth } from "./AuthContext";
+import Toast from "react-native-toast-message";
 
 const DataContext = createContext<DataContextValueT | undefined>(undefined);
 
 export const DataProvider: React.FC<DataContextPropsT> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [homeData, setHomeData] = useState<HomeDataT>();
-  const {authState} = useAuth()
+  const { authState } = useAuth();
   useEffect(() => {
     const abort = new AbortController();
 
     const fetchData = async () => {
       const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
       const authData = JSON.parse(gettingAuth as string);
-      console.log(authState?.RC_ID)
-        try {
-          const response = await axios.get(
-            "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/home/gtData",
-            {
-              params: {
-                P_APPID: 1,
-                P_RCID: authData?.RC_ID || authState?.RC_ID,
-                P_LANGCODE: "E",
-              },
-            }
-          );
-          setHomeData(response.data.RESPONSE[0]);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          throw error
-        } finally {
-          setLoading(false);
-        }
+      try {
+        const response = await axios.get(
+          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/home/gtData",
+          {
+            params: {
+              P_APPID: 1,
+              P_RCID: authData?.RC_ID || authState?.RC_ID,
+              P_LANGCODE: "E",
+            },
+          }
+        );
+        setHomeData(response.data.RESPONSE[0]);
+      } catch (error) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Something Went Wrong Try again.",
+          topOffset: 100,
+          text1Style: {
+            fontFamily: "Poppins",
+            fontSize: 18,
+          },
+          text2Style: {
+            fontFamily: "PoppinsR",
+            fontSize: 14,
+          },
+        });
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
