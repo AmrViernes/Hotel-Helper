@@ -24,6 +24,7 @@ export default function Page() {
           style={{
             height: height / 2,
             width: "100%",
+            backgroundColor: 'white'
           }}
         />
         <View style={styles.titleContainer}>
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     alignItems: "center",
+    backgroundColor: 'white'
   },
   text: {
     fontFamily: "Poppins",
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: -40,
     marginBottom: 20,
+    backgroundColor: 'white'
   },
   buttonsContainer: {
     width: "80%",
@@ -75,5 +78,6 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: 'white'
   },
 });
