@@ -10,7 +10,7 @@ export default function TabTwoScreen() {
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       <View style={styles.container}>
-        <View style={styles.contentContainer}>
+        {/* <View style={styles.contentContainer}>
 
         <Text style={styles.title}>Contact the Developer</Text>
         <View style={styles.iconsContainer}>
@@ -54,7 +54,7 @@ export default function TabTwoScreen() {
             onPress={() => Linking.openURL(`tel:${"+201554131606"}`)}
           />
         </View>
-        </View>
+        </View> */}
         <Text style={{position: 'absolute', bottom: 5, fontFamily: 'PoppinsR'}}>App Version 1.0.0</Text>     
       </View>
       
