@@ -9,6 +9,7 @@ type OrderProps = {
   guestName?: string;
   orderType?: string;
   orderTime?: string;
+  imageUrl: string
 };
 
 const Orders = ({
@@ -17,9 +18,10 @@ const Orders = ({
   guestName,
   orderType,
   orderTime,
+  imageUrl
 }: OrderProps) => {
   return (
-    <ImageBackground source={require('../assets/images/orders.png')} style={styles.box} imageStyle={{borderRadius: 10, opacity: 0.25}} contentFit="cover">
+    <ImageBackground source={imageUrl} style={styles.box} imageStyle={{borderRadius: 10, opacity: 0.25}} contentFit="cover">
       <Text>{orderId}</Text>
       <Text style={{fontSize: 18, color: tintColorPrimary ,fontFamily: 'PoppinsR'}}>{orderName}</Text>
       <Text>{guestName}</Text>
