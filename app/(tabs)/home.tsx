@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
@@ -13,14 +13,11 @@ import Colors, {
 } from "../../constants/Colors";
 import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
-import Orders from "../../components/Orders";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Programs from "../../components/Programs";
 import { useModal } from "./../context/ModelContext";
-import Toast from "react-native-toast-message";
 import Loader from "../../components/Loader";
-import axios from "axios";
-import ProgramBox from "../../components/ProgramBox";
+import Orders from "../../components/Orders";
+import ProgramCard from "../../components/ProgramCard";
 import { useData } from "../context/DataContext";
 
 const home = () => {
@@ -34,7 +31,7 @@ const home = () => {
       url: "Maintenance",
       icon: (
         <MaterialCommunityIcons
-          name="auto-fix"
+          name="account-hard-hat"
           size={50}
           color={Colors[colorScheme ?? "light"].iconOutLine}
         />
@@ -63,11 +60,11 @@ const home = () => {
       ),
     },
     {
-      name: "Program",
-      url: "Program",
+      name: "cleaning",
+      url: "HouseKeeping",
       icon: (
         <MaterialCommunityIcons
-          name="animation"
+          name="auto-fix"
           size={50}
           color={Colors[colorScheme ?? "light"].iconOutLine}
         />
@@ -111,12 +108,12 @@ const home = () => {
             <Pressable
               onPress={() => router.push(`/${item.url}`)}
               key={index}
-              style={styles.list}
+              style={{alignItems: 'center'}}
             >
               <View style={styles.list}>
                 <Text>{item.icon}</Text>
-                {/* <Text style={styles.listTitle}>{item.name}</Text> */}
               </View>
+                <Text style={styles.listTitle}>{item.name}</Text>
             </Pressable>
           ))}
         </View>
@@ -180,7 +177,7 @@ const home = () => {
                     width: 200,
                   }}
                 >
-                  <ProgramBox title={program.PROG_TITLE} />
+                  <ProgramCard title={program.PROG_TITLE} />
                 </View>
               </Pressable>
             ))}
@@ -213,12 +210,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   list: {
     display: "flex",
+    flexDirection: 'row',
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: 'center',
     margin: 5,
     backgroundColor: tintColorSecondary,
     borderRadius: 10,
@@ -235,16 +234,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   listTitle: {
-    fontFamily: "Poppins",
-    fontSize: 12,
-    color: tintColorPrimary,
-    textTransform: "uppercase",
     display: "flex",
     flexDirection: "row",
+    fontFamily: "Poppins",
+    fontSize: 12,
+    color: tintColorSecondary,
+    textTransform: "uppercase",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 8,
-    marginLeft: 4,
+    paddingHorizontal: 10,
   },
   linkInTitle: {
     textDecorationStyle: "solid",
