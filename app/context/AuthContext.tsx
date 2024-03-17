@@ -3,18 +3,25 @@ import axios from "axios";
 import * as secureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 type AuthProps = {
-  authState?: { token: string | null; authenticated: boolean | null };
+  authState?: {
+    ACCESS_TOKEN: string | null;
+    RC_ID?: number | null;
+    PW_CHANGED?: number | null;
+    RC_STATUS?: number | null;
+    authenticated: boolean;
+  };
   onRegister?: (email: string, password: string) => Promise<any>;
   onLogin?: (email: string, password: string) => Promise<any>;
   onLogout?: () => Promise<any>;
 };
 
-const TOKEN_KEY = "Auth_token";
+export const AUTH_KEY = "AUTH_DATA";
 
 export const API_URL =
-  "https://actidesk.oracleapexservices.com/apexdbl/r/boatmob/boatto/login";
+  "https://actidesk.oracleapexservices.com/apexdbl/boatmob/user/login";
 
 const AuthContext = createContext<AuthProps>({});
 
@@ -24,23 +31,26 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: any) => {
   const [authState, setAuthState] = useState<{
-    token: string | null;
+    ACCESS_TOKEN: string | null;
+    RC_ID?: number | null;
+    PW_CHANGED?: number | null;
+    RC_STATUS?: number | null;
     authenticated: boolean;
   }>({
-    token: null,
+    ACCESS_TOKEN: null,
+    RC_ID: null,
+    PW_CHANGED: null,
+    RC_STATUS: null,
     authenticated: false,
   });
 
   useEffect(() => {
     const loadToken = async () => {
-      const token = await secureStore.getItemAsync(TOKEN_KEY);
+      const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+      const authData = JSON.parse(gettingAuth as string);
 
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = token;
-        setAuthState({
-          token: token,
-          authenticated: true,
-        });
+      if (authData === null) {
+        router.replace('/')
       }
     };
     loadToken();
@@ -51,7 +61,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       return axios.post(`${API_URL}/users`, { email, password });
     } catch (error) {
-      return Alert.alert("Error",error as any);
+      return Alert.alert("Error", error as any);
     }
   };
 
@@ -62,26 +72,42 @@ export const AuthProvider = ({ children }: any) => {
         headers: {
           P_USERNAME: username,
           P_PASSWORD: password,
+          P_APPID: 1,
         },
       });
-
-      if (result.data.RESPONSE[0].ACCESS_TOKEN) {
+      //console.log(result.data)
+      if (result?.data?.RESPONSE[0]?.ACCESS_TOKEN) {
         setAuthState({
-          token: result.data.RESPONSE[0].ACCESS_TOKEN,
+          ACCESS_TOKEN: result.data.RESPONSE[0].ACCESS_TOKEN,
+          RC_ID: result.data.RESPONSE[0].RC_ID,
           authenticated: true,
         });
 
         axios.defaults.headers.common["Authorization"] =
-          result.data.RESPONSE[0].ACCESS_TOKEN;
+          result?.data?.RESPONSE[0]?.ACCESS_TOKEN;
 
         await secureStore.setItemAsync(
-          TOKEN_KEY,
-          result.data.RESPONSE[0].ACCESS_TOKEN
-        );
+          AUTH_KEY,
+          JSON.stringify(result?.data?.RESPONSE[0])
+        )
 
-        router.push("/home");
+        router.replace("/home")
+        
       } else {
-        Alert.alert("Error", "Invalid Username or Password!!");
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Invalid Username or Password.",
+          topOffset: 100,
+          text1Style: {
+            fontFamily: "Poppins",
+            fontSize: 18,
+          },
+          text2Style: {
+            fontFamily: "PoppinsR",
+            fontSize: 14,
+          },
+        });
       }
     } catch (error) {
       return {
@@ -93,14 +119,16 @@ export const AuthProvider = ({ children }: any) => {
 
   // Logout Function
   const logout = async () => {
-    await secureStore.deleteItemAsync(TOKEN_KEY);
+    await secureStore.deleteItemAsync(AUTH_KEY);
 
     axios.defaults.headers.common["Authorization"] = "";
 
     setAuthState({
-      token: null,
+      ACCESS_TOKEN: null,
       authenticated: false,
     });
+
+    router.replace('/')
   };
 
   const value = {
