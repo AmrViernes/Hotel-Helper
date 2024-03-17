@@ -8,22 +8,7 @@ import { tintColorSecondary } from "../constants/Colors";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import DropdownMenu from "../components/DropdownMenu";
-
-type Register = {
-  username: string;
-  password: string;
-  confirmPassword: string;
-  numberOfGuests: number;
-  firstGuestName: string;
-  firstGuestPassport: string;
-  secondGuestName: string | null;
-  secondGuestPassport: string | null;
-  thirdGuestName: string | null;
-  thirdGuestPassport: string | null;
-  tourGuideName: string;
-  localCompanyName: string;
-  foreignCompanyName: string;
-};
+import { RegisterT } from "../types/types";
 
 const Register = () => {
   const localCompanies = ["JEM", "Star"];
@@ -31,7 +16,7 @@ const Register = () => {
   const guideData = ["Moubark", "Hany Gabr"];
   const guestData = [1, 2, 3];
 
-  const [userData, setUserData] = useState<Register>({
+  const [userData, setUserData] = useState<RegisterT>({
     numberOfGuests: 0,
     username: "",
     password: "",

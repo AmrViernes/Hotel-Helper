@@ -8,17 +8,12 @@ import Button from "../components/Button";
 import { tintColorPrimary } from "../constants/Colors";
 import { useAuth } from "./context/AuthContext";
 import Loader from "../components/Loader";
-
-type Login = {
-  username: string;
-  password: string;
-  loading: boolean;
-};
+import { LoginT } from "../types/types";
 
 const Login = () => {
   const router = useRouter();
 
-  const [loginData, setLoginData] = React.useState<Login>({
+  const [loginData, setLoginData] = React.useState<LoginT>({
     username: "",
     password: "",
     loading: false,
