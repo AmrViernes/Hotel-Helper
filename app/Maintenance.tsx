@@ -83,8 +83,6 @@ const Maintenance = () => {
 
   const checkIfUserSelectItem = maintenanceOrder.ITEM_ID === 0 ? true : false;
 
-  console.log(maintenanceOrder);
-
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
