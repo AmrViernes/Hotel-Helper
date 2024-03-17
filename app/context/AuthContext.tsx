@@ -14,7 +14,7 @@ type AuthProps = {
 const TOKEN_KEY = "Auth_token";
 
 export const API_URL =
-  "https://actidesk.oracleapexservices.com/apexdbl/boatmob/user/login";
+  "https://actidesk.oracleapexservices.com/apexdbl/r/boatmob/boatto/login";
 
 const AuthContext = createContext<AuthProps>({});
 
