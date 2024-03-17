@@ -65,12 +65,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize: 18,
-    fontFamily: "Poppins",
-    fontWeight: "bold",
+    fontSize: 20,
+    fontFamily: "PoppinsR",
     color: "#fff",
     marginTop: 20,
-    marginLeft: -20
+    marginLeft: -25
   },
   headerLogo: {
     textAlign: "center",
