@@ -7,12 +7,12 @@ import { tintColorPrimary } from "../constants/Colors";
 type Props = {
   data: string[] | number[];
   title: string;
-  setGuests?: any
+  handleInput?: any
 };
 
 const DropdownMenu = (props: Props) => {
 
-  const handleGuestsNumber = (number: number) => props.setGuests(number)
+  const handleInputChange = (input: string, value?: string | number) => props.handleInput(input)
   
   return (
     <SelectDropdown
@@ -31,7 +31,7 @@ const DropdownMenu = (props: Props) => {
         );
       }}
       onSelect={(selectedItem, index) => {
-        handleGuestsNumber(selectedItem)
+        handleInputChange(selectedItem)
         return selectedItem;
       }}
       buttonTextAfterSelection={(selectedItem, index) => {

@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import React from "react";
+import React, { ReactDOM, useState } from "react";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,17 +9,53 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import DropdownMenu from "../components/DropdownMenu";
 
+type Register = {
+  username: string;
+  password: string;
+  confirmPassword: string;
+  numberOfGuests: number;
+  firstGuestName: string;
+  firstGuestPassport: string;
+  secondGuestName: string | null;
+  secondGuestPassport: string | null;
+  thirdGuestName: string | null;
+  thirdGuestPassport: string | null;
+  tourGuideName: string;
+  localCompanyName: string;
+  foreignCompanyName: string;
+};
+
 const Register = () => {
   const localCompanies = ["JEM", "Star"];
   const foreignCompanies = ["Wander", "Sowan"];
   const guideData = ["Moubark", "Hany Gabr"];
   const guestData = [1, 2, 3];
 
-  const [guestsNumber, setGuestsNumber] = React.useState<any>(0);
+  const [userData, setUserData] = useState<Register>({
+    numberOfGuests: 0,
+    username: "",
+    password: "",
+    confirmPassword: "",
+    firstGuestName: "",
+    firstGuestPassport: "",
+    secondGuestName: null,
+    secondGuestPassport: null,
+    thirdGuestName: null,
+    thirdGuestPassport: null,
+    tourGuideName: "",
+    localCompanyName: "",
+    foreignCompanyName: "",
+  });
 
-  const handleSetGuestsNumber = (newCount: any) => {
-    setGuestsNumber(newCount);
+  const handleSetUserData = (name: string, value: string) => {
+    setUserData((prev) => {
+      return { ...prev, [name]: value };
+    });
   };
+
+  const isDataEmpty = Object.values(userData).some(
+    (item) => item === (0 || "")
+  );
 
   return (
     <View>
@@ -32,7 +68,7 @@ const Register = () => {
         />
         {/* <ActivityIndicator size="large" color={tintColorPrimary} /> */}
         <ScrollView style={{ height: "100%" }}>
-          <View style={styles.contanier}>
+          <View style={styles.container}>
             <View style={styles.textsContainers}>
               <Text style={styles.registerText}>Create Account</Text>
               <Text style={styles.welcomeText}>
@@ -41,43 +77,105 @@ const Register = () => {
             </View>
 
             <View style={styles.inputContainer}>
-              <Input placeholder="Username" />
-              <Input placeholder="Password" secureTextEntry />
-              <Input placeholder="Confirm Password" secureTextEntry />
+              <Input
+                placeholder="Username"
+                onChangeText={(value) => handleSetUserData("username", value)}
+              />
+              <Input
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={(value) => handleSetUserData("password", value)}
+              />
+              <Input
+                placeholder="Confirm Password"
+                secureTextEntry
+                onChangeText={(value) =>
+                  handleSetUserData("confirmPassword", value)
+                }
+              />
               <DropdownMenu
                 data={guestData}
                 title="Number of Guests"
-                setGuests={handleSetGuestsNumber}
+                handleInput={(value: any) =>
+                  handleSetUserData("numberOfGuests", value)
+                }
               />
 
-              {guestsNumber >= 1 && (
+              {userData.numberOfGuests >= 1 && (
                 <>
-                  <Input placeholder="First Guest Name" />
-                  <Input placeholder="First Guest Passport" />
+                  <Input
+                    placeholder="First Guest Name"
+                    onChangeText={(value) =>
+                      handleSetUserData("firstGuestName", value)
+                    }
+                  />
+                  <Input
+                    placeholder="First Guest Passport"
+                    onChangeText={(value) =>
+                      handleSetUserData("firstGuestPassport", value)
+                    }
+                  />
                 </>
               )}
-              {guestsNumber >= 2 && (
+              {userData.numberOfGuests >= 2 && (
                 <>
-                  <Input placeholder="Second Guest Name" />
-                  <Input placeholder="Second Guest Passport" />
+                  <Input
+                    placeholder="Second Guest Name"
+                    onChangeText={(value) =>
+                      handleSetUserData("secondGuestName", value)
+                    }
+                  />
+                  <Input
+                    placeholder="Second Guest Passport"
+                    onChangeText={(value) =>
+                      handleSetUserData("secondGuestPassport", value)
+                    }
+                  />
                 </>
               )}
-              {guestsNumber === 3 && (
+              {userData.numberOfGuests === 3 && (
                 <>
-                  <Input placeholder="Third Guest Name" />
-                  <Input placeholder="Third Guest Passport" />
+                  <Input
+                    placeholder="Third Guest Name"
+                    onChangeText={(value) =>
+                      handleSetUserData("thirdGuestName", value)
+                    }
+                  />
+                  <Input
+                    placeholder="Third Guest Passport"
+                    onChangeText={(value) =>
+                      handleSetUserData("thirdGuestPassport", value)
+                    }
+                  />
                 </>
               )}
-              <DropdownMenu data={guideData} title="Select Tour Guide" />
+              <DropdownMenu
+                data={guideData}
+                title="Select Tour Guide"
+                handleInput={(value: any) =>
+                  handleSetUserData("tourGuideName", value)
+                }
+              />
               <DropdownMenu
                 data={localCompanies}
                 title="Local Tourism Company"
+                handleInput={(value: any) =>
+                  handleSetUserData("localCompanyName", value)
+                }
               />
               <DropdownMenu
                 data={foreignCompanies}
                 title="Foreign Tourism Company"
+                handleInput={(value: any) =>
+                  handleSetUserData("foreignCompanyName", value)
+                }
               />
-              <Button color={tintColorSecondary} page="Login" title="Sign Up" />
+              <Button
+                disabled={isDataEmpty}
+                color={isDataEmpty ? "#cccc" : tintColorSecondary}
+                page="Login"
+                title="Sign Up"
+              />
             </View>
           </View>
         </ScrollView>
@@ -89,7 +187,7 @@ const Register = () => {
 export default Register;
 
 const styles = StyleSheet.create({
-  contanier: {
+  container: {
     height: "100%",
     display: "flex",
     marginTop: 0,

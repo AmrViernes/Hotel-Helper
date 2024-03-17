@@ -9,7 +9,7 @@ const Input = (props: Props) => {
   
   return (
     <View>
-      <TextInput style={styles.input}  {...otherProps} />
+      <TextInput style={styles.input}  {...otherProps} autoComplete='additional-name'/>
     </View>
   );
 };
