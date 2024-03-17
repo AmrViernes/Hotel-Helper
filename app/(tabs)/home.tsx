@@ -15,10 +15,10 @@ import { Link, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useModal } from "./../context/ModelContext";
-import Orders from "../../components/Orders";
-import ProgramCard from "../../components/ProgramCard";
+import ProgramCard from "../../components/Cards/ProgramCard";
 import { useData } from "../context/DataContext";
 import Loader from "../../components/Loader";
+import OrderCard from "../../components/Cards/OrderCard";
 
 const home = () => {
   const colorScheme = useColorScheme();
@@ -76,18 +76,8 @@ const home = () => {
     handleOpen(dynamicContent);
   };
 
-  const ordersImage = (num: number) => {
-    if (num == 3) {
-      return "../assets/images/fix.jpeg";
-    } else if (num == 6) {
-      return "../assets/images/orders.png";
-    }
-    return "../assets/images/hk.jpeg";
-  };
-
   return (
     <SafeAreaProvider style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>
           Room
           <Text style={{ color: tintColorSecondary }}> {homeData.ROOM_NO}</Text>
@@ -98,22 +88,23 @@ const home = () => {
             {homeData.NEXT_EVENT}
           </Text>
         </Text>
-
         {/* Screens Sections */}
         <View style={styles.listContainer}>
           {screensIconsData.map((item, index) => (
             <Pressable
               onPress={() => router.push(`/${item.url}`)}
               key={index}
-              style={{alignItems: 'center'}}
+              style={{ alignItems: "center" }}
             >
               <View style={styles.list}>
                 <Text>{item.icon}</Text>
               </View>
-                <Text style={styles.listTitle}>{item.name}</Text>
+              <Text style={styles.listTitle}>{item.name}</Text>
             </Pressable>
           ))}
         </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+
 
         {/* Orders Section */}
         <View style={styles.listTitle}>
@@ -122,67 +113,62 @@ const home = () => {
             See All
           </Link>
         </View>
-        {loading && <Loader/>}
+        {loading && <Loader />}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {!loading && homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID).map((req: any) => (
-            <Pressable
-              key={req.REQ_ID}
-              onPress={() =>
-                openModel(
-                  <View style={{ display: "flex", alignItems: "center" }}>
-                    <Text>{req.DEPT_NAME}</Text>
-                    <Text>{req.REQ_STATUS}</Text>
-                  </View>
-                )
-              }
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  paddingVertical: 10,
-                  height: 200,
-                }}
-              >
-                <Orders
-                  orderName={req.DEPT_NAME}
-                  imageUrl={ordersImage(req.DEPT_NUMBER)}
-                  loading={loading}
-                />
-              </View>
-            </Pressable>
-          ))}
+          {!loading &&
+            homeData?.REQUEST.sort((a: any, b: any) => b.REQ_ID - a.REQ_ID)
+              .map((req: any) => (
+                <Pressable
+                  key={req.REQ_ID}
+                  onPress={() =>
+                    openModel(
+                      <View style={{ display: "flex", alignItems: "center" }}>
+                        <Text>{req.DEPT_NAME}</Text>
+                        <Text>{req.REQ_STATUS}</Text>
+                      </View>
+                    )
+                  }
+                >
+                  <OrderCard
+                    orderName={req.DEPT_NAME}
+                    imageUrl={req.DEPT_NUMBER}
+                    loading={loading}
+                  />
+                </Pressable>
+              ))
+              .slice(0, 4)}
         </ScrollView>
 
         {/* Program Section */}
-        <View style={{ paddingBottom: 10 }}>
           <View style={styles.listTitle}>
             <Text style={styles.sectionsTitle}>Programs</Text>
-            <Link style={styles.linkInTitle} href="/Program">
+            <Link style={styles.linkInTitle} href="/Programs">
               See All
             </Link>
           </View>
-          {loading && <Loader/>}
+          {loading && <Loader />}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {!loading && homeData?.PROGRAM.sort((a: any, b: any) => b.PROG_ID - a.PROG_ID).map((program: any) => (
-              <Pressable
-                key={program.PROG_ID}
-                onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
-              >
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    paddingVertical: 10,
-                    width: 200,
-                  }}
-                >
-                  <ProgramCard title={program.PROG_TITLE} />
-                </View>
-              </Pressable>
-            ))}
+            {!loading &&
+              homeData?.PROGRAM.sort((a: any, b: any) => a.PROG_ID - b.PROG_ID)
+                .map((program: any) => (
+                  <Pressable
+                    key={program.PROG_ID}
+                    onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        paddingVertical: 10,
+                        width: 200,
+                      }}
+                    >
+                      <ProgramCard title={program.PROG_TITLE} />
+                    </View>
+                  </Pressable>
+                ))
+                .slice(0, 4)}
           </ScrollView>
-        </View>
       </ScrollView>
     </SafeAreaProvider>
   );
@@ -192,7 +178,7 @@ export default home;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: '8%',
     display: "flex",
     height: "100%",
   },
@@ -212,10 +198,10 @@ const styles = StyleSheet.create({
   },
   list: {
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: 'center',
+    alignSelf: "center",
     margin: 5,
     backgroundColor: tintColorSecondary,
     borderRadius: 10,
