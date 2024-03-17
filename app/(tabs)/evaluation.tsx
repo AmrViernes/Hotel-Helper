@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
     fontFamily: "Poppins",
     marginVertical: 30,
     marginBottom: 10,
