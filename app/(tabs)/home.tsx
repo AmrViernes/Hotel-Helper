@@ -222,23 +222,27 @@ const home = () => {
                               </Text>
                             ))}
                             <View style={styles.ordersDetailsContainer}>
-                              <Pressable
-                                onPress={() => {
-                                  handleEditRedirect(
-                                    req.DEPT_NUMBER,
-                                    req.REQ_ID
-                                  );
-                                  handleClose();
-                                }}
-                              >
-                                <Text style={styles.editOrderButton}>
-                                  <MaterialCommunityIcons
-                                    name="clock-edit"
-                                    size={24}
-                                    color="white"
-                                  />
-                                </Text>
-                              </Pressable>
+                              {req.DEPT_NUMBER === 6 &&
+                                req.MINUTES_CREATED <= 20 && (
+                                  <Pressable
+                                    onPress={() => {
+                                      handleEditRedirect(
+                                        req.DEPT_NUMBER,
+                                        req.REQ_ID
+                                      );
+                                      handleClose();
+                                    }}
+                                  >
+                                    <Text style={styles.editOrderButton}>
+                                      <MaterialCommunityIcons
+                                        name="clock-edit"
+                                        size={24}
+                                        color="white"
+                                      />
+                                    </Text>
+                                  </Pressable>
+                                )}
+
                               <Pressable
                                 onPress={() => handleDeleteOrder(req.REQ_ID)}
                               >
