@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
 import { useRouter } from "expo-router";
@@ -15,12 +15,12 @@ const Button = ({
 }) => {
   const router = useRouter();
   return (
-    <TouchableOpacity
+    <Pressable
       style={[styles.button, { backgroundColor: color }]}
       onPress={() => router.push(`/${page}`)}
     >
       <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
