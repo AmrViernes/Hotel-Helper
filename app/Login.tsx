@@ -5,7 +5,7 @@ import React from "react";
 import { useRouter, Stack } from "expo-router";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { tintColorPrimary } from "../constants/Colors";
+import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 import { useAuth } from "./context/AuthContext";
 import Loader from "../components/Loader";
 import { LoginT } from "../types/types";
@@ -63,6 +63,10 @@ const Login = () => {
             options={{
               headerTitle: "",
               headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
             }}
           />
           <View style={styles.container}>
@@ -87,7 +91,7 @@ const Login = () => {
                 disabled={isLoginDataEmpty}
                 title="Sign In"
                 color={isLoginDataEmpty ? "#ccc" : tintColorPrimary}
-                onClick={login}
+                onClick={() => login()}
               />
             </View>
 
