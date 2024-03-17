@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 import React from "react";
 import Logo from "./Logo";
 
-const WeavyHeader = (/* {children}:{children: React.ReactElement} */) => {
+const WeavyHeader = () => {
   return (
     <View style={styles.svgCurve}>
       <View style={styles.headerContainer}>
@@ -18,7 +18,7 @@ const WeavyHeader = (/* {children}:{children: React.ReactElement} */) => {
 
         {/* Left Header Button */}
         <View style={styles.headerButton}>
-          <Link href="/modal" asChild>
+          <Link href="/Welcome" asChild>
             <Pressable>
               {({ pressed }) => (
                 <FontAwesome
