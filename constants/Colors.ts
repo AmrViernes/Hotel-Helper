@@ -1,19 +1,22 @@
 export const tintColorPrimary = "#466d86";
 export const tintColorSecondary = "#e5a134";
+export const tintColorWarmBackground = '#FCF5ED'
 
 export default {
   light: {
-    text: "#466d86",
-    background: "#fff",
+    text: tintColorPrimary,
+    iconOutLine: '#fff',
+    background: tintColorWarmBackground,
     tint: tintColorPrimary,
     tabIconDefault: "#fff",
-    tabIconSelected: tintColorSecondary,
+    tabIconSelected: tintColorPrimary,
   },
   dark: {
-    text: "#fff",
-    background: "#000",
+    text: '#fff',
+    iconOutLine: '#fff',
+    background: '#fffff',
     tint: tintColorSecondary,
     tabIconDefault: "#fff",
-    tabIconSelected: tintColorSecondary,
+    tabIconSelected: tintColorPrimary,
   },
 };
