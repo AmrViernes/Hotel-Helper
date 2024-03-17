@@ -10,7 +10,8 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { AuthProvider } from "./context/AuthContext";
 import { ModalProvider } from "./context/ModelContext";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
+import { DataProvider } from "./context/DataContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,14 +56,18 @@ function RootLayoutNav() {
 
   return (
     //<AuthProvider>
-    <ModalProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-        <Toast />
-      </ThemeProvider>
-    </ModalProvider>
+    <DataProvider>
+      <ModalProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+          <Toast />
+        </ThemeProvider>
+      </ModalProvider>
+    </DataProvider>
     //</AuthProvider>
   );
 }

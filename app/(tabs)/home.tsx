@@ -5,26 +5,32 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors, {
   tintColorPrimary,
   tintColorSecondary,
 } from "../../constants/Colors";
 import { Link, useRouter } from "expo-router";
-import { ScrollView} from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import Orders from "../../components/Orders";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Programs from "../../components/Programs";
-import { useModal } from './../context/ModelContext';
-import Toast from 'react-native-toast-message';
+import { useModal } from "./../context/ModelContext";
+import Toast from "react-native-toast-message";
+import Loader from "../../components/Loader";
+import axios from "axios";
+import ProgramBox from "../../components/ProgramBox";
+import { useData } from "../context/DataContext";
+
+
 
 const home = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
   const { handleOpen } = useModal();
-
-  const mainScreensData = [
+  const { homeData, loading } = useData()
+  const screensIconsData = [
     {
       name: "Maintain",
       url: "Maintenance",
@@ -71,9 +77,10 @@ const home = () => {
     },
   ];
 
-const openModel = (dynamicContent: ReactNode) => {
-  handleOpen(dynamicContent);
-}
+  const openModel = (dynamicContent: ReactNode) => {
+    handleOpen(dynamicContent);
+  };
+
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -82,7 +89,7 @@ const openModel = (dynamicContent: ReactNode) => {
 
         {/* Screens Sections */}
         <View style={styles.listContainer}>
-          {mainScreensData.map((item, index) => (
+          {screensIconsData.map((item, index) => (
             <Pressable
               onPress={() => router.push(`/${item.url}`)}
               key={index}
@@ -98,47 +105,72 @@ const openModel = (dynamicContent: ReactNode) => {
 
         {/* Orders Section */}
         <View>
-          <View style={styles.listTitle}>
-            <Text style={styles.sectionsTitle}>Orders</Text>
-            <Link href="/Orders" style={styles.linkInTitle}>
-              See All
-            </Link>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                paddingVertical: 10,
-              }}
-            >
-              <Pressable  onPress={() => openModel(<Text>Order Name</Text>)}>
-              <Orders orderName="Breakfast Meal"/>
-              </Pressable>
-              <Orders orderName="Launch Meal" />
-            </View>
-          </ScrollView>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <View style={styles.listTitle}>
+                <Text style={styles.sectionsTitle}>Orders</Text>
+                <Link href="/Orders" style={styles.linkInTitle}>
+                  See All
+                </Link>
+              </View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {homeData?.REQUEST.map((req: any) => (
+                  <Pressable
+                    key={req.REQ_ID}
+                    onPress={() => openModel(<Text>{req.DEPT_NAME}</Text>)}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        paddingVertical: 10,
+                        height: 200,
+                      }}
+                    >
+                      <Orders orderName={req.DEPT_NAME} />
+                    </View>
+                  </Pressable>
+                ))}
+              </ScrollView>
+            </>
+          )}
         </View>
 
         {/* Program Section */}
         <View style={{ paddingBottom: 10 }}>
-          <View style={styles.listTitle}>
-            <Text style={styles.sectionsTitle}>Programs</Text>
-            <Link style={styles.linkInTitle} href="/Program">
-              See All
-            </Link>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                paddingVertical: 10,
-              }}
-            >
-              <Programs />
-            </View>
-          </ScrollView>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <View style={styles.listTitle}>
+                <Text style={styles.sectionsTitle}>Programs</Text>
+                <Link style={styles.linkInTitle} href="/Program">
+                  See All
+                </Link>
+              </View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {homeData?.PROGRAM.map((program: any) => (
+                  <Pressable
+                    key={program.PROG_ID}
+                    onPress={() => openModel(<Text>{program.PROG_TITLE}</Text>)}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        paddingVertical: 10,
+                        width: 200,
+                      }}
+                    >
+                      <ProgramBox title={program.PROG_TITLE} />
+                    </View>
+                  </Pressable>
+                ))}
+              </ScrollView>
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaProvider>
