@@ -15,6 +15,8 @@ import axios from "axios";
 import MaintenanceCard from "../components/Cards/ServicesCard";
 import { ServicesT } from "../types/types";
 import { useData } from "./context/DataContext";
+import * as secureStore from "expo-secure-store";
+import { AUTH_KEY } from "./context/AuthContext";
 
 const HouseKeeping = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,6 +51,8 @@ const HouseKeeping = () => {
   }, []);
 
   const handlePlaceHouseKeepingRequest = async () => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string)
     setLoading(true)
     try {
       // Add logic to send the order data to the backend
@@ -58,7 +62,7 @@ const HouseKeeping = () => {
         {
           params: {
             P_APPID: 1,
-            P_RCID: 7977
+            P_RCID: authData.RC_ID
           }
         }
       );
@@ -78,12 +82,16 @@ console.log(houseKeepingOrder)
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-        <Stack.Screen
-          options={{
-            headerTitle: "",
-            headerShadowVisible: false,
-          }}
-        />
+      <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
         {loading ? (
           <Loader />
         ) : (
@@ -121,6 +129,7 @@ console.log(houseKeepingOrder)
                 styles.orderButton,
                 {
                   backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
+                  color: checkIfUserSelectItem ? tintColorPrimary : "white",
                 },
               ]}
             >

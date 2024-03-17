@@ -15,6 +15,8 @@ import axios from "axios";
 import MaintenanceCard from "../components/Cards/ServicesCard";
 import { ServicesT } from "../types/types";
 import { useData } from './context/DataContext'
+import * as secureStore from "expo-secure-store";
+import { AUTH_KEY } from "./context/AuthContext";
 
 const Maintenance = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,7 +31,6 @@ const { setLoadingToTrue } = useData()
         const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/fix/item",
           {
-            signal: abort.signal,
             params: {
               P_APPID: 1,
               P_LANGCODE: "E",
@@ -53,6 +54,8 @@ const { setLoadingToTrue } = useData()
   };
 
   const handlePlaceFixRequest = async () => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string)
     setLoading(true)
     try {
       // Add logic to send the order data to the backend
@@ -62,7 +65,7 @@ const { setLoadingToTrue } = useData()
         {
           params: {
             P_APPID: 1,
-            P_RCID: 7977
+            P_RCID: authData.RC_ID
           }
         }
       );
@@ -83,19 +86,23 @@ const { setLoadingToTrue } = useData()
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-        <Stack.Screen
-          options={{
-            headerTitle: "",
-            headerShadowVisible: false,
-          }}
-        />
+      <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
         {loading ? (
           <Loader />
         ) : (
           <>
             <Text style={styles.title}>Select Damaged Items</Text>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={styles.maintenanceContainer}>
+              <View>
                 {loading ? (
                   <Loader />
                 ) : (
@@ -126,6 +133,7 @@ const { setLoadingToTrue } = useData()
                 styles.orderButton,
                 {
                   backgroundColor: checkIfUserSelectItem ? "#ccc" : tintColorPrimary,
+                  color: checkIfUserSelectItem ? tintColorPrimary : 'white'
                 },
               ]}
             >
@@ -144,7 +152,6 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
   },
-  maintenanceContainer: {},
   title: {
     fontFamily: "Poppins",
     fontSize: 26,

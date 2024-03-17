@@ -16,6 +16,8 @@ import FoodCard from "../components/Cards/FoodCard";
 import { FoodT, OrderT, OrderInfoT, LocationT } from "../types/types";
 import LocationCard from "../components/Cards/LocationCard";
 import { useData } from "./context/DataContext";
+import * as secureStore from "expo-secure-store";
+import { AUTH_KEY } from "./context/AuthContext";
 
 const Food = () => {
   const {setLoadingToTrue} = useData()
@@ -187,6 +189,8 @@ const Food = () => {
   };
 
   const handlePlaceOrder = async () => {
+    const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+    const authData = JSON.parse(gettingAuth as string)
     try {
       // Add logic to send the order data to the backend
       await axios.post(
@@ -195,7 +199,7 @@ const Food = () => {
         {
           params: {
             P_APPID: 1,
-            P_RCID: 7977
+            P_RCID: authData.RC_ID
           }
         }
       );
@@ -231,12 +235,16 @@ const Food = () => {
   return (
     <View style={styles.container}>
       <SafeAreaProvider>
-        <Stack.Screen
-          options={{
-            headerTitle: "",
-            headerShadowVisible: false,
-          }}
-        />
+      <Stack.Screen
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerStyle: {
+                backgroundColor: tintColorWarmBackground
+              },
+              headerTintColor: tintColorPrimary
+            }}
+          />
 
         {loading ? (
           <Loader />
@@ -475,6 +483,7 @@ const Food = () => {
                     backgroundColor: checkIfOrderIsNotEmpty
                       ? "#ccc"
                       : tintColorPrimary,
+                      color: checkIfOrderIsNotEmpty ? tintColorPrimary : 'white'
                   },
                 ]}
               >
@@ -553,7 +562,8 @@ const styles = StyleSheet.create({
   totalTitle: {
     fontFamily: "PoppinsR",
     fontSize: 22,
-    margin: 5,
+    padding: 5,
+    backgroundColor: tintColorSecondary
   },
   locationContainer: {
     padding: 16,

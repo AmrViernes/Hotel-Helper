@@ -9,6 +9,8 @@ import { FlashList } from "@shopify/flash-list";
 import Loader from "../../components/Loader";
 import axios from "axios";
 import { EvaluationT } from "../../types/types";
+import * as secureStore from "expo-secure-store";
+import { AUTH_KEY } from "../context/AuthContext";
 
 const evaluation = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,15 +48,16 @@ const evaluation = () => {
     const abort = new AbortController();
 
     const fetchData = async () => {
+      const gettingAuth = await secureStore.getItemAsync(AUTH_KEY);
+      const authData = JSON.parse(gettingAuth as string)
       try {
         const response = await axios.get(
           "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
           {
-            signal: abort.signal,
             params: {
               P_APPID: 1,
               P_LANGCODE: "E",
-              P_RCID: 7977,
+              P_RCID: authData.RC_ID,
             },
           }
         );
