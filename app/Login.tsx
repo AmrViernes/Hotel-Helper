@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
 import React from "react";
@@ -33,13 +33,13 @@ const Login = () => {
             <Button title="Sign In" color={tintColorPrimary} page="home" />
           </View>
 
-          <TouchableOpacity onPress={() => router.push(`/${"Register"}`)}>
+          <Pressable onPress={() => router.push(`/${"Register"}`)}>
             <Text
               style={{ fontFamily: "Poppins", textDecorationLine: "underline" }}
             >
               Create New Account
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </SafeAreaView>
     </View>
