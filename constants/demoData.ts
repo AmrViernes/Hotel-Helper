@@ -58,7 +58,7 @@ export const tripsData = [{
     "id": 8,
     "title": "Verde Formation Breadroot",
     "details": "Supplement Bi Fallopian Tube w Nonaut Sub, Perc Endo",
-    "date": "2023-01-04T12:00:00.000",
+    "date": "2023-11-09T12:00:00.000",
     "startAt": "11:18 AM",
     "duration": 18,
     "mode_of_transport": "bus"
@@ -66,7 +66,7 @@ export const tripsData = [{
     "id": 9,
     "title": "Saw Greenbrier",
     "details": "Resection of Left Breast, Open Approach",
-    "date": "2023-11-08T12:00:00.000",
+    "date": "2023-11-09T12:00:00.000",
     "startAt": "1:32 PM",
     "duration": 18,
     "mode_of_transport": "car"
