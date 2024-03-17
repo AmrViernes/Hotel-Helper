@@ -3,7 +3,7 @@ import { Text, View } from '../components/Themed';
 import { Redirect } from 'expo-router';
 
 export default function index() {
-   return <Redirect href="/Welcome" />
+   return <Redirect href="/home" />
 }
 
 const styles = StyleSheet.create({
