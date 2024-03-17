@@ -12,8 +12,21 @@ type Home_Data = {
   ROOM_NO: string;
   NEXT_EVENT: string;
   FINANCE: [];
-  PROGRAM: [];
-  REQUEST: [];
+  PROGRAM: [{
+    PROG_ID: number,
+    PROG_DATE: string,
+    PROG_TIME: string,
+    PROG_TITLE: string,
+    PROG_DESCRIPTION: string
+  }];
+  REQUEST: [{
+    REQ_ID: number,
+    DEPT_NAME: string,
+    DEPT_NUMBER: number,
+    REQ_DESC: string,
+    REQ_STATUS?: string,
+    ITEM_COUNT?: number
+  }];
 };
 
 interface DataContextProps {
@@ -22,7 +35,8 @@ interface DataContextProps {
 
 interface DataContextValue {
   homeData: Home_Data;
-  updateData: (newData: Home_Data) => void;
+  updateHomeData: (newData: Home_Data) => void;
+  setLoadingToFalse: () => void;
   loading: boolean
 }
 
@@ -33,8 +47,19 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
     ROOM_NO: "",
     NEXT_EVENT: "",
     FINANCE: [],
-    PROGRAM: [],
-    REQUEST: []
+    PROGRAM: [{
+      PROG_ID: 0,
+      PROG_TITLE: '',
+      PROG_DATE: '',
+      PROG_DESCRIPTION: '',
+      PROG_TIME: ''
+    }],
+    REQUEST: [{
+      DEPT_NAME: '',
+      DEPT_NUMBER: 0,
+      REQ_ID: 0,
+      REQ_DESC: ''
+    }]
   });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -52,16 +77,23 @@ export const DataProvider: React.FC<DataContextProps> = ({ children }) => {
       )
       .then((res) => setHomeData(res.data.RESPONSE[0]))
       .finally(() => setLoading(false));
-  }, []);
+      console.log(homeData);
+      
+  }, [loading]);
 
-  const updateData = (newData: Home_Data) => {
+  const updateHomeData = (newData: Home_Data) => {
     setHomeData(newData);
   };
 
+  const setLoadingToFalse = () => {
+    setLoading(true)
+  }
+
   const value: DataContextValue = {
     loading,
+    setLoadingToFalse,
     homeData,
-    updateData,
+    updateHomeData,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
