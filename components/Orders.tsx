@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text } from "react-native";
 import React from "react";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 import { ImageBackground } from "expo-image";
