@@ -39,7 +39,7 @@ export type HomeDataT = {
     REQ_STATUS?: string;
     ITEM_COUNT?: number;
   }>;
-};
+} | undefined
 
 export interface DataContextPropsT {
   children: React.ReactNode;
