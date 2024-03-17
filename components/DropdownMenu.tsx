@@ -1,15 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React from 'react'
-import { tintColorPrimary } from '../constants/Colors';
+import React from "react";
+import { tintColorPrimary } from "../constants/Colors";
 
 type Props = {
-    data: string[],
-    title: string
-}
+  data: string[] | number[];
+  title: string;
+  setGuests?: any
+};
 
 const DropdownMenu = (props: Props) => {
+
+  const handleGuestsNumber = (number: number) => props.setGuests(number)
+  
   return (
     <SelectDropdown
       dropdownIconPosition="right"
@@ -27,24 +31,31 @@ const DropdownMenu = (props: Props) => {
         );
       }}
       onSelect={(selectedItem, index) => {
+        handleGuestsNumber(selectedItem)
         return selectedItem;
       }}
       buttonTextAfterSelection={(selectedItem, index) => {
         // text represented after item is selected
         // if data array is an array of objects then return selectedItem.property to render after item is selected
-        return selectedItem;
+        return selectedItem
       }}
       rowTextForSelection={(item, index) => {
         // text represented for each item in dropdown
         // if data array is an array of objects then return item.property to represent item in dropdown
         return item;
-          }}
-          buttonTextStyle={{color: tintColorPrimary, fontFamily: 'PoppinsR', fontSize: 15, opacity: 0.5, paddingTop: 2}}
+      }}
+      buttonTextStyle={{
+        color: tintColorPrimary,
+        fontFamily: "PoppinsR",
+        fontSize: 15,
+        opacity: 0.5,
+        paddingTop: 2,
+      }}
     />
   );
-}
+};
 
-export default DropdownMenu
+export default DropdownMenu;
 
 const styles = StyleSheet.create({
   dropdownMenu: {
@@ -54,7 +65,7 @@ const styles = StyleSheet.create({
     color: tintColorPrimary,
   },
   dropdownButton: {
-      fontFamily: "PoppinsR",
+    fontFamily: "PoppinsR",
     paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: "#E6F4F1",
