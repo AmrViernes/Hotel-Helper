@@ -30,16 +30,17 @@ export default function edit() {
   const [orderIsDone, setOrderIsDone] = useState<boolean>(false);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("food");
-  const [orderInfo, setOrderInfo] = useState<OrderInfoT>({
-    totalPrice: 0,
-    items: [],
-  });
+
   const [foodData, setFoodData] = useState<FoodT>([]);
   const [order, setOrder] = useState<OrderT>({
     LOCATIONTYPE_CODE: 0,
     LOCATION_CODE: 0,
     REQ_DESC: "",
     ITEMS: [],
+  });
+  const [orderInfo, setOrderInfo] = useState<OrderInfoT>({
+    totalPrice: 0,
+    items: [],
   });
 
   const foodSelectedTextColor =
@@ -68,8 +69,6 @@ export default function edit() {
         setFoodData(response.data.RESPONSE[0].CATEGORY);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -88,6 +87,21 @@ export default function edit() {
             },
           }
         );
+        console.log(response.data.RESPONSE[0].REQUEST[0]);
+        setOrder((prevOrder) => {
+          const items = response.data.RESPONSE[0].REQUEST[0].REQUEST_ITEMS?.map((item:any) => ({
+            ITEM_ID: item.ITEM_ID,
+            ITEM_QTY: item.ITEM_QTY
+          }));
+      
+          return {
+            ...prevOrder,
+            ITEMS: items,
+            LOCATIONTYPE_CODE: 0,
+            LOCATION_CODE: 0,
+            REQ_DESC: ""
+          };
+        });
         setOrderInfo((prev) => {
           return {
             totalPrice: response.data.RESPONSE[0].REQUEST[0].TOTAL_PRICE,
@@ -111,7 +125,9 @@ export default function edit() {
     return () => abort.abort();
   }, []);
 
-  console.log(order);
+  console.log("Final Order",order);
+  console.log("Order ID",orderId);
+  console.log("Order Info", orderInfo);
 
   const handleIncrement = useCallback(
     (price: number, itemId: number, itemName: string) => {
