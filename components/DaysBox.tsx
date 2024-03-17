@@ -30,10 +30,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   box: {
-    borderColor: "#cccc",
-    borderWidth: 2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
-    height: 70,
+    height: 65,
     width: 60,
     margin: 5,
     shadowColor: tintColorPrimary,
@@ -44,17 +45,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+
   },
   boxDay: {
     textAlign: "center",
     fontFamily: "Poppins",
     fontSize: 14,
-    color: tintColorSecondary,
+    color: tintColorPrimary,
     marginTop: -8,
   },
   boxDayNum: {
     textAlign: "center",
     fontFamily: "PoppinsR",
     fontSize: 28,
+    color: tintColorPrimary
   },
 });
