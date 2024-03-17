@@ -5,6 +5,7 @@ import Button from "../../components/Button";
 import { tintColorSecondary } from "../../constants/Colors";
 import Stars from "../../components/Stars";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { FlashList } from "@shopify/flash-list";
 
 type Services = {
   name: string;
@@ -52,14 +53,20 @@ const evaluation = () => {
             <View key={serviceIndex}>
               <Text style={styles.itemTitle}>{service.name}</Text>
               <View style={styles.starsContainer}>
-                {rates.map((_, starIndex) => (
-                  <Stars
-                    key={starIndex}
-                    value={starIndex}
-                    maxValue={services[serviceIndex].rateMaxValue}
-                    onClick={() => handleClick(serviceIndex, starIndex)}
-                  />
-                ))}
+                <FlashList
+                  data={rates}
+                  estimatedItemSize={100}
+                  keyExtractor={(item) => item}
+                  numColumns={5}
+                  renderItem={({ item, index }) => (
+                    <Stars
+                      key={index}
+                      value={index}
+                      maxValue={services[serviceIndex].rateMaxValue}
+                      onClick={() => handleClick(serviceIndex, index)}
+                    />
+                  )}
+                />
               </View>
             </View>
           ))}
@@ -108,6 +115,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   starsContainer: {
+    height: 50,
+    width: 250,
     display: "flex",
     flexDirection: "row",
   },
