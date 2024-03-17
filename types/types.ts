@@ -101,7 +101,6 @@ export type LocationItemT = {
 };
 
 export type LocationT = LocationItemT[];
-;
 
 export type ServicesT = {
   ITEM_ID: number;
