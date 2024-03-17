@@ -1,6 +1,7 @@
-import { StyleSheet, Pressable } from "react-native";
+import { StyleSheet, Pressable, Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Text, View } from "../components/Themed";
+import { Image } from "expo-image";
 import React from "react";
 import { useRouter } from "expo-router";
 import Input from "../components/Input";
@@ -65,6 +66,14 @@ const Login = () => {
         <>
           <StackScreen />
           <View style={styles.container}>
+          <Image
+          source={require("../assets/images/svg/password.svg")}
+          contentFit="cover"
+          style={{
+            height: Dimensions.get('screen').height / 3,
+            width: "100%",
+          }}
+        />
             <View style={styles.textsContainers}>
               <Text style={styles.loginText}>Login Here</Text>
               <Text style={styles.welcomeText}>
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   textsContainers: {

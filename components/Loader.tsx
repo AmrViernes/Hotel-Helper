@@ -1,11 +1,39 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  useColorScheme,
+} from "react-native";
+import {
+  tintColorWarmBackground,
+} from "../constants/Colors";
+import LottieView from "lottie-react-native";
 
 const Loader = () => {
+  const { height } = Dimensions.get("screen");
+  const color = useColorScheme();
+  const animation = React.useRef(null);
+  console.log(color);
+
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={tintColorPrimary} />
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: color === "dark" ? "black" : tintColorWarmBackground,
+        },
+      ]}
+    >
+      {/* <ActivityIndicator size="large" color={tintColorPrimary} /> */}
+      <LottieView
+        autoPlay
+        ref={animation}
+        style={{
+          height: height / 7,
+        }}
+        source={require("../assets/loading.json")}
+      />
     </View>
   );
 };

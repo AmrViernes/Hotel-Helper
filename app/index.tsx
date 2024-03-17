@@ -5,11 +5,15 @@ import { Image } from "expo-image";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View, Text } from "../components/Themed";
 import Button from "../components/Button";
-import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
-
+import {
+  tintColorPrimary,
+  tintColorSecondary,
+  tintColorWarmBackground,
+} from "../constants/Colors";
+import LottieView from "lottie-react-native";
 export default function Page() {
   const { height } = Dimensions.get("screen");
-
+  const animation = React.useRef(null);
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
@@ -18,13 +22,14 @@ export default function Page() {
             headerShown: false,
           }}
         />
-        <Image
-          source={require("../assets/images/svg/login.svg")}
-          contentFit="fill"
+        <LottieView
+          autoPlay
+          ref={animation}
           style={{
-            height: height / 2,
             width: "100%",
+            height: height / 2,
           }}
+          source={require("../assets/gradientBall.json")}
         />
         <View style={styles.titleContainer}>
           <Image
@@ -41,36 +46,31 @@ export default function Page() {
             color={tintColorPrimary}
             onClick={() => router.push("/Login")}
           />
-          {/* <Button
-            title="Register"
-            color={tintColorSecondary}
-            onClick={() => router.push("/Register")}
-          /> */}
         </View>
       </View>
     </SafeAreaProvider>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     height: "100%",
     alignItems: "center",
-    flexDirection: 'column',
-    justifyContent: 'space-around'
+    flexDirection: "column",
+    justifyContent: "space-evenly",
   },
   text: {
     fontFamily: "Poppins",
     textAlign: "center",
     fontSize: 20,
-    color: tintColorPrimary
+    color: tintColorPrimary,
   },
   titleContainer: {
     display: "flex",
     justifyContent: "space-evenly",
     alignItems: "center",
-    height: '18%',
-    marginTop: '-15%'
+    height: "18%",
+    marginTop: "-15%",
   },
   buttonsContainer: {
     width: "80%",

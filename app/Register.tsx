@@ -18,6 +18,7 @@ import * as secureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
 import Loader from "../components/Loader";
 import { useRouter } from "expo-router";
+import { useData } from "./context/DataContext";
 
 const Register = () => {
   const router = useRouter();
@@ -119,6 +120,7 @@ const Register = () => {
     });
   };
 
+  const checkIfUserStateEmpty = Object.values(userData).some((item) => item === 0 || item === "")
   console.log("form Check", userData.formIsCompleted);
   const handleSubmit = async () => {
     const apiData = {
@@ -131,7 +133,7 @@ const Register = () => {
       COMPANYL_ID: userData.localCompanyId,
       COMPANYF_ID: userData.foreignCompanyId,
     };
-    if (Object.values(apiData).some((item) => item === 0 || item === "")) {
+    if (checkIfUserStateEmpty) {
       Toast.show({
         type: "error",
         text1: "Error",
@@ -195,6 +197,40 @@ const Register = () => {
     }
   };
 
+  const setClientsNumber = (value: number) => {
+    if (value === 1) {
+      setUserData((prev) => {
+        return {
+          ...prev,
+          firstGuestName: prev.firstGuestName,
+          firstGuestPassport: prev.firstGuestPassport
+        }
+      });
+    } else if (value === 2) {
+      setUserData((prev) => {
+        return {
+          ...prev,
+          firstGuestName: prev.firstGuestName,
+          firstGuestPassport: prev.firstGuestPassport,
+          secondGuestName: prev.secondGuestName || "",
+          secondGuestPassport: prev.secondGuestPassport || "",
+        }
+      });
+    } else if (value === 3) {
+      setUserData((prev) => {
+        return {
+          ...prev,
+          firstGuestName: prev.firstGuestName || "",
+          firstGuestPassport: prev.firstGuestPassport || "",
+          secondGuestName: prev.secondGuestName || "",
+          secondGuestPassport: prev.secondGuestPassport || "",
+          thirdGuestName: prev.thirdGuestName || "",
+          thirdGuestPassport: prev.thirdGuestPassport || "",
+        }
+      });
+    }
+  }
+
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
@@ -211,6 +247,7 @@ const Register = () => {
               </View>
 
               <View style={styles.inputContainer}>
+                <View>
                 <Text style={styles.label}>Number of Guests</Text>
                 <DropdownMenu
                   data={[1, 2, 3]}
@@ -220,31 +257,14 @@ const Register = () => {
                     setUserData((prev) => {
                       return { ...prev, guestsNumber: value };
                     });
-                    if (value === 1) {
-                      setUserData((prev) => {
-                        // Exclude properties for second and third guests
-                        const {
-                          secondGuestName,
-                          secondGuestPassport,
-                          thirdGuestName,
-                          thirdGuestPassport,
-                          ...rest
-                        } = prev;
-                        return rest;
-                      });
-                    } else if (value === 2) {
-                      setUserData((prev) => {
-                        // Exclude properties for second and third guests
-                        const { thirdGuestName, thirdGuestPassport, ...rest } =
-                          prev;
-                        return rest;
-                      });
-                    }
+                    setClientsNumber(value)
                   }}
                 />
+                </View>
 
                 {userData.guestsNumber >= 1 && (
                   <>
+                  <View>
                     <Text style={styles.label}>First Guest Name</Text>
                     <Input
                       placeholder="First Guest Name"
@@ -256,6 +276,8 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
+                  <View>
                     <Text style={styles.label}>First Guest Passport</Text>
                     <Input
                       placeholder="First Guest Passport"
@@ -266,10 +288,12 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
                   </>
                 )}
                 {userData.guestsNumber >= 2 && (
                   <>
+                  <View>
                     <Text style={styles.label}>Second Guest Name</Text>
                     <Input
                       placeholder="Second Guest Name"
@@ -281,6 +305,8 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
+                  <View>
                     <Text style={styles.label}>Second Guest Passport</Text>
                     <Input
                       placeholder="Second Guest Passport"
@@ -291,10 +317,12 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
                   </>
                 )}
                 {userData.guestsNumber === 3 && (
                   <>
+                  <View>
                     <Text style={styles.label}>Third Guest Name</Text>
                     <Input
                       placeholder="Third Guest Name"
@@ -306,6 +334,8 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
+                  <View>
                     <Text style={styles.label}>Third Guest Passport</Text>
                     <Input
                       placeholder="Third Guest Passport"
@@ -316,8 +346,10 @@ const Register = () => {
                         traceInputChange(value)
                       }}
                     />
+                  </View>
                   </>
                 )}
+                <View>
                 <Text style={styles.label}>Local Company</Text>
                 <DropdownMenu
                   data={userData.companies.localCompanies.map(
@@ -336,6 +368,8 @@ const Register = () => {
                     });
                   }}
                 />
+                </View>
+                <View>
                 <Text style={styles.label}>Foreign Company</Text>
                 <DropdownMenu
                   data={userData.companies.foreignCompanies.map(
@@ -355,10 +389,11 @@ const Register = () => {
                     })
                   }
                 />
+                </View>
                 <Button
-                  disabled={!userData.formIsCompleted}
+                  disabled={!userData.formIsCompleted || checkIfUserStateEmpty}
                   color={
-                    !userData.formIsCompleted ? "#cccc" : tintColorSecondary
+                    !userData.formIsCompleted || checkIfUserStateEmpty ? "#cccc" : tintColorSecondary
                   }
                   title="Confirm"
                   onClick={() => handleSubmit()}
@@ -412,7 +447,10 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: tintColorPrimary,
     opacity: 0.4,
-    marginBottom: -12,
+    marginBottom: -17,
+    position: 'absolute',
+    paddingLeft: 8,
+    top: 0,
     zIndex: 10,
     textShadowColor: tintColorPrimary,
     textShadowRadius: 2,
