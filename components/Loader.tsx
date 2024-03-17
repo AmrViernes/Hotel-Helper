@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { tintColorPrimary } from "../constants/Colors";
+import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 
 const Loader = () => {
   return (
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-
+    backgroundColor: tintColorWarmBackground
   },
 });
 
