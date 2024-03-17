@@ -18,9 +18,7 @@ const dates = tripsData
   );
 
 const Program = () => {
-  const [selectedDate, setSelectedDate] = React.useState<Date>(
-    new Date()
-  );
+  const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   return (
     <View style={styles.container}>
       <SafeAreaProvider style={styles.container}>
@@ -34,8 +32,15 @@ const Program = () => {
         <View style={styles.daysContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {dates.map((item, index) => (
-              <Pressable key={index} onPress={() => setSelectedDate(item)}>
+              <Pressable
+                key={index}
+                onPress={() => setSelectedDate(item)}
+                style={{
+                  backgroundColor: "red",
+                }}
+              >
                 <DaysBox
+                  color={item.getDate() === selectedDate.getDate() ? '#e76f51' : "#e9e9e9"}
                   day={dayNames[item.getDay()]}
                   dayNum={item.getDate()}
                 />
@@ -53,15 +58,16 @@ const Program = () => {
                 new Date(item.date).getFullYear() === selectedDate.getFullYear()
             )
             .map((item) => (
+              <SafeAreaProvider key={item.id}>
               <ProgramBox
-                key={item.id}
                 title={item.title}
                 details={item.details}
                 date={new Date(item.date)}
                 duration={item.duration}
                 startAt={item.startAt}
                 transportation={item.mode_of_transport}
-              />
+                />
+                </SafeAreaProvider>
             ))}
         </ScrollView>
       </SafeAreaProvider>

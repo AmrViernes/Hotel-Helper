@@ -19,13 +19,13 @@ const Orders = ({
   orderTime,
 }: OrderProps) => {
   return (
-        <View style={styles.box}>
-          <Text>{orderName}</Text>
-          <Text>{roomNumber}</Text>
-          <Text>{guestName}</Text>
-          <Text>{orderType}</Text>
-          <Text>{orderTime}</Text>
-        </View>
+    <View style={styles.box}>
+      <Text>{orderName}</Text>
+      <Text>{roomNumber}</Text>
+      <Text>{guestName}</Text>
+      <Text>{orderType}</Text>
+      <Text>{orderTime}</Text>
+    </View>
   );
 };
 
@@ -33,14 +33,15 @@ export default Orders;
 
 const styles = StyleSheet.create({
   box: {
-    borderColor: tintColorPrimary,
-    backgroundColor: tintColorSecondary,
-    borderWidth: 2,
-    borderRadius: 5,
-    height: Dimensions.get('screen').height / 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    height: Dimensions.get("screen").height / 5,
     width: 200,
-    margin: 5,
+    marginHorizontal: 10,
+    borderColor: "#eed7c5",
+    backgroundColor: "#f5ebe0",
     shadowColor: tintColorPrimary,
+    textAlign: "center",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -48,7 +49,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    padding: 20
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   boxDay: {
     textAlign: "center",

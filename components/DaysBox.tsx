@@ -6,12 +6,13 @@ import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 type Props = {
   dayNum: number;
   day: string;
+  color: string
 };
 
 const DaysBox = (props: Props) => {
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
+      <View style={[styles.box,{backgroundColor: props.color}]}>
         <Text style={styles.boxDayNum}>{props.dayNum}</Text>
         <Text style={styles.boxDay}>{props.day}</Text>
       </View>
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
   },
   box: {
     borderColor: "#cccc",
-    backgroundColor: "#e9e9e9",
     borderWidth: 2,
     borderRadius: 10,
     height: 70,
