@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
@@ -19,8 +19,6 @@ const Orders = ({
   orderTime,
 }: OrderProps) => {
   return (
-    <SafeAreaProvider>
-      <View style={styles.container}>
         <View style={styles.box}>
           <Text>{orderName}</Text>
           <Text>{roomNumber}</Text>
@@ -28,27 +26,19 @@ const Orders = ({
           <Text>{orderType}</Text>
           <Text>{orderTime}</Text>
         </View>
-      </View>
-    </SafeAreaProvider>
   );
 };
 
 export default Orders;
 
 const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   box: {
-    borderColor: "#cccc",
-    backgroundColor: "#e9e9e9",
+    borderColor: tintColorPrimary,
+    backgroundColor: tintColorSecondary,
     borderWidth: 2,
-    borderRadius: 10,
-    height: 70,
-    width: 60,
+    borderRadius: 5,
+    height: Dimensions.get('screen').height / 5,
+    width: 200,
     margin: 5,
     shadowColor: tintColorPrimary,
     shadowOffset: {
@@ -58,6 +48,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    padding: 20
   },
   boxDay: {
     textAlign: "center",
