@@ -25,7 +25,7 @@ import OrderCard from "../../components/Cards/OrderCard";
 const home = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const { handleOpen } = useModal();
+  const { handleOpen, handleClose } = useModal();
   const { homeData, loading, setLoadingToTrue } = useData();
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -166,6 +166,10 @@ const home = () => {
                             <Text style={styles.modelText}>
                               {req.REQ_STATUS}
                             </Text>
+                            <Pressable onPress={() => {
+                              router.push(`/Food/${req.REQ_ID}`)
+                              handleClose()
+                              }}><Text>Go to Order</Text></Pressable>
                           </View>
                         )
                       }
