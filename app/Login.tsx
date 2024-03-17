@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { tintColorPrimary } from "../constants/Colors";
 import { useAuth } from "./context/AuthContext";
+import Loader from "../components/Loader";
 
 type Login = {
   username: string;
@@ -60,9 +61,7 @@ const Login = () => {
   return (
     <SafeAreaProvider>
       {loginData.loading ? (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color={tintColorPrimary} />
-        </View>
+        <Loader/>
       ) : (
         <>
           <Stack.Screen
