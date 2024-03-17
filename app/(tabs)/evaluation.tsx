@@ -39,8 +39,10 @@ const evaluation = () => {
     setServices(newServices);
   };
 
+  const checkEmptyRates = services.some((item) => item.rate === "");
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 35 }}>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.title}>Evaluation Points</Text>
 
@@ -61,9 +63,9 @@ const evaluation = () => {
         ))}
 
         <View style={styles.buttonContainer}>
-          {services[services.length - 1].rateMaxValue !== 0 ? (
+          {!checkEmptyRates && (
             <Button title="Submit" color={tintColorSecondary} page="home" />
-          ) : null}
+          )}
         </View>
       </View>
     </ScrollView>
