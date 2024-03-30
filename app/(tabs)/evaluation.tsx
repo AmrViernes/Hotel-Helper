@@ -121,7 +121,7 @@ const evaluation = () => {
     );
     try {
       const response = await axios.get(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval/chk",
+        "http://10.0.10.150:8085/ords/boatmob/guest/eval/chk",
         {
           params: {
             P_APPID: 1,

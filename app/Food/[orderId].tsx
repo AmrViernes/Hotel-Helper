@@ -250,7 +250,7 @@ export default function edit() {
     try {
       // Add logic to send the order data to the backend
       await axios.put(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        "http://10.0.10.150:8085/ords/boatmob/guest/bar/req",
         order,
         {
           params: {

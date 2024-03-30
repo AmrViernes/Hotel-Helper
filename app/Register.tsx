@@ -198,13 +198,16 @@ const Register = () => {
           },
         });
       } finally {
-        const checkRC = await axios.get("https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/rc/fillStatus", {
-          params: {
-            P_APPID: 1,
-            P_RCID: authData?.RC_ID || authState?.RC_ID,
-            P_LANGCODE: 'E'
+        const checkRC = await axios.get(
+          "http://10.0.10.150:8085/ords/boatmob/guest/rc/fillStatus",
+          {
+            params: {
+              P_APPID: 1,
+              P_RCID: authData?.RC_ID || authState?.RC_ID,
+              P_LANGCODE: "E",
+            },
           }
-        })
+        );
         
         if (checkRC?.data?.RESPONSE[0].Message === "Yes") router.replace("/home");
         if (checkRC?.data?.RESPONSE[0].Message === "No") router.replace("/Register");
