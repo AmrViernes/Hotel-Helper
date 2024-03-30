@@ -31,7 +31,7 @@ const Maintenance = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/fix/item",
+          "http://10.0.10.150:8085/ords/boatmob/guest/fix/item",
           {
             params: {
               P_APPID: 1,
@@ -62,7 +62,7 @@ const Maintenance = () => {
     try {
       // Add logic to send the order data to the backend
       await axios.post(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/fix/req",
+        "http://10.0.10.150:8085/ords/boatmob/guest/fix/req",
         maintenanceOrder,
         {
           params: {

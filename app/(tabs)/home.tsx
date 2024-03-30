@@ -103,7 +103,7 @@ const home = () => {
 
     try {
       await axios.delete(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        "http://10.0.10.150:8085/ords/boatmob/guest/bar/req",
         {
           params: {
             P_APPID: 1,

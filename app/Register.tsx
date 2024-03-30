@@ -46,7 +46,7 @@ const Register = () => {
       const authData = JSON.parse(gettingAuth as string);
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/rc/chData",
+          "http://10.0.10.150:8085/ords/boatmob/guest/rc/chData",
           {
             params: {
               P_APPID: 1,
@@ -172,7 +172,7 @@ const Register = () => {
       });
       try {
         await axios.post(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/rc/chData",
+          "http://10.0.10.150:8085/ords/boatmob/guest/rc/chData",
           apiData,
           {
             params: {

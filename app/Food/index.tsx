@@ -54,7 +54,7 @@ const Food = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/item",
+          "http://10.0.10.150:8085/ords/boatmob/guest/bar/item",
           {
             params: {
               P_APPID: 1,
@@ -172,7 +172,7 @@ const Food = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/loc",
+        "http://10.0.10.150:8085/ords/boatmob/guest/loc",
         {
           params: {
             P_APPID: 1,
@@ -195,7 +195,7 @@ const Food = () => {
     try {
       // Add logic to send the order data to the backend
       await axios.post(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/bar/req",
+        "http://10.0.10.150:8085/ords/boatmob/guest/bar/req",
         order,
         {
           params: {

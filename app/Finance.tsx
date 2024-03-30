@@ -21,7 +21,7 @@ const Finance = () => {
       const authData = JSON.parse(gettingAuth as string);
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/fin/balance",
+          "http://10.0.10.150:8085/ords/boatmob/guest/fin/balance",
           {
             params: {
               P_APPID: 1,

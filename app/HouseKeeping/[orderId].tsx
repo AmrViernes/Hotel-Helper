@@ -34,7 +34,7 @@ console.log(orderId);
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/hk/item",
+          "http://10.0.10.150:8085/ords/boatmob/guest/hk/item",
           {
             params: {
               P_APPID: 1,
@@ -61,7 +61,7 @@ console.log(orderId);
     try {
       // Add logic to send the order data to the backend
       await axios.post(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/hk/req",
+        "http://10.0.10.150:8085/ords/boatmob/guest/hk/req",
         houseKeepingOrder,
         {
           params: {

@@ -54,7 +54,7 @@ const evaluation = () => {
   const fetchDataFromApi = async () => {
     try {
       const response = await axios.get(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
+        "http://10.0.10.150:8085/ords/boatmob/guest/eval",
         { params: { P_APPID: 1, P_LANGCODE: "E" } }
       );
       return response.data.ITEMS[0].EVAL_POINT.map((apiItem: any) => ({
@@ -88,7 +88,7 @@ const evaluation = () => {
     setLoading(true);
     try {
       await axios.put(
-        "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/eval",
+        "http://10.0.10.150:8085/ords/boatmob/guest/eval",
         finalData,
         {
           params: {

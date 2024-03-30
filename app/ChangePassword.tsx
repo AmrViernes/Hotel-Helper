@@ -63,7 +63,7 @@ const ChangePassword = () => {
       });
       try {
         await axios.post(
-          "https://actidesk.oracleapexservices.com/apexdbl/boatmob/guest/user/pwd",
+          "http://10.0.10.150:8085/ords/boatmob/guest/user/pwd",
           {
             params: {
               P_APPID: 1,
