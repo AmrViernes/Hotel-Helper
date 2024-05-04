@@ -55,21 +55,22 @@ const OrderCard = ({
           <View
             style={[styles.overlay, { backgroundColor: orderColor(imageUrl) }]}
           ></View>
-        <ImageBackground
-          source={ordersImage(imageUrl)}
-          style={styles.imageContainer}
-          imageStyle={{ borderRadius: 10, opacity: 0.25 }}
-          contentFit="contain"
-        >
-
-          <Text style={styles.orderTitle}>{orderName}</Text>
-          {orderStatus && <Text style={styles.orderStatus}>{orderStatus}</Text>}
-          {orderQuantity ? (
-            <Text style={styles.orderItemsCount}>
-              Items Count {orderQuantity}
-            </Text>
-          ) : null}
-        </ImageBackground>
+          <ImageBackground
+            source={ordersImage(imageUrl)}
+            style={styles.imageContainer}
+            imageStyle={{ borderRadius: 10, opacity: 0.25 }}
+            contentFit="contain"
+          >
+            <Text style={styles.orderTitle}>{orderName}</Text>
+            {orderStatus && (
+              <Text style={styles.orderStatus}>{orderStatus}</Text>
+            )}
+            {orderQuantity ? (
+              <Text style={styles.orderItemsCount}>
+                Items Count {orderQuantity}
+              </Text>
+            ) : null}
+          </ImageBackground>
         </View>
       )}
     </>
@@ -96,13 +97,13 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
-    width: '95%',
+    width: "95%",
   },
   imageContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minWidth: '25%',
+    minWidth: "25%",
     height: "80%",
   },
   overlay: {
