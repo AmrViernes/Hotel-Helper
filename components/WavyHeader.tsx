@@ -7,11 +7,11 @@ import { useAuth } from "../app/context/AuthContext";
 import { router } from "expo-router";
 
 const WavyHeader = () => {
-  const {onLogout} = useAuth()
+  const { onLogout } = useAuth();
 
   const logout = async () => {
-    return await onLogout!()
-  }
+    return await onLogout!();
+  };
 
   return (
     <View style={styles.svgCurve}>
@@ -25,17 +25,16 @@ const WavyHeader = () => {
 
         {/* Left Header Button */}
         <View style={styles.headerButton}>
-
-            <Pressable onPress={() => router.push("/Settings")}>
-              {({ pressed }) => (
-                <FontAwesome
-                  name="gear"
-                  size={25}
-                  color={`#fff`}
-                  style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                />
-              )}
-            </Pressable>
+          <Pressable onPress={() => router.push("/Settings")}>
+            {({ pressed }) => (
+              <FontAwesome
+                name="gear"
+                size={25}
+                color={`#fff`}
+                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+              />
+            )}
+          </Pressable>
         </View>
       </View>
       <Svg
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsR",
     color: "#fff",
     marginTop: 20,
-    marginLeft: -25
+    marginLeft: -25,
   },
   headerLogo: {
     textAlign: "center",
