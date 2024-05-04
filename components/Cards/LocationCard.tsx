@@ -1,27 +1,18 @@
 import { Dimensions, Pressable, StyleSheet } from "react-native";
 import { Text, View } from "../Themed";
 import React from "react";
-import {
-    tintColorDisabled,
-  tintColorPrimary,
-} from "../../constants/Colors";
+import { tintColorDisabled, tintColorPrimary } from "../../constants/Colors";
 
 type FoodCard = {
   id?: number;
   name: string;
-  backgroundColor: string
+  backgroundColor: string;
 };
 
-const LocationCard = ({
-  id,
-  name,
-  backgroundColor,
-}: FoodCard) => {
+const LocationCard = ({ id, name, backgroundColor }: FoodCard) => {
   return (
-    <View style={[styles.container, {backgroundColor}]}>
-        <Text style={styles.text}>
-          {name.toLocaleUpperCase()}
-        </Text>
+    <View style={[styles.container, { backgroundColor }]}>
+      <Text style={styles.text}>{name.toLocaleUpperCase()}</Text>
     </View>
   );
 };
@@ -49,12 +40,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "90%",
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   text: {
-    color: 'white',
+    color: "white",
     fontFamily: "Poppins",
-    textAlign: 'center',
-    fontSize: 22
+    textAlign: "center",
+    fontSize: 22,
   },
 });
