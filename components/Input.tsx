@@ -2,7 +2,6 @@ import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
 import React from "react";
 import { tintColorPrimary } from "../constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 type CustomInputProps = {
   onClick?: () => void;
   showEye: boolean
