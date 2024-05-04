@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  useColorScheme,
-} from "react-native";
-import {
-  tintColorWarmBackground,
-} from "../constants/Colors";
+import { Dimensions, StyleSheet, View, useColorScheme } from "react-native";
+import { tintColorWarmBackground } from "../constants/Colors";
 import LottieView from "lottie-react-native";
 
 const Loader = () => {
