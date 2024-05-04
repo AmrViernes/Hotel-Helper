@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontFamily: "Poppins",
     paddingHorizontal: 3,
-    fontSize: 20
+    fontSize: 20,
   },
 });
