@@ -16,8 +16,8 @@ type FoodCard = {
   counter: number;
   onIncrement: () => void;
   onDecrement: () => void;
-  disabled?: boolean,
-  disabledColor: string
+  disabled?: boolean;
+  disabledColor: string;
 };
 
 const FoodCard = ({
@@ -29,7 +29,7 @@ const FoodCard = ({
   disabledColor,
   onIncrement,
   onDecrement,
-  disabled
+  disabled,
 }: FoodCard) => {
   return (
     <View style={styles.container}>
@@ -45,7 +45,9 @@ const FoodCard = ({
       </View>
       <View style={styles.counterContainer}>
         <Pressable onPress={onDecrement} disabled={disabled}>
-          <Text style={[styles.decreaseButton, {color: disabledColor}]}>-</Text>
+          <Text style={[styles.decreaseButton, { color: disabledColor }]}>
+            -
+          </Text>
         </Pressable>
         <Text style={styles.counterNumber}>{counter}</Text>
         <Pressable onPress={onIncrement}>
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "90%",
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   foodInfoContainer: {
     display: "flex",
@@ -110,17 +112,17 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsR",
     fontSize: 20,
     textAlign: "center",
-    color: tintColorWarmBackground
+    color: tintColorWarmBackground,
   },
   increaseButton: {
     fontFamily: "PoppinsR",
     fontSize: 30,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
-    width: '100%',
+    width: "100%",
     textAlign: "center",
     paddingHorizontal: 8,
-    color: tintColorPrimary
+    color: tintColorPrimary,
   },
   decreaseButton: {
     fontFamily: "PoppinsR",
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     textAlign: "center",
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 8,
   },
 });
