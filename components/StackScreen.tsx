@@ -1,7 +1,6 @@
 import { useColorScheme } from "react-native";
 import { Stack } from "expo-router";
 import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
-
 const StackScreen = () => {
   const colorScheme = useColorScheme();
   return (
