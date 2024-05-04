@@ -7,14 +7,14 @@ import { tintColorPrimary } from "../constants/Colors";
 type Props = {
   data: string[] | number[];
   title: string;
-  handleInput?: any
-  defaultValue?: number
+  handleInput?: any;
+  defaultValue?: number;
 };
 
 const DropdownMenu = (props: Props) => {
+  const handleInputChange = (input: string, value?: string | number) =>
+    props.handleInput(input);
 
-  const handleInputChange = (input: string, value?: string | number) => props.handleInput(input)
-  
   return (
     <SelectDropdown
       dropdownIconPosition="right"
@@ -31,14 +31,14 @@ const DropdownMenu = (props: Props) => {
         );
       }}
       onSelect={(selectedItem, index) => {
-        handleInputChange(selectedItem)
+        handleInputChange(selectedItem);
         return selectedItem;
       }}
       defaultValue={props.defaultValue}
       buttonTextAfterSelection={(selectedItem, index) => {
         // text represented after item is selected
         // if data array is an array of objects then return selectedItem.property to render after item is selected
-        return selectedItem
+        return selectedItem;
       }}
       rowTextForSelection={(item, index) => {
         // text represented for each item in dropdown
@@ -48,7 +48,7 @@ const DropdownMenu = (props: Props) => {
       buttonTextStyle={{
         color: tintColorPrimary,
         fontFamily: "PoppinsR",
-        fontWeight: 'bold',
+        fontWeight: "bold",
         fontSize: 15,
         opacity: 0.8,
       }}
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E6F4F1",
     borderRadius: 10,
     fontFamily: "PoppinsR",
-
   },
   dropdownButton: {
     fontFamily: "PoppinsR",
