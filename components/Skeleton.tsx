@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from "react";
+import { View, Animated, StyleSheet } from "react-native";
 
 interface SkeletonPlaceholderProps {
   duration?: number;
@@ -45,15 +45,15 @@ const SkeletonPlaceholder: React.FC<SkeletonPlaceholderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
+    height: "100%",
+    width: "100%",
+    overflow: "hidden",
     borderRadius: 10,
   },
   shimmer: {
-    backgroundColor: '#cccc',
-    height: '100%',
-    width: '100%',
+    backgroundColor: "#cccc",
+    height: "100%",
+    width: "100%",
   },
 });
 
