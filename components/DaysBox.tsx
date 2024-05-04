@@ -6,13 +6,13 @@ import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 type Props = {
   dayNum: number;
   day: string;
-  color: string
+  color: string;
 };
 
 const DaysBox = (props: Props) => {
   return (
     <View style={styles.container}>
-      <View style={[styles.box,{backgroundColor: props.color}]}>
+      <View style={[styles.box, { backgroundColor: props.color }]}>
         <Text style={styles.boxDayNum}>{props.dayNum}</Text>
         <Text style={styles.boxDay}>{props.day}</Text>
       </View>
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   box: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
     height: 65,
     width: 60,
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-
   },
   boxDay: {
     textAlign: "center",
@@ -58,6 +57,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "PoppinsR",
     fontSize: 28,
-    color: tintColorPrimary
+    color: tintColorPrimary,
   },
 });
