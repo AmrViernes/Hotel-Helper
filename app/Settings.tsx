@@ -55,9 +55,12 @@ export default function TabTwoScreen() {
           />
         </View>
         </View> */}
-        <Text style={{position: 'absolute', bottom: 5, fontFamily: 'PoppinsR'}}>App Version 1.0.0</Text>     
+        <Text
+          style={{ position: "absolute", bottom: 5, fontFamily: "PoppinsR" }}
+        >
+          App Version 1.0.0
+        </Text>
       </View>
-      
     </SafeAreaProvider>
   );
 }
@@ -71,15 +74,15 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   contentContainer: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: '20%',
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: "20%",
   },
   iconsContainer: {
     flexDirection: "row",
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
     width: "40%",
   },
   title: {
