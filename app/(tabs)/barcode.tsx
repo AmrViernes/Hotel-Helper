@@ -6,16 +6,23 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
 import { tintColorWarmBackground } from "../../constants/Colors";
 
-
 export default function qr() {
-  const authData = useAuth()
-  const RC = authData.authState?.RC_ID?.toString() || "0"
+  const authData = useAuth();
+  const RC = authData.authState?.RC_ID?.toString() || "0";
 
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       <View style={styles.container}>
-        <QRCode value={RC} size={200} backgroundColor={tintColorWarmBackground}/>
-        <Barcode value={RC as string} format="CODE39" background={tintColorWarmBackground}/>
+        <QRCode
+          value={RC}
+          size={200}
+          backgroundColor={tintColorWarmBackground}
+        />
+        <Barcode
+          value={RC as string}
+          format="CODE39"
+          background={tintColorWarmBackground}
+        />
       </View>
     </SafeAreaProvider>
   );
