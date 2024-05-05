@@ -208,9 +208,11 @@ const Register = () => {
             },
           }
         );
-        
-        if (checkRC?.data?.RESPONSE[0].Message === "Yes") router.replace("/home");
-        if (checkRC?.data?.RESPONSE[0].Message === "No") router.replace("/Register");
+
+        if (checkRC?.data?.RESPONSE[0].Message === "Yes")
+          router.replace("/home");
+        if (checkRC?.data?.RESPONSE[0].Message === "No")
+          router.replace("/Register");
       }
     }
   };
