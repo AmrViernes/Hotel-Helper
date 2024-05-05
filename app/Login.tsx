@@ -66,14 +66,14 @@ const Login = () => {
         <>
           <StackScreen />
           <View style={styles.container}>
-          <Image
-          source={require("../assets/images/svg/password.svg")}
-          contentFit="cover"
-          style={{
-            height: Dimensions.get('screen').height / 3,
-            width: "100%",
-          }}
-        />
+            <Image
+              source={require("../assets/images/svg/password.svg")}
+              contentFit="cover"
+              style={{
+                height: Dimensions.get("screen").height / 3,
+                width: "100%",
+              }}
+            />
             <View style={styles.textsContainers}>
               <Text style={styles.loginText}>Login Here</Text>
               <Text style={styles.welcomeText}>
