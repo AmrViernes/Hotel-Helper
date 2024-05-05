@@ -102,16 +102,13 @@ const home = () => {
     console.log(id);
 
     try {
-      await axios.delete(
-        "http://10.0.10.150:8085/ords/boatmob/guest/bar/req",
-        {
-          params: {
-            P_APPID: 1,
-            P_RCID: authData.RC_ID,
-            P_REQID: id,
-          },
-        }
-      );
+      await axios.delete("http://10.0.10.150:8085/ords/boatmob/guest/bar/req", {
+        params: {
+          P_APPID: 1,
+          P_RCID: authData.RC_ID,
+          P_REQID: id,
+        },
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
