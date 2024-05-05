@@ -6,13 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import {
-  Modal,
-  View,
-  StyleSheet,
-  PanResponder,
-  Animated,
-} from "react-native";
+import { Modal, View, StyleSheet, PanResponder, Animated } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import {
   tintColorPrimary,
@@ -24,21 +18,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 type ModalContextProps = {
   handleOpen: (content: ReactNode) => void;
   handleClose: () => void;
-}
-
+};
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
-  const modalHeight = 700
+  const modalHeight = 700;
   const translateY = new Animated.Value(0);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderRelease: (_, gestureState) => {
-
       if (gestureState.dy >= 50) {
         handleClose();
       }
@@ -66,7 +58,7 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
       handleClose,
     };
   }, [handleOpen, handleClose]);
-  
+
   return (
     <ModalContext.Provider value={contextValue}>
       {children}
@@ -136,9 +128,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
-  animatedView: {
-    
-  },
+  animatedView: {},
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
