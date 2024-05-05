@@ -20,8 +20,7 @@ type AuthProps = {
 
 export const AUTH_KEY = "AUTH_DATA";
 
-export const API_URL =
-  "http://10.0.10.150:8085/ords/boatmob/user/login";
+export const API_URL = "http://10.0.10.150:8085/ords/boatmob/user/login";
 
 const AuthContext = createContext<AuthProps>({});
 
@@ -94,9 +93,18 @@ export const AuthProvider = ({ children }: any) => {
         );
 
         // Redirect where PW number for New Password or Fill data
-        if (result?.data?.RESPONSE[0].PW_CHANGED === 1 && result?.data?.RESPONSE[0].RC_STATUS === 1) router.replace("/home");
-        if (result?.data?.RESPONSE[0].PW_CHANGED === 1 && result?.data?.RESPONSE[0].RC_STATUS === 2) router.replace("/Register");
-        if (result?.data?.RESPONSE[0].PW_CHANGED === 2) router.replace("/ChangePassword");
+        if (
+          result?.data?.RESPONSE[0].PW_CHANGED === 1 &&
+          result?.data?.RESPONSE[0].RC_STATUS === 1
+        )
+          router.replace("/home");
+        if (
+          result?.data?.RESPONSE[0].PW_CHANGED === 1 &&
+          result?.data?.RESPONSE[0].RC_STATUS === 2
+        )
+          router.replace("/Register");
+        if (result?.data?.RESPONSE[0].PW_CHANGED === 2)
+          router.replace("/ChangePassword");
       } else {
         Toast.show({
           type: "error",
