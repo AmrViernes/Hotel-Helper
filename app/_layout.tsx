@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-import { AuthProvider} from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import { ModalProvider } from "./context/ModelContext";
 import Toast from "react-native-toast-message";
 import { DataProvider } from "./context/DataContext";
@@ -32,7 +32,7 @@ export default function RootLayout() {
     PoppinsR: require("../assets/fonts/Poppins-Regular.ttf"),
     ...FontAwesome.font,
   });
-  
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
