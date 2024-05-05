@@ -29,7 +29,15 @@ const Orders = (props: Props) => {
   }, []);
 
   return (
-    <SafeAreaProvider style={[styles.listContainer, {backgroundColor: colorSchema === "light" ? tintColorWarmBackground : "black",}]}>
+    <SafeAreaProvider
+      style={[
+        styles.listContainer,
+        {
+          backgroundColor:
+            colorSchema === "light" ? tintColorWarmBackground : "black",
+        },
+      ]}
+    >
       <StackScreen />
       {loading && <Loader />}
       <ScrollView
@@ -76,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: tintColorPrimary,
     textTransform: "uppercase",
-    textAlign: 'center'
+    textAlign: "center",
   },
   card: {
     display: "flex",
