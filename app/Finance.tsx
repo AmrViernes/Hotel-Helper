@@ -51,15 +51,15 @@ const Finance = () => {
         <>
           <Image
             source={require("../assets/images/svg/payment.svg")}
-            placeholder='Payment'
-            style={{ width: '30%', height: '20%'}}
+            placeholder="Payment"
+            style={{ width: "30%", height: "20%" }}
             contentFit="contain"
           />
           <View>
-          <Text style={styles.title}>Your Debt Amount</Text>
-          <Text style={[styles.title, { color: tintColorSecondary }]}>
-            {amount}
-          </Text>
+            <Text style={styles.title}>Your Debt Amount</Text>
+            <Text style={[styles.title, { color: tintColorSecondary }]}>
+              {amount}
+            </Text>
           </View>
         </>
       )}
@@ -71,11 +71,11 @@ export default Finance;
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    marginTop: -40
+    marginTop: -40,
   },
   title: {
     fontSize: 30,
