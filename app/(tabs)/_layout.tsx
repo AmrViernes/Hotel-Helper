@@ -20,11 +20,11 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   // const [appState, setAppState] = useState<string>(AppState.currentState);
   // const [isConnected, setIsConnected] = useState<boolean | null>(true);
-  const {onLogout} = useAuth()
+  const { onLogout } = useAuth();
 
   const logout = async () => {
-    return await onLogout!()
-  }
+    return await onLogout!();
+  };
 
   useEffect(() => {
     const handleBackButton = () => {
@@ -40,7 +40,7 @@ export default function TabLayout() {
           {
             text: "OK",
             onPress: () => {
-              logout()
+              logout();
               BackHandler.exitApp();
             },
           },
@@ -100,55 +100,53 @@ export default function TabLayout() {
   return (
     <SafeAreaProvider>
       {/* {isConnected && ( */}
-        <Tabs
-          screenOptions={{
-            tabBarActiveTintColor: tintColorSecondary,
-            tabBarInactiveTintColor: "#fff",
-            headerShadowVisible: false,
-            header: () => <WavyHeader />,
-            tabBarLabelStyle: {
-              fontFamily: 'PoppinsR'
-            },
-            tabBarStyle: {
-              height: 80,
-              paddingBottom: 13,
-              backgroundColor: tintColorPrimary,
-              borderTopRightRadius: 20,
-              borderTopLeftRadius: 20,
-            },
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: tintColorSecondary,
+          tabBarInactiveTintColor: "#fff",
+          headerShadowVisible: false,
+          header: () => <WavyHeader />,
+          tabBarLabelStyle: {
+            fontFamily: "PoppinsR",
+          },
+          tabBarStyle: {
+            height: 80,
+            paddingBottom: 13,
+            backgroundColor: tintColorPrimary,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: "Home",
+            href: "/home",
+            tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           }}
-        >
-          <Tabs.Screen
-            name="home"
-            options={{
-              title: "Home",
-              href: "/home",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="home" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="barcode"
-            options={{
-              title: "Barcode",
-              href: "/barcode",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="qrcode" color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="evaluation"
-            options={{
-              title: "Evaluation",
-              href: "/evaluation",
-              tabBarIcon: ({ color }) => (
-                <TabBarIcon name="star-half-full" color={color} />
-              ),
-            }}
-          />
-          {/* <Tabs.Screen
+        />
+        <Tabs.Screen
+          name="barcode"
+          options={{
+            title: "Barcode",
+            href: "/barcode",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="qrcode" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="evaluation"
+          options={{
+            title: "Evaluation",
+            href: "/evaluation",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="star-half-full" color={color} />
+            ),
+          }}
+        />
+        {/* <Tabs.Screen
             name="settings"
             options={{
               title: "Settings",
@@ -158,7 +156,7 @@ export default function TabLayout() {
               ),
             }}
           /> */}
-        </Tabs>
+      </Tabs>
       {/*  )} */}
       {/* {!isConnected && (
         <View style={Styles.Container}>
