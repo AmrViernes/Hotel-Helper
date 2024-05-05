@@ -16,7 +16,7 @@ import StackScreen from "../components/StackScreen";
 
 const ChangePassword = () => {
   const router = useRouter();
- const {authState} = useAuth()
+  const { authState } = useAuth();
   const [passwordData, setPasswordData] = React.useState<ChangePasswordT>({
     password: "",
     confirmPassword: "",
@@ -72,8 +72,8 @@ const ChangePassword = () => {
             },
           }
         );
-        if(authState?.RC_STATUS === 1) router.replace('/home')
-        if(authState?.RC_STATUS === 2) router.replace('/Register')
+        if (authState?.RC_STATUS === 1) router.replace("/home");
+        if (authState?.RC_STATUS === 2) router.replace("/Register");
       } catch (error) {
         Toast.show({
           type: "error",
@@ -99,7 +99,7 @@ const ChangePassword = () => {
         <Loader />
       ) : (
         <>
-        <StackScreen/>
+          <StackScreen />
           <View style={styles.container}>
             <View>
               <Text style={styles.passwordText}>Change Password</Text>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: '50%'
+    paddingTop: "50%",
   },
   passwordText: {
     fontFamily: "Poppins",
