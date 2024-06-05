@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
-import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
+import { tintColorPrimary, tintColorSecondary } from "../constants/Colors"
 
 type Props = {
   dayNum: number;
