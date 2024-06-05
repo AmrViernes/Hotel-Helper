@@ -1,7 +1,7 @@
 import { StyleSheet, Pressable } from "react-native";
 import { Text, View } from "./Themed";
 import React from "react";
-import { tintColorPrimary } from "../constants/Colors";
+import { tintColorPrimary } from "../constants/Colors"
 
 const Button = ({
   title,
