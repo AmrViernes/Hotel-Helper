@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome from "@expo/vector-icons/FontAwesome"
 import React from "react";
 import { tintColorPrimary } from "../constants/Colors";
 
