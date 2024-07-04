@@ -3,7 +3,7 @@ import axios from "axios";
 import * as secureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { router } from "expo-router";
-import Toast from "react-native-toast-message";
+import Toast from "react-native-toast-message"
 
 type AuthProps = {
   authState?: {
