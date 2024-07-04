@@ -6,7 +6,7 @@ import {
   DataContextValueT,
   HomeDataT,
 } from "../../types/types";
-import * as secureStore from "expo-secure-store";
+import * as secureStore from "expo-secure-store"
 import { AUTH_KEY, useAuth } from "./AuthContext";
 import Toast from "react-native-toast-message";
 
