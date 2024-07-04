@@ -6,7 +6,7 @@ import {
   View,
   RefreshControl,
   useColorScheme,
-} from "react-native";
+} from "react-native"
 import React from "react";
 import { useData } from "./context/DataContext";
 import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
