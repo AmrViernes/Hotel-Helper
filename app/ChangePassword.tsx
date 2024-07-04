@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { Text, View } from "../components/Themed";
+import { Text, View } from "../components/Themed"
 import { Stack, useRouter } from "expo-router";
 import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
 import { ChangePasswordT } from "../types/types";
