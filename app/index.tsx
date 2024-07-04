@@ -7,8 +7,6 @@ import { View, Text } from "../components/Themed";
 import Button from "../components/Button";
 import {
   tintColorPrimary,
-  tintColorSecondary,
-  tintColorWarmBackground,
 } from "../constants/Colors";
 import LottieView from "lottie-react-native";
 export default function Page() {
