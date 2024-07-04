@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, Linking } from "react-native";
-import { View, Text } from "../components/Themed";
+import { View, Text } from "../components/Themed"
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
