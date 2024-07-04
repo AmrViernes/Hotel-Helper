@@ -6,7 +6,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { tintColorPrimary, tintColorWarmBackground } from "../constants/Colors";
+import { tintColorPrimary } from "../constants/Colors";
 import { useAuth } from "./context/AuthContext";
 import Loader from "../components/Loader";
 import { LoginT } from "../types/types";
