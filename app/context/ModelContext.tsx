@@ -13,7 +13,6 @@ import {
   tintColorWarmBackground,
 } from "../../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type ModalContextProps = {
   handleOpen: (content: ReactNode) => void;
