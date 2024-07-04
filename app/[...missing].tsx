@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 import { useEffect, useState } from "react";
-import Loader from "../components/Loader";
+import Loader from "../components/Loader"
 
 export default function NotFoundScreen() {
   const [loading, setLoading] = useState<boolean>(true);
