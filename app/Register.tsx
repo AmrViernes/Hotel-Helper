@@ -3,7 +3,6 @@ import { Text, View } from "../components/Themed";
 import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
-  tintColorDisabled,
   tintColorPrimary,
   tintColorSecondary,
 } from "../constants/Colors";
