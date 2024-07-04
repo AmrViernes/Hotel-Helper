@@ -5,7 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import DaysBox from "../components/DaysBox";
 import { ScrollView } from "react-native-gesture-handler";
 import ProgramCard from "../components/Cards/ProgramCard";
-import { useData } from "./context/DataContext";
+import { useData } from "./context/DataContext"
 import {
   tintColorDisabled,
   tintColorPrimary,
