@@ -4,7 +4,7 @@ import { Text, View } from "../components/Themed";
 import { tintColorPrimary, tintColorSecondary } from "../constants/Colors";
 import axios from "axios";
 import * as secureStore from "expo-secure-store";
-import { AUTH_KEY } from "./context/AuthContext";
+import { AUTH_KEY } from "./context/AuthContext"
 import Loader from "../components/Loader";
 import StackScreen from "../components/StackScreen";
 import { Image } from "expo-image";
