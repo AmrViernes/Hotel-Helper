@@ -1,6 +1,6 @@
 export type CompanyT = {
   companyId: number;
-  companyName: string;
+  companyName: string
 }
 export type RegisterT = {
   loading: boolean
